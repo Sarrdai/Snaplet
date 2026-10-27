@@ -122,7 +122,6 @@ fun KidCameraUi(
     var fly by remember { mutableStateOf<Fly?>(null) }
     var flyTarget by remember { mutableStateOf<Rect?>(null) }
     var rootCoords by remember { mutableStateOf<LayoutCoordinates?>(null) }
-    val flash = remember { Animatable(0f) }
 
     fun startCooldown() {
         if (settings.cooldownSec <= 0) return
@@ -132,11 +131,8 @@ fun KidCameraUi(
         }
     }
 
+    // No white flash: the snapshot flying into the strip is feedback enough and gentler on kids' eyes
     fun showCaptured(c: Captured) {
-        scope.launch {
-            flash.snapTo(0.75f)
-            flash.animateTo(0f, tween(220))
-        }
         val bitmap = c.snapshot ?: return
         val f = Fly(bitmap, c.item.id)
         flyTarget = null
@@ -297,9 +293,6 @@ fun KidCameraUi(
             )
         }
 
-        if (flash.value > 0f) {
-            Box(Modifier.fillMaxSize().graphicsLayer { alpha = flash.value }.background(Color.White))
-        }
         fly?.let { f -> FlyingSnapshot(f, flyTarget, style.frame, u) }
 
         when (val o = overlay) {
