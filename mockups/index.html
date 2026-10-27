@@ -39,93 +39,101 @@ header p { margin: 8px 0 0; color: var(--muted); max-width: 62ch; }
   box-shadow: 0 0 0 2px #2c3242, 0 30px 60px -20px rgba(0,0,0,.7);
   max-width: 100%;
 }
+.device.portrait { width: min(100%, 380px); justify-self: center; }
 .screen {
-  position: relative; aspect-ratio: 2 / 1; width: 100%; max-width: 100%;
+  --pill-h: 50cqh; position: relative; aspect-ratio: 2 / 1; width: 100%; max-width: 100%;
   border-radius: 22px; overflow: hidden; container-type: size;
   background: #000; touch-action: none; user-select: none; -webkit-user-select: none;
 }
+.portrait .screen { aspect-ratio: 9 / 19; --pill-h: 30cqh; }
 .screen canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 
-/* Thumbnail strip (newest item sits nearest to the shutter) */
+/* Thumbnail strip along the top (newest item sits on the shutter side) */
 .strip {
-  position: absolute; top: 4cqh; height: 17cqh; display: flex; gap: 1.6cqh;
-  left: 4cqw; right: calc(36cqh + 12cqw); flex-direction: row-reverse; overflow: hidden;
+  position: absolute; top: 4cqmin; left: 4cqmin; right: 4cqmin; height: 17cqmin;
+  display: flex; gap: 1.6cqmin; flex-direction: row-reverse; overflow: hidden;
 }
-.left-hand .strip { left: calc(36cqh + 12cqw); right: 4cqw; flex-direction: row; }
+.left-hand .strip { flex-direction: row; }
+/* Landscape: the rail reaches the top, so keep the strip clear of it */
+.device:not(.portrait) .screen:not(.left-hand) .strip { right: 29cqmin; }
+.device:not(.portrait) .left-hand .strip { left: 29cqmin; }
 .thumb {
-  flex: none; height: 100%; aspect-ratio: 4 / 3; border-radius: 2.4cqh; overflow: hidden;
-  border: .6cqh solid rgba(255,255,255,.9); background: #222; padding: 0; cursor: pointer;
-  position: relative; box-shadow: 0 .8cqh 2cqh rgba(0,0,0,.35);
+  flex: none; height: 100%; aspect-ratio: 4 / 3; border-radius: 2.4cqmin; overflow: hidden;
+  border: .6cqmin solid rgba(255,255,255,.9); background: #222; padding: 0; cursor: pointer;
+  position: relative; box-shadow: 0 .8cqmin 2cqmin rgba(0,0,0,.35);
 }
 .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .thumb.incoming { opacity: 0; }
 .badge {
-  position: absolute; left: 1cqh; bottom: 1cqh; background: rgba(0,0,0,.6); color: #fff;
-  font: 700 3cqh/1 var(--body); padding: .6cqh 1.2cqh; border-radius: 99px;
+  position: absolute; left: 1cqmin; bottom: 1cqmin; background: rgba(0,0,0,.6); color: #fff;
+  font: 700 3cqmin/1 var(--body); padding: .6cqmin 1.2cqmin; border-radius: 99px;
 }
 
-/* Shutter with cooldown ring (--p: 0..1) */
+/* Side rail in the lower half: gallery, mode switch, pill shutter */
+.rail {
+  position: absolute; right: 4cqmin; bottom: 7cqh; display: flex; flex-direction: column;
+  align-items: center; gap: 3cqmin;
+}
+.left-hand .rail { right: auto; left: 4cqmin; }
+.side { position: relative; display: grid; place-items: center; }
+
+/* Pill shutter, fills from the bottom while cooling down (--p: 0..1) */
 .shutter {
-  --p: 1; position: absolute; top: 50%; right: 5cqw; width: 36cqh; height: 36cqh;
-  transform: translateY(-50%); border-radius: 50%; border: 0; padding: 0; cursor: pointer;
-  background: conic-gradient(var(--sun) calc(var(--p) * 1turn), rgba(255,255,255,.2) 0);
-  display: grid; place-items: center; transition: transform .15s;
+  --p: 1; position: relative; width: 21cqmin; height: var(--pill-h); border-radius: 99px;
+  border: 0; padding: 0; cursor: pointer;
+  background: linear-gradient(to top, var(--sun) calc(var(--p) * 100%), rgba(255,255,255,.22) 0);
 }
-.left-hand .shutter { right: auto; left: 5cqw; }
 .shutter .core {
-  width: 84%; height: 84%; border-radius: 50%; background: #fff;
-  box-shadow: inset 0 0 0 1.4cqh rgba(0,0,0,.15); transition: transform .25s, background .25s, border-radius .25s;
+  position: absolute; inset: 2.2cqmin; border-radius: 99px; background: #fff;
+  box-shadow: inset 0 0 0 1.2cqmin rgba(0,0,0,.12); display: grid; place-items: center;
+  color: #1b1f2a; font: 800 6cqmin/1 var(--display);
+  transition: transform .25s, background .25s, border-radius .25s, inset .25s;
 }
-.shutter.cooling .core { transform: scale(.78); background: #8f95a3; }
+.shutter.cooling .core, .shutter.empty .core { transform: scale(.86); background: #8f95a3; }
 .shutter.ready-pop .core { animation: pop .35s ease-out; }
-@keyframes pop { 50% { transform: scale(1.08); } }
-.video .shutter { background: conic-gradient(var(--rec) calc(var(--p) * 1turn), rgba(255,255,255,.2) 0); }
-.video .shutter .core { background: var(--rec); }
-.video.recording .shutter .core { transform: scale(.5); border-radius: 18%; }
+@keyframes pop { 50% { transform: scale(1.06); } }
+.video .shutter { background: linear-gradient(to top, var(--rec) calc(var(--p) * 100%), rgba(255,255,255,.22) 0); }
+.video .shutter .core { background: var(--rec); color: #fff; }
+.video.recording .shutter .core { inset: calc(50% - 6cqmin) 4.5cqmin; border-radius: 2.4cqmin; }
 
-/* Side controls above/below shutter */
-.side { position: absolute; right: 5cqw; width: 36cqh; display: grid; place-items: center; }
-.left-hand .side { right: auto; left: 5cqw; }
-.side.top { top: 4cqh; }
-.side.bottom { bottom: 5cqh; }
 .hold {
-  --h: 0; position: relative; border: 0; cursor: pointer; color: #fff; font: 700 3.6cqh/1 var(--body);
+  --h: 0; position: relative; border: 0; cursor: pointer; color: #fff; font: 700 3.6cqmin/1 var(--body);
   border-radius: 99px; overflow: hidden; background: rgba(0,0,0,.45);
   backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
 }
 .hold::before {
-  content: ""; position: absolute; inset: 0; transform-origin: left; transform: scaleX(var(--h));
-  background: rgba(255,201,60,.55);
+  content: ""; position: absolute; inset: 0; transform-origin: bottom; transform: scaleY(var(--h));
+  background: rgba(255,201,60,.6);
 }
 .hold > * { position: relative; }
-.mode { display: flex; gap: .8cqh; padding: 1cqh; }
-.mode span { width: 10cqh; height: 8cqh; display: grid; place-items: center; border-radius: 99px; opacity: .55; }
+.mode { display: flex; flex-direction: column; gap: .8cqmin; padding: 1cqmin; }
+.mode span { width: 11cqmin; height: 10cqmin; display: grid; place-items: center; border-radius: 99px; opacity: .55; }
 .mode span.on { background: rgba(255,255,255,.95); color: #111; opacity: 1; }
-.gallery-btn { width: 17cqh; height: 13cqh; display: grid; place-items: center; border-radius: 3cqh; }
+.gallery-btn { width: 14cqmin; height: 14cqmin; display: grid; place-items: center; border-radius: 4cqmin; }
 .hint {
-  position: absolute; white-space: nowrap; bottom: calc(100% + 1.4cqh); background: #fff; color: #111;
-  font: 700 3.2cqh/1 var(--body); padding: 1.2cqh 1.8cqh; border-radius: 99px; pointer-events: none;
-  opacity: 0; transition: opacity .2s;
+  position: absolute; z-index: 3; white-space: nowrap; top: 50%; right: calc(100% + 2cqmin); transform: translateY(-50%);
+  background: #fff; color: #111; font: 700 3.4cqmin/1 var(--body); padding: 1.4cqmin 2cqmin;
+  border-radius: 99px; pointer-events: none; opacity: 0; transition: opacity .2s;
 }
+.left-hand .hint { right: auto; left: calc(100% + 2cqmin); }
 .hint.show { opacity: 1; }
-.side.top .hint { bottom: auto; top: calc(100% + 1.4cqh); }
 
-/* Parent lock: hold 3 s */
+/* Parent lock: hold 3 s, opposite bottom corner */
 .lock {
-  position: absolute; bottom: 4cqh; left: 4cqw; width: 9cqh; height: 9cqh; border-radius: 50%;
+  position: absolute; bottom: 4cqmin; left: 4cqmin; width: 9cqmin; height: 9cqmin; border-radius: 50%;
   display: grid; place-items: center; opacity: .35; padding: 0;
   background: conic-gradient(var(--sun) calc(var(--h) * 1turn), rgba(0,0,0,.45) 0);
 }
 .lock::before { display: none; }
-.left-hand .lock { left: auto; right: 4cqw; }
+.left-hand .lock { left: auto; right: 4cqmin; }
 
 .rec-pill {
-  position: absolute; top: 4cqh; left: 50%; transform: translateX(-50%);
-  background: rgba(0,0,0,.6); color: #fff; font: 700 4cqh/1 var(--body);
-  padding: 1.4cqh 2.4cqh; border-radius: 99px; display: flex; gap: 1.4cqh; align-items: center;
+  position: absolute; top: 25cqmin; left: 50%; transform: translateX(-50%);
+  background: rgba(0,0,0,.6); color: #fff; font: 700 4cqmin/1 var(--body);
+  padding: 1.4cqmin 2.4cqmin; border-radius: 99px; display: flex; gap: 1.4cqmin; align-items: center;
   font-variant-numeric: tabular-nums;
 }
-.rec-pill::before { content: ""; width: 2.6cqh; height: 2.6cqh; border-radius: 50%; background: var(--rec); animation: blink 1s infinite; }
+.rec-pill::before { content: ""; width: 2.6cqmin; height: 2.6cqmin; border-radius: 50%; background: var(--rec); animation: blink 1s infinite; }
 @keyframes blink { 50% { opacity: .2; } }
 
 .flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
@@ -134,19 +142,19 @@ header p { margin: 8px 0 0; color: var(--muted); max-width: 62ch; }
 /* Overlays */
 .overlay { position: absolute; inset: 0; z-index: 10; background: rgba(6,8,12,.94); }
 .preview { display: grid; place-items: center; cursor: pointer; }
-.preview img { max-width: 92%; max-height: 86%; border-radius: 3cqh; animation: zoomIn .22s ease-out; }
-.preview .cap { position: absolute; bottom: 3cqh; color: #fff; font: 700 3.6cqh/1 var(--body); opacity: .8; }
+.preview img { max-width: 92%; max-height: 86%; border-radius: 3cqmin; animation: zoomIn .22s ease-out; }
+.preview .cap { position: absolute; bottom: 3cqmin; color: #fff; font: 700 3.6cqmin/1 var(--body); opacity: .8; }
 @keyframes zoomIn { from { transform: scale(.85); opacity: 0; } }
-.grid { padding: 5cqh 5cqw; overflow-y: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(28cqh, 1fr)); gap: 2cqh; align-content: start; }
+.grid { padding: 5cqmin 5cqw; overflow-y: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(28cqmin, 1fr)); gap: 2cqmin; align-content: start; }
 .grid .thumb { width: 100%; height: auto; }
 .close {
-  position: sticky; top: 0; justify-self: start; grid-column: 1 / -1; width: 14cqh; height: 14cqh;
-  border-radius: 50%; border: 0; background: #fff; color: #111; font: 800 7cqh/1 var(--display); cursor: pointer; z-index: 2;
+  position: sticky; top: 0; justify-self: start; grid-column: 1 / -1; width: 14cqmin; height: 14cqmin;
+  border-radius: 50%; border: 0; background: #fff; color: #111; font: 800 7cqmin/1 var(--display); cursor: pointer; z-index: 2;
 }
-.parent { padding: 4cqh 5cqw; overflow-y: auto; color: var(--ink); font-size: 3.6cqh; }
-.parent h2 { font-family: var(--display); font-size: 6cqh; margin: 0 0 2cqh; line-height: 1.1; }
-.row { display: flex; align-items: center; justify-content: space-between; gap: 3cqw; padding: 1.6cqh 0; border-top: 1px solid var(--line); }
-.done { margin-top: 3cqh; }
+.parent { padding: 4cqmin 5cqw; overflow-y: auto; color: var(--ink); font-size: 3.6cqmin; }
+.parent h2 { font-family: var(--display); font-size: 6cqmin; margin: 0 0 2cqmin; line-height: 1.1; }
+.row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 3cqw; padding: 1.6cqmin 0; border-top: 1px solid var(--line); }
+.done { margin-top: 3cqmin; }
 
 /* ---------- Notes panel ---------- */
 .notes { display: grid; gap: 18px; min-width: 0; }
@@ -163,7 +171,7 @@ kbd { font-family: var(--body); font-weight: 700; background: var(--ground); bor
   border: 0; background: transparent; color: var(--muted); font: 700 .9rem/1 var(--body);
   padding: 8px 12px; border-radius: 99px; cursor: pointer;
 }
-.parent .seg button { font-size: 3.4cqh; padding: 1.6cqh 2.4cqh; }
+.parent .seg button { font-size: 3.4cqmin; padding: 1.6cqmin 2.4cqmin; }
 .seg button[aria-pressed="true"] { background: var(--sun); color: #1b1f2a; }
 button:focus-visible { outline: 3px solid var(--sun); outline-offset: 2px; }
 .level-desc { margin-top: 10px; color: var(--muted); font-size: .9rem; }
@@ -174,30 +182,35 @@ button:focus-visible { outline: 3px solid var(--sun); outline-offset: 2px; }
 <div class="wrap">
   <header>
     <h1>Tiny<span>Cam</span></h1>
-    <p>Klickbarer Entwurf einer Kinderkamera im Querformat. Das Livebild ist simuliert. Berührungen auf dem Bild lösen nichts aus, nur der Auslöser und die Vorschau-Leiste reagieren auf einfaches Tippen.</p>
+    <p>Klickbarer Entwurf einer Kinderkamera für Quer- und Hochformat. Das Livebild ist simuliert. Berührungen auf dem Bild lösen nichts aus, nur der Auslöser und die Vorschau-Leiste reagieren auf einfaches Tippen.</p>
   </header>
 
   <div class="layout">
-    <div class="device">
+    <div class="device" id="device">
       <div class="screen" id="screen">
         <canvas id="live" width="960" height="480"></canvas>
         <div class="strip" id="strip"></div>
 
-        <div class="side top" id="galleryWrap" hidden>
+        <div class="rail">
+        <div class="side" id="galleryWrap" hidden>
           <button class="hold gallery-btn" id="galleryBtn" aria-label="Galerie (gedrückt halten)">
             <svg width="55%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
           </button>
           <span class="hint" id="galleryHint">Gedrückt halten</span>
         </div>
 
-        <button class="shutter" id="shutter" aria-label="Auslöser"><span class="core"></span></button>
-
-        <div class="side bottom" id="modeWrap" hidden>
+        <div class="side" id="modeWrap" hidden>
           <button class="hold mode" id="modeBtn" aria-label="Foto/Video umschalten (gedrückt halten)">
             <span data-m="photo"><svg width="60%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg></span>
             <span data-m="video"><svg width="60%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3z"/></svg></span>
           </button>
           <span class="hint" id="modeHint">Gedrückt halten</span>
+        </div>
+
+        <div class="side">
+          <button class="shutter" id="shutter" aria-label="Auslöser"><span class="core" id="count"></span></button>
+          <span class="hint" id="shutterHint">Filmrolle voll. Morgen geht's weiter!</span>
+        </div>
         </div>
 
         <button class="hold lock" id="lock" aria-label="Eltern-Einstellungen (3 Sekunden halten)">
@@ -213,6 +226,8 @@ button:focus-visible { outline: 3px solid var(--sun); outline-offset: 2px; }
           <h2>Eltern-Einstellungen</h2>
           <div class="row"><span>Lernstufe</span><div class="seg" data-key="level"></div></div>
           <div class="row"><span>Pause zwischen Fotos</span><div class="seg" data-key="cooldown"></div></div>
+          <div class="row"><span>Fotos pro Tag</span><div class="seg" data-key="budget"></div></div>
+          <div class="row"><span>Nutzungszeit pro Tag</span><div class="seg" data-key="timeLimit"></div></div>
           <div class="row"><span>Bilder in der Leiste</span><div class="seg" data-key="stripCount"></div></div>
           <div class="row"><span>Max. Videolänge</span><div class="seg" data-key="maxVideo"></div></div>
           <div class="row"><span>Auslöser-Seite</span><div class="seg" data-key="hand"></div></div>
@@ -225,16 +240,18 @@ button:focus-visible { outline: 3px solid var(--sun); outline-offset: 2px; }
       <div class="card">
         <p class="eyebrow">Ausprobieren</p>
         <ol>
-          <li>Auslöser tippen. Das Bild fliegt in die Leiste, der Ring zeigt, wann die Kamera wieder bereit ist.</li>
+          <li>Auslöser-Pille tippen. Das Bild fliegt in die Leiste, die Pille füllt sich wieder, bis die Kamera bereit ist.</li>
           <li>Ein Bild in der Leiste antippen, irgendwo tippen zum Schließen.</li>
           <li>Ab Stufe 2: Foto/Video-Schalter <kbd>1,5 s</kbd> halten.</li>
           <li>Ab Stufe 3: Galerie-Knopf <kbd>1 s</kbd> halten.</li>
-          <li>Schloss unten in der Ecke <kbd>3 s</kbd> halten öffnet die Eltern-Einstellungen.</li>
+          <li>Schloss unten in der Ecke <kbd>3 s</kbd> halten öffnet die Eltern-Einstellungen: Auslöser-Seite und alle Limits.</li>
         </ol>
       </div>
       <div class="card">
         <p class="eyebrow">Demo-Abkürzung</p>
-        <h2>Lernstufe</h2>
+        <h2>Ausrichtung</h2>
+        <div class="seg" data-key="orient"></div>
+        <h2 style="margin-top:16px">Lernstufe</h2>
         <div class="seg" data-key="level"></div>
         <div class="level-desc" id="levelDesc"></div>
       </div>
@@ -257,14 +274,17 @@ const screen = $('screen'), canvas = $('live'), ctx = canvas.getContext('2d');
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const state = {
-  level: 1, cooldown: 3, stripCount: 5, maxVideo: 30, hand: 'right',
-  mode: 'photo', items: [], readyAt: 0, recording: null, wasReady: true,
+  level: 1, cooldown: 3, stripCount: 5, maxVideo: 30, hand: 'right', orient: 'landscape',
+  budget: 0, timeLimit: 0, usedToday: 0, mode: 'photo', items: [], readyAt: 0, recording: null, wasReady: true,
 };
 const OPTIONS = {
   level: [[1, 'Stufe 1'], [2, 'Stufe 2'], [3, 'Stufe 3']],
-  cooldown: [[1, '1 s'], [3, '3 s'], [5, '5 s']],
+  cooldown: [[0, 'Aus'], [1, '1 s'], [3, '3 s'], [5, '5 s']],
+  budget: [[0, 'Aus'], [5, '5'], [20, '20'], [50, '50']],
+  timeLimit: [[0, 'Aus'], [15, '15 min'], [30, '30 min'], [60, '60 min']],
+  orient: [['landscape', 'Quer'], ['portrait', 'Hoch']],
   stripCount: [[3, '3'], [5, '5'], [7, '7']],
-  maxVideo: [[10, '10 s'], [30, '30 s'], [60, '60 s']],
+  maxVideo: [[10, '10 s'], [30, '30 s'], [60, '60 s'], [0, 'Aus']],
   hand: [['right', 'Rechts'], ['left', 'Links']],
 };
 const LEVEL_DESC = {
@@ -307,12 +327,12 @@ function loop(t) {
   const shutter = $('shutter');
   if (state.recording) {
     const el = (now - state.recording.start) / 1000;
-    shutter.style.setProperty('--p', 1 - el / state.maxVideo);
+    shutter.style.setProperty('--p', state.maxVideo ? 1 - el / state.maxVideo : 1);
     $('recPill').textContent = fmt(el);
-    if (el >= state.maxVideo) stopRecording();
+    if (state.maxVideo && el >= state.maxVideo) stopRecording();
   } else {
-    const p = Math.min(1, 1 - (state.readyAt - now) / (state.cooldown * 1000));
     const ready = now >= state.readyAt;
+    const p = ready ? 1 : 1 - (state.readyAt - now) / (state.cooldown * 1000);
     shutter.style.setProperty('--p', ready ? 1 : p);
     shutter.classList.toggle('cooling', !ready);
     if (ready && !state.wasReady) {
@@ -335,6 +355,7 @@ $('shutter').addEventListener('pointerdown', e => {
   if (isPalm(e)) return;
   if (state.mode === 'video') return state.recording ? stopRecording() : startRecording();
   if (performance.now() < state.readyAt) return;
+  if (budgetLeft() === 0) return flashHint($('shutterHint'));
   capture({ type: 'photo' });
   state.readyAt = performance.now() + state.cooldown * 1000;
   state.wasReady = false;
@@ -342,6 +363,7 @@ $('shutter').addEventListener('pointerdown', e => {
 
 function startRecording() {
   if (performance.now() < state.readyAt) return;
+  if (budgetLeft() === 0) return flashHint($('shutterHint'));
   state.recording = { start: performance.now(), src: canvas.toDataURL('image/jpeg', .7) };
   screen.classList.add('recording'); $('recPill').hidden = false; syncUI();
 }
@@ -355,7 +377,16 @@ function stopRecording() {
   state.wasReady = false; syncUI();
 }
 
+const budgetLeft = () => state.budget ? Math.max(0, state.budget - state.usedToday) : null;
+function flashHint(el) { el.classList.add('show'); setTimeout(() => el.classList.remove('show'), 1600); }
+function renderCount() {
+  const left = budgetLeft();
+  $('count').textContent = left ?? '';
+  $('shutter').classList.toggle('empty', left === 0);
+}
+
 function capture(item) {
+  state.usedToday++; renderCount();
   item.src = item.src || canvas.toDataURL('image/jpeg', .7);
   item.id = Date.now();
   state.items.unshift(item);
@@ -407,7 +438,7 @@ function openGallery() {
 function hold(el, ms, onDone, hintEl) {
   let t0 = 0, raf = 0;
   const stop = () => {
-    if (t0 && hintEl && performance.now() - t0 < ms * .5) { hintEl.classList.add('show'); setTimeout(() => hintEl.classList.remove('show'), 1400); }
+    if (t0 && hintEl && performance.now() - t0 < ms * .5) flashHint(hintEl);
     cancelAnimationFrame(raf); t0 = 0; el.style.setProperty('--h', 0);
   };
   const tick = () => {
@@ -442,6 +473,10 @@ function buildSegs() {
 }
 function syncUI() {
   buildSegs();
+  const portrait = state.orient === 'portrait';
+  $('device').classList.toggle('portrait', portrait);
+  if ((canvas.width < canvas.height) !== portrait) [canvas.width, canvas.height] = [canvas.height, canvas.width];
+  renderCount();
   screen.classList.toggle('left-hand', state.hand === 'left');
   screen.classList.toggle('video', state.mode === 'video');
   $('modeWrap').hidden = state.level < 2;
