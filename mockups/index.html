@@ -1,0 +1,458 @@
+<title>TinyCam Mockup</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&display=swap">
+<style>
+/* Layout: device stage on the left, try-it notes on the right; stacks below ~900px.
+   Single deliberate dark look (camera UI), so no light/dark token switch. */
+:root {
+  color-scheme: dark;
+  --ground: #1b1f2a;
+  --panel: #242a38;
+  --line: #343c4f;
+  --ink: #eef0f6;
+  --muted: #9aa3b8;
+  --sun: #ffc93c;
+  --rec: #ff4d5e;
+  --device: #0c0e13;
+  --display: "Baloo 2", "Trebuchet MS", system-ui, sans-serif;
+  --body: "Nunito Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+[hidden] { display: none !important; }
+html, body { background: var(--ground); color: var(--ink); }
+body {
+  font-family: var(--body); font-size: 15px; line-height: 1.55;
+  padding-block: 28px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 1240px; margin: 0 auto; display: grid; gap: 28px; }
+header h1 { font-family: var(--display); font-weight: 800; font-size: 2.4rem; line-height: 1; margin: 0; letter-spacing: -.01em; }
+header h1 span { color: var(--sun); }
+header p { margin: 8px 0 0; color: var(--muted); max-width: 62ch; }
+.layout { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 28px; align-items: start; }
+@media (max-width: 900px) { .layout { grid-template-columns: minmax(0, 1fr); } }
+
+/* ---------- Device ---------- */
+.device {
+  background: var(--device); border-radius: 34px; padding: 14px;
+  box-shadow: 0 0 0 2px #2c3242, 0 30px 60px -20px rgba(0,0,0,.7);
+  max-width: 100%;
+}
+.screen {
+  position: relative; aspect-ratio: 2 / 1; width: 100%; max-width: 100%;
+  border-radius: 22px; overflow: hidden; container-type: size;
+  background: #000; touch-action: none; user-select: none; -webkit-user-select: none;
+}
+.screen canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+/* Thumbnail strip (newest item sits nearest to the shutter) */
+.strip {
+  position: absolute; top: 4cqh; height: 17cqh; display: flex; gap: 1.6cqh;
+  left: 4cqw; right: calc(36cqh + 12cqw); flex-direction: row-reverse; overflow: hidden;
+}
+.left-hand .strip { left: calc(36cqh + 12cqw); right: 4cqw; flex-direction: row; }
+.thumb {
+  flex: none; height: 100%; aspect-ratio: 4 / 3; border-radius: 2.4cqh; overflow: hidden;
+  border: .6cqh solid rgba(255,255,255,.9); background: #222; padding: 0; cursor: pointer;
+  position: relative; box-shadow: 0 .8cqh 2cqh rgba(0,0,0,.35);
+}
+.thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.thumb.incoming { opacity: 0; }
+.badge {
+  position: absolute; left: 1cqh; bottom: 1cqh; background: rgba(0,0,0,.6); color: #fff;
+  font: 700 3cqh/1 var(--body); padding: .6cqh 1.2cqh; border-radius: 99px;
+}
+
+/* Shutter with cooldown ring (--p: 0..1) */
+.shutter {
+  --p: 1; position: absolute; top: 50%; right: 5cqw; width: 36cqh; height: 36cqh;
+  transform: translateY(-50%); border-radius: 50%; border: 0; padding: 0; cursor: pointer;
+  background: conic-gradient(var(--sun) calc(var(--p) * 1turn), rgba(255,255,255,.2) 0);
+  display: grid; place-items: center; transition: transform .15s;
+}
+.left-hand .shutter { right: auto; left: 5cqw; }
+.shutter .core {
+  width: 84%; height: 84%; border-radius: 50%; background: #fff;
+  box-shadow: inset 0 0 0 1.4cqh rgba(0,0,0,.15); transition: transform .25s, background .25s, border-radius .25s;
+}
+.shutter.cooling .core { transform: scale(.78); background: #8f95a3; }
+.shutter.ready-pop .core { animation: pop .35s ease-out; }
+@keyframes pop { 50% { transform: scale(1.08); } }
+.video .shutter { background: conic-gradient(var(--rec) calc(var(--p) * 1turn), rgba(255,255,255,.2) 0); }
+.video .shutter .core { background: var(--rec); }
+.video.recording .shutter .core { transform: scale(.5); border-radius: 18%; }
+
+/* Side controls above/below shutter */
+.side { position: absolute; right: 5cqw; width: 36cqh; display: grid; place-items: center; }
+.left-hand .side { right: auto; left: 5cqw; }
+.side.top { top: 4cqh; }
+.side.bottom { bottom: 5cqh; }
+.hold {
+  --h: 0; position: relative; border: 0; cursor: pointer; color: #fff; font: 700 3.6cqh/1 var(--body);
+  border-radius: 99px; overflow: hidden; background: rgba(0,0,0,.45);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+}
+.hold::before {
+  content: ""; position: absolute; inset: 0; transform-origin: left; transform: scaleX(var(--h));
+  background: rgba(255,201,60,.55);
+}
+.hold > * { position: relative; }
+.mode { display: flex; gap: .8cqh; padding: 1cqh; }
+.mode span { width: 10cqh; height: 8cqh; display: grid; place-items: center; border-radius: 99px; opacity: .55; }
+.mode span.on { background: rgba(255,255,255,.95); color: #111; opacity: 1; }
+.gallery-btn { width: 17cqh; height: 13cqh; display: grid; place-items: center; border-radius: 3cqh; }
+.hint {
+  position: absolute; white-space: nowrap; bottom: calc(100% + 1.4cqh); background: #fff; color: #111;
+  font: 700 3.2cqh/1 var(--body); padding: 1.2cqh 1.8cqh; border-radius: 99px; pointer-events: none;
+  opacity: 0; transition: opacity .2s;
+}
+.hint.show { opacity: 1; }
+.side.top .hint { bottom: auto; top: calc(100% + 1.4cqh); }
+
+/* Parent lock: hold 3 s */
+.lock {
+  position: absolute; bottom: 4cqh; left: 4cqw; width: 9cqh; height: 9cqh; border-radius: 50%;
+  display: grid; place-items: center; opacity: .35; padding: 0;
+  background: conic-gradient(var(--sun) calc(var(--h) * 1turn), rgba(0,0,0,.45) 0);
+}
+.lock::before { display: none; }
+.left-hand .lock { left: auto; right: 4cqw; }
+
+.rec-pill {
+  position: absolute; top: 4cqh; left: 50%; transform: translateX(-50%);
+  background: rgba(0,0,0,.6); color: #fff; font: 700 4cqh/1 var(--body);
+  padding: 1.4cqh 2.4cqh; border-radius: 99px; display: flex; gap: 1.4cqh; align-items: center;
+  font-variant-numeric: tabular-nums;
+}
+.rec-pill::before { content: ""; width: 2.6cqh; height: 2.6cqh; border-radius: 50%; background: var(--rec); animation: blink 1s infinite; }
+@keyframes blink { 50% { opacity: .2; } }
+
+.flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
+.fly { position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; transform-origin: 0 0; pointer-events: none; border-radius: 0; z-index: 5; }
+
+/* Overlays */
+.overlay { position: absolute; inset: 0; z-index: 10; background: rgba(6,8,12,.94); }
+.preview { display: grid; place-items: center; cursor: pointer; }
+.preview img { max-width: 92%; max-height: 86%; border-radius: 3cqh; animation: zoomIn .22s ease-out; }
+.preview .cap { position: absolute; bottom: 3cqh; color: #fff; font: 700 3.6cqh/1 var(--body); opacity: .8; }
+@keyframes zoomIn { from { transform: scale(.85); opacity: 0; } }
+.grid { padding: 5cqh 5cqw; overflow-y: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(28cqh, 1fr)); gap: 2cqh; align-content: start; }
+.grid .thumb { width: 100%; height: auto; }
+.close {
+  position: sticky; top: 0; justify-self: start; grid-column: 1 / -1; width: 14cqh; height: 14cqh;
+  border-radius: 50%; border: 0; background: #fff; color: #111; font: 800 7cqh/1 var(--display); cursor: pointer; z-index: 2;
+}
+.parent { padding: 4cqh 5cqw; overflow-y: auto; color: var(--ink); font-size: 3.6cqh; }
+.parent h2 { font-family: var(--display); font-size: 6cqh; margin: 0 0 2cqh; line-height: 1.1; }
+.row { display: flex; align-items: center; justify-content: space-between; gap: 3cqw; padding: 1.6cqh 0; border-top: 1px solid var(--line); }
+.done { margin-top: 3cqh; }
+
+/* ---------- Notes panel ---------- */
+.notes { display: grid; gap: 18px; min-width: 0; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 18px; }
+.card h2 { font-family: var(--display); font-weight: 700; font-size: 1.25rem; margin: 0 0 8px; line-height: 1.2; }
+.card ol, .card ul { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; }
+.card p { margin: 0 0 10px; color: var(--muted); }
+.eyebrow { text-transform: uppercase; letter-spacing: .08em; font-size: .72rem; font-weight: 700; color: var(--muted); margin: 0 0 6px; }
+kbd { font-family: var(--body); font-weight: 700; background: var(--ground); border: 1px solid var(--line); border-radius: 6px; padding: 0 6px; }
+
+/* Segmented control, shared by notes and parent screen */
+.seg { display: inline-flex; background: var(--ground); border: 1px solid var(--line); border-radius: 99px; padding: 3px; gap: 2px; flex-wrap: wrap; }
+.seg button {
+  border: 0; background: transparent; color: var(--muted); font: 700 .9rem/1 var(--body);
+  padding: 8px 12px; border-radius: 99px; cursor: pointer;
+}
+.parent .seg button { font-size: 3.4cqh; padding: 1.6cqh 2.4cqh; }
+.seg button[aria-pressed="true"] { background: var(--sun); color: #1b1f2a; }
+button:focus-visible { outline: 3px solid var(--sun); outline-offset: 2px; }
+.level-desc { margin-top: 10px; color: var(--muted); font-size: .9rem; }
+.level-desc b { color: var(--ink); }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Tiny<span>Cam</span></h1>
+    <p>Klickbarer Entwurf einer Kinderkamera im Querformat. Das Livebild ist simuliert. Berührungen auf dem Bild lösen nichts aus, nur der Auslöser und die Vorschau-Leiste reagieren auf einfaches Tippen.</p>
+  </header>
+
+  <div class="layout">
+    <div class="device">
+      <div class="screen" id="screen">
+        <canvas id="live" width="960" height="480"></canvas>
+        <div class="strip" id="strip"></div>
+
+        <div class="side top" id="galleryWrap" hidden>
+          <button class="hold gallery-btn" id="galleryBtn" aria-label="Galerie (gedrückt halten)">
+            <svg width="55%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+          </button>
+          <span class="hint" id="galleryHint">Gedrückt halten</span>
+        </div>
+
+        <button class="shutter" id="shutter" aria-label="Auslöser"><span class="core"></span></button>
+
+        <div class="side bottom" id="modeWrap" hidden>
+          <button class="hold mode" id="modeBtn" aria-label="Foto/Video umschalten (gedrückt halten)">
+            <span data-m="photo"><svg width="60%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg></span>
+            <span data-m="video"><svg width="60%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3z"/></svg></span>
+          </button>
+          <span class="hint" id="modeHint">Gedrückt halten</span>
+        </div>
+
+        <button class="hold lock" id="lock" aria-label="Eltern-Einstellungen (3 Sekunden halten)">
+          <svg width="50%" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+        </button>
+
+        <div class="rec-pill" id="recPill" hidden>0:00</div>
+        <div class="flash" id="flash"></div>
+
+        <div class="overlay grid" id="gallery" hidden></div>
+        <div class="overlay preview" id="preview" hidden><img id="previewImg" alt=""><span class="cap" id="previewCap"></span></div>
+        <div class="overlay parent" id="parent" hidden>
+          <h2>Eltern-Einstellungen</h2>
+          <div class="row"><span>Lernstufe</span><div class="seg" data-key="level"></div></div>
+          <div class="row"><span>Pause zwischen Fotos</span><div class="seg" data-key="cooldown"></div></div>
+          <div class="row"><span>Bilder in der Leiste</span><div class="seg" data-key="stripCount"></div></div>
+          <div class="row"><span>Max. Videolänge</span><div class="seg" data-key="maxVideo"></div></div>
+          <div class="row"><span>Auslöser-Seite</span><div class="seg" data-key="hand"></div></div>
+          <div class="seg done"><button id="parentDone" aria-pressed="true">Fertig</button></div>
+        </div>
+      </div>
+    </div>
+
+    <aside class="notes">
+      <div class="card">
+        <p class="eyebrow">Ausprobieren</p>
+        <ol>
+          <li>Auslöser tippen. Das Bild fliegt in die Leiste, der Ring zeigt, wann die Kamera wieder bereit ist.</li>
+          <li>Ein Bild in der Leiste antippen, irgendwo tippen zum Schließen.</li>
+          <li>Ab Stufe 2: Foto/Video-Schalter <kbd>1,5 s</kbd> halten.</li>
+          <li>Ab Stufe 3: Galerie-Knopf <kbd>1 s</kbd> halten.</li>
+          <li>Schloss unten in der Ecke <kbd>3 s</kbd> halten öffnet die Eltern-Einstellungen.</li>
+        </ol>
+      </div>
+      <div class="card">
+        <p class="eyebrow">Demo-Abkürzung</p>
+        <h2>Lernstufe</h2>
+        <div class="seg" data-key="level"></div>
+        <div class="level-desc" id="levelDesc"></div>
+      </div>
+      <div class="card">
+        <p class="eyebrow">Schutz vor Fehlbedienung</p>
+        <ul>
+          <li>Livebild ist komplett inaktiv.</li>
+          <li>Mehrere Finger gleichzeitig (Handballen) werden ignoriert.</li>
+          <li>Seltene oder folgenreiche Aktionen nur per Gedrückthalten mit sichtbarem Fortschritt.</li>
+          <li>In der echten App zusätzlich: Android-Bildschirmfixierung bzw. iOS „Geführter Zugriff“.</li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const screen = $('screen'), canvas = $('live'), ctx = canvas.getContext('2d');
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const state = {
+  level: 1, cooldown: 3, stripCount: 5, maxVideo: 30, hand: 'right',
+  mode: 'photo', items: [], readyAt: 0, recording: null, wasReady: true,
+};
+const OPTIONS = {
+  level: [[1, 'Stufe 1'], [2, 'Stufe 2'], [3, 'Stufe 3']],
+  cooldown: [[1, '1 s'], [3, '3 s'], [5, '5 s']],
+  stripCount: [[3, '3'], [5, '5'], [7, '7']],
+  maxVideo: [[10, '10 s'], [30, '30 s'], [60, '60 s']],
+  hand: [['right', 'Rechts'], ['left', 'Links']],
+};
+const LEVEL_DESC = {
+  1: '<b>Nur Fotos.</b> Auslöser und Vorschau-Leiste, sonst nichts.',
+  2: '<b>Plus Video.</b> Umschalter erscheint, nur per Gedrückthalten.',
+  3: '<b>Plus Galerie.</b> Alle Bilder als Raster, ebenfalls per Gedrückthalten.',
+};
+
+/* ---------- Simulated live view ---------- */
+function drawScene(t) {
+  const w = canvas.width, h = canvas.height, s = t / 1000;
+  const sky = ctx.createLinearGradient(0, 0, 0, h);
+  sky.addColorStop(0, `hsl(${205 + Math.sin(s / 6) * 12} 75% 62%)`);
+  sky.addColorStop(1, '#cfeaf7');
+  ctx.fillStyle = sky; ctx.fillRect(0, 0, w, h);
+  ctx.fillStyle = '#ffd34d';
+  ctx.beginPath(); ctx.arc(w * .2 + Math.sin(s / 5) * 40, h * .32, 46, 0, 7); ctx.fill();
+  ctx.fillStyle = 'rgba(255,255,255,.92)';
+  for (let i = 0; i < 3; i++) {
+    const x = ((s * (18 + i * 9) + i * 340) % (w + 240)) - 120, y = 70 + i * 50;
+    [[0, 0, 34], [36, -12, 42], [76, 0, 30]].forEach(([dx, dy, r]) => { ctx.beginPath(); ctx.arc(x + dx, y + dy, r, 0, 7); ctx.fill(); });
+  }
+  ctx.fillStyle = '#6cc070';
+  ctx.beginPath(); ctx.moveTo(0, h);
+  for (let x = 0; x <= w; x += 20) ctx.lineTo(x, h * .7 + Math.sin(x / 120) * 26);
+  ctx.lineTo(w, h); ctx.fill();
+  ctx.fillStyle = '#3f9a55';
+  ctx.beginPath(); ctx.moveTo(0, h);
+  for (let x = 0; x <= w; x += 20) ctx.lineTo(x, h * .82 + Math.cos(x / 90 + 1) * 18);
+  ctx.lineTo(w, h); ctx.fill();
+  const bx = w * .55 + Math.sin(s * 1.3) * w * .2, by = h * .78 - Math.abs(Math.sin(s * 2.6)) * h * .3;
+  ctx.fillStyle = '#ff6b6b'; ctx.beginPath(); ctx.arc(bx, by, 28, 0, 7); ctx.fill();
+  ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(bx - 9, by - 9, 7, 0, 7); ctx.fill();
+}
+
+/* ---------- Main loop: scene, shutter ring, recording ---------- */
+function loop(t) {
+  drawScene(t);
+  const now = performance.now();
+  const shutter = $('shutter');
+  if (state.recording) {
+    const el = (now - state.recording.start) / 1000;
+    shutter.style.setProperty('--p', 1 - el / state.maxVideo);
+    $('recPill').textContent = fmt(el);
+    if (el >= state.maxVideo) stopRecording();
+  } else {
+    const p = Math.min(1, 1 - (state.readyAt - now) / (state.cooldown * 1000));
+    const ready = now >= state.readyAt;
+    shutter.style.setProperty('--p', ready ? 1 : p);
+    shutter.classList.toggle('cooling', !ready);
+    if (ready && !state.wasReady) {
+      shutter.classList.remove('ready-pop'); void shutter.offsetWidth; shutter.classList.add('ready-pop');
+    }
+    state.wasReady = ready;
+  }
+  requestAnimationFrame(loop);
+}
+const fmt = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+
+/* ---------- Touch protection: ignore multi-finger / palm contacts ---------- */
+const active = new Set();
+screen.addEventListener('pointerdown', e => active.add(e.pointerId), true);
+['pointerup', 'pointercancel'].forEach(ev => addEventListener(ev, e => active.delete(e.pointerId), true));
+const isPalm = e => active.size > 1 || (e.pointerType === 'touch' && e.width > 60);
+
+/* ---------- Shutter ---------- */
+$('shutter').addEventListener('pointerdown', e => {
+  if (isPalm(e)) return;
+  if (state.mode === 'video') return state.recording ? stopRecording() : startRecording();
+  if (performance.now() < state.readyAt) return;
+  capture({ type: 'photo' });
+  state.readyAt = performance.now() + state.cooldown * 1000;
+  state.wasReady = false;
+});
+
+function startRecording() {
+  if (performance.now() < state.readyAt) return;
+  state.recording = { start: performance.now(), src: canvas.toDataURL('image/jpeg', .7) };
+  screen.classList.add('recording'); $('recPill').hidden = false; syncUI();
+}
+function stopRecording() {
+  const r = state.recording;
+  if (!r || performance.now() - r.start < 1000) return; // avoid instant stop from a double tap
+  state.recording = null;
+  screen.classList.remove('recording'); $('recPill').hidden = true;
+  capture({ type: 'video', src: r.src, dur: (performance.now() - r.start) / 1000 });
+  state.readyAt = performance.now() + state.cooldown * 1000;
+  state.wasReady = false; syncUI();
+}
+
+function capture(item) {
+  item.src = item.src || canvas.toDataURL('image/jpeg', .7);
+  item.id = Date.now();
+  state.items.unshift(item);
+  renderStrip(item.id);
+  const flash = $('flash');
+  flash.animate([{ opacity: .8 }, { opacity: 0 }], { duration: 220 });
+  const target = $('strip').querySelector(`[data-id="${item.id}"]`);
+  if (reduceMotion || !target) return target?.classList.remove('incoming');
+  // Fly the frozen frame into its strip slot so the child sees where it went
+  const sr = screen.getBoundingClientRect(), tr = target.getBoundingClientRect();
+  const img = new Image(); img.src = item.src; img.className = 'fly'; screen.appendChild(img);
+  const sx = tr.width / sr.width, sy = tr.height / sr.height;
+  img.animate([
+    { transform: 'none', borderRadius: '0' },
+    { transform: `translate(${tr.left - sr.left}px, ${tr.top - sr.top}px) scale(${sx}, ${sy})`, borderRadius: '40px' },
+  ], { duration: 600, easing: 'cubic-bezier(.3,.7,.2,1)', fill: 'forwards' })
+    .finished.then(() => { target.classList.remove('incoming'); img.remove(); });
+}
+
+/* ---------- Strip, gallery, preview ---------- */
+function thumb(item, incoming) {
+  const b = document.createElement('button');
+  b.className = 'thumb' + (incoming ? ' incoming' : ''); b.dataset.id = item.id;
+  b.innerHTML = `<img alt="" src="${item.src}">` + (item.type === 'video' ? `<span class="badge">▶ ${fmt(item.dur)}</span>` : '');
+  b.addEventListener('click', e => { e.stopPropagation(); if (!isPalm(e)) openPreview(item); });
+  return b;
+}
+function renderStrip(incomingId) {
+  const strip = $('strip'); strip.replaceChildren();
+  state.items.slice(0, state.stripCount).forEach(it => strip.appendChild(thumb(it, it.id === incomingId)));
+}
+function openPreview(item) {
+  $('previewImg').src = item.src;
+  $('previewCap').textContent = item.type === 'video' ? `Video · ${fmt(item.dur)} (Mockup: Standbild)` : '';
+  $('preview').hidden = false;
+}
+$('preview').addEventListener('click', () => { $('preview').hidden = true; });
+function openGallery() {
+  const g = $('gallery'); g.replaceChildren();
+  const close = document.createElement('button');
+  close.className = 'close'; close.textContent = '×'; close.setAttribute('aria-label', 'Zurück zur Kamera');
+  close.addEventListener('click', () => { g.hidden = true; });
+  g.appendChild(close);
+  state.items.forEach(it => g.appendChild(thumb(it)));
+  g.hidden = false;
+}
+
+/* ---------- Hold-to-activate controls ---------- */
+function hold(el, ms, onDone, hintEl) {
+  let t0 = 0, raf = 0;
+  const stop = () => {
+    if (t0 && hintEl && performance.now() - t0 < ms * .5) { hintEl.classList.add('show'); setTimeout(() => hintEl.classList.remove('show'), 1400); }
+    cancelAnimationFrame(raf); t0 = 0; el.style.setProperty('--h', 0);
+  };
+  const tick = () => {
+    const p = Math.min(1, (performance.now() - t0) / ms);
+    el.style.setProperty('--h', p);
+    if (p >= 1) { t0 = 0; cancelAnimationFrame(raf); el.style.setProperty('--h', 0); onDone(); }
+    else raf = requestAnimationFrame(tick);
+  };
+  el.addEventListener('pointerdown', e => {
+    if (isPalm(e)) return;
+    el.setPointerCapture(e.pointerId); t0 = performance.now(); raf = requestAnimationFrame(tick);
+  });
+  el.addEventListener('pointerup', stop);
+  el.addEventListener('pointercancel', stop);
+}
+hold($('modeBtn'), 1500, () => { if (!state.recording) { state.mode = state.mode === 'photo' ? 'video' : 'photo'; syncUI(); } }, $('modeHint'));
+hold($('galleryBtn'), 1000, openGallery, $('galleryHint'));
+hold($('lock'), 3000, () => { $('parent').hidden = false; });
+$('parentDone').addEventListener('click', () => { $('parent').hidden = true; });
+
+/* ---------- Settings / segmented controls ---------- */
+function buildSegs() {
+  document.querySelectorAll('.seg[data-key]').forEach(seg => {
+    const key = seg.dataset.key;
+    seg.replaceChildren(...OPTIONS[key].map(([v, label]) => {
+      const b = document.createElement('button');
+      b.textContent = label; b.setAttribute('aria-pressed', state[key] === v);
+      b.addEventListener('click', () => { state[key] = v; if (key === 'level' && v < 2) state.mode = 'photo'; syncUI(); });
+      return b;
+    }));
+  });
+}
+function syncUI() {
+  buildSegs();
+  screen.classList.toggle('left-hand', state.hand === 'left');
+  screen.classList.toggle('video', state.mode === 'video');
+  $('modeWrap').hidden = state.level < 2;
+  $('galleryWrap').hidden = state.level < 3 || !!state.recording;
+  $('modeBtn').querySelectorAll('span').forEach(s => s.classList.toggle('on', s.dataset.m === state.mode));
+  $('levelDesc').innerHTML = LEVEL_DESC[state.level];
+  renderStrip();
+}
+
+// Seed a few example shots so the strip is not empty on first view
+for (let i = 0; i < 3; i++) { drawScene(4000 + i * 2300); state.items.unshift({ type: 'photo', id: i, src: canvas.toDataURL('image/jpeg', .7) }); }
+syncUI();
+requestAnimationFrame(loop);
+</script>
