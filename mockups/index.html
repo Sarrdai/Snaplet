@@ -59,7 +59,7 @@ header p { margin: 8px 0 0; color: var(--muted); max-width: 62ch; }
 .device:not(.portrait) .left-hand .strip { left: 29cqmin; }
 .thumb {
   flex: none; height: 100%; aspect-ratio: 4 / 3; border-radius: 2.4cqmin; overflow: hidden;
-  border: .6cqmin solid rgba(255,255,255,.9); background: #222; padding: 0; cursor: pointer;
+  border: .6cqmin solid var(--frame); background: #222; padding: 0; cursor: pointer;
   position: relative; box-shadow: 0 .8cqmin 2cqmin rgba(0,0,0,.35);
 }
 .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -77,38 +77,90 @@ header p { margin: 8px 0 0; color: var(--muted); max-width: 62ch; }
 .left-hand .rail { right: auto; left: 4cqmin; }
 .side { position: relative; display: grid; place-items: center; }
 
+/* Kid-facing skins: only controls, frames and overlays change; the camera image stays untouched */
+.screen {
+  --track: rgba(255,255,255,.22); --fill: var(--sun); --core: #fff; --core-ink: #1b1f2a;
+  --frame: rgba(255,255,255,.9); --btn: rgba(0,0,0,.45); --btn-on: rgba(255,255,255,.95);
+  --btn-on-ink: #111; --hold-fill: rgba(255,201,60,.6); --overlay: rgba(6,8,12,.94);
+}
+.t-rainbow {
+  --track: #3b1d6e; --fill: linear-gradient(to top, #ff5d5d, #ffa23a, #ffe14d, #5fd068, #4cb3ff, #9b5de5);
+  --core: radial-gradient(circle at 50% 30%, #c39bff, #7b3fe4); --core-ink: #fff; --frame: #c9a7ff;
+  --btn: rgba(76,29,149,.62); --btn-on: #fff; --btn-on-ink: #5b21b6; --hold-fill: rgba(201,167,255,.7);
+  --overlay: linear-gradient(160deg, #2a1150, #160a2e);
+}
+.t-space {
+  --track: #1d2352; --fill: linear-gradient(to top, #ff4d2e, #ff9f1c 45%, #ffe66d);
+  --core: linear-gradient(90deg, #b9c3dc, #fff 45%, #a3aecb); --core-ink: #1d2352; --frame: #9fb4ff;
+  --btn: rgba(20,26,70,.68); --btn-on: #9fe7ff; --btn-on-ink: #0d1240; --hold-fill: rgba(159,231,255,.6);
+  --overlay: radial-gradient(1.5px 1.5px at 20% 30%, #fff 50%, transparent 51%) 0 0 / 60px 60px,
+             radial-gradient(1.5px 1.5px at 70% 65%, #cfd8ff 50%, transparent 51%) 0 0 / 95px 95px, #0b1030;
+}
+.t-dino {
+  --track: #1f4d2b; --fill: linear-gradient(to top, #2f9e44, #8ce99a);
+  --core: radial-gradient(circle at 30% 25%, #a9e5a0 0 13%, transparent 14%) 0 0 / 9cqmin 11cqmin,
+          radial-gradient(circle at 75% 70%, #4fa94a 0 11%, transparent 12%) 0 0 / 9cqmin 11cqmin, #7bc96f;
+  --core-ink: #1f4d2b; --frame: #a7e08f; --btn: rgba(22,64,32,.62); --btn-on: #ffd166;
+  --btn-on-ink: #1f4d2b; --hold-fill: rgba(255,209,102,.6); --overlay: linear-gradient(160deg, #173d22, #0d2414);
+}
+.t-leopard {
+  --track: #3b2412; --fill: linear-gradient(to top, #c06014, #ffb000);
+  --core: radial-gradient(closest-side, #c47a2c 55%, #2b1a0e 57% 80%, transparent 82%) 0 0 / 9cqmin 8cqmin,
+          radial-gradient(closest-side, #2b1a0e 70%, transparent 74%) 5cqmin 5cqmin / 9cqmin 8cqmin, #ecb862;
+  --core-ink: #2b1a0e; --frame: #e9b35a; --btn: rgba(59,36,18,.68); --btn-on: #e9b35a;
+  --btn-on-ink: #2b1a0e; --hold-fill: rgba(233,179,90,.7); --overlay: linear-gradient(160deg, #3b2412, #1c1008);
+}
+
 /* Pill shutter, fills from the bottom while cooling down (--p: 0..1) */
 .shutter {
-  --p: 1; position: relative; width: 21cqmin; height: var(--pill-h); border-radius: 99px;
-  border: 0; padding: 0; cursor: pointer;
-  background: linear-gradient(to top, var(--sun) calc(var(--p) * 100%), rgba(255,255,255,.22) 0);
+  --p: 1; position: relative; isolation: isolate; width: 21cqmin; height: var(--pill-h); border-radius: 99px;
+  border: 0; padding: 0; cursor: pointer; background: var(--track);
+}
+.shutter .fill {
+  position: absolute; inset: 0; border-radius: inherit; background: var(--fill);
+  clip-path: inset(calc((1 - var(--p)) * 100%) 0 0 0);
 }
 .shutter .core {
-  position: absolute; inset: 2.2cqmin; border-radius: 99px; background: #fff;
+  position: absolute; inset: 2.2cqmin; border-radius: 99px; background: var(--core);
   box-shadow: inset 0 0 0 1.2cqmin rgba(0,0,0,.12); display: grid; place-items: center;
-  color: #1b1f2a; font: 800 6cqmin/1 var(--display);
-  transition: transform .25s, background .25s, border-radius .25s, inset .25s;
+  color: var(--core-ink); font: 800 6cqmin/1 var(--display);
+  transition: transform .25s, filter .25s, border-radius .25s, inset .25s;
 }
-.shutter.cooling .core, .shutter.empty .core { transform: scale(.86); background: #8f95a3; }
+.shutter .core svg { width: 62%; }
+.shutter .chip { background: rgba(255,255,255,.92); color: #1b1f2a; border-radius: 99px; padding: 1.4cqmin 2cqmin; min-width: 9cqmin; text-align: center; }
+.shutter.cooling .core, .shutter.empty .core { transform: scale(.86); filter: grayscale(1) brightness(.75); }
 .shutter.ready-pop .core { animation: pop .35s ease-out; }
 @keyframes pop { 50% { transform: scale(1.06); } }
-.video .shutter { background: linear-gradient(to top, var(--rec) calc(var(--p) * 100%), rgba(255,255,255,.22) 0); }
+.video .shutter { --fill: var(--rec); }
 .video .shutter .core { background: var(--rec); color: #fff; }
+.video .shutter .core svg { display: none; }
+
+/* Rocket fins (space) and back spikes (dino), drawn behind the pill */
+.t-space .shutter::before, .t-space .shutter::after {
+  content: ""; position: absolute; z-index: -1; bottom: 4%; width: 5.5cqmin; height: 16cqmin; background: #ff4d6d;
+}
+.t-space .shutter::before { left: -3.5cqmin; clip-path: polygon(100% 0, 100% 100%, 0 100%, 0 60%); }
+.t-space .shutter::after { right: -3.5cqmin; clip-path: polygon(0 0, 100% 60%, 100% 100%, 0 100%); }
+.t-dino .shutter::before {
+  content: ""; position: absolute; z-index: -1; left: -3.4cqmin; top: 10%; bottom: 10%; width: 3.8cqmin;
+  background: conic-gradient(from 45deg at 0 50%, #f77f00 90deg, transparent 0) 0 0 / 100% 7.6cqmin repeat-y;
+}
+.left-hand.t-dino .shutter::before { left: auto; right: -3.4cqmin; transform: scaleX(-1); }
 .video.recording .shutter .core { inset: calc(50% - 6cqmin) 4.5cqmin; border-radius: 2.4cqmin; }
 
 .hold {
   --h: 0; position: relative; border: 0; cursor: pointer; color: #fff; font: 700 3.6cqmin/1 var(--body);
-  border-radius: 99px; overflow: hidden; background: rgba(0,0,0,.45);
+  border-radius: 99px; overflow: hidden; background: var(--btn);
   backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
 }
 .hold::before {
   content: ""; position: absolute; inset: 0; transform-origin: bottom; transform: scaleY(var(--h));
-  background: rgba(255,201,60,.6);
+  background: var(--hold-fill);
 }
 .hold > * { position: relative; }
 .mode { display: flex; flex-direction: column; gap: .8cqmin; padding: 1cqmin; }
 .mode span { width: 11cqmin; height: 10cqmin; display: grid; place-items: center; border-radius: 99px; opacity: .55; }
-.mode span.on { background: rgba(255,255,255,.95); color: #111; opacity: 1; }
+.mode span.on { background: var(--btn-on); color: var(--btn-on-ink); opacity: 1; }
 .gallery-btn { width: 14cqmin; height: 14cqmin; display: grid; place-items: center; border-radius: 4cqmin; }
 .hint {
   position: absolute; z-index: 3; white-space: nowrap; top: 50%; right: calc(100% + 2cqmin); transform: translateY(-50%);
@@ -140,7 +192,7 @@ header p { margin: 8px 0 0; color: var(--muted); max-width: 62ch; }
 .fly { position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; transform-origin: 0 0; pointer-events: none; border-radius: 0; z-index: 5; }
 
 /* Overlays */
-.overlay { position: absolute; inset: 0; z-index: 10; background: rgba(6,8,12,.94); }
+.overlay { position: absolute; inset: 0; z-index: 10; background: var(--overlay); }
 .preview { display: grid; place-items: center; cursor: pointer; }
 .preview img { max-width: 92%; max-height: 86%; border-radius: 3cqmin; animation: zoomIn .22s ease-out; }
 .preview .cap { position: absolute; bottom: 3cqmin; color: #fff; font: 700 3.6cqmin/1 var(--body); opacity: .8; }
@@ -208,7 +260,7 @@ button:focus-visible { outline: 3px solid var(--sun); outline-offset: 2px; }
         </div>
 
         <div class="side">
-          <button class="shutter" id="shutter" aria-label="Auslöser"><span class="core" id="count"></span></button>
+          <button class="shutter" id="shutter" aria-label="Auslöser"><span class="fill"></span><span class="core" id="count"></span></button>
           <span class="hint" id="shutterHint">Filmrolle voll. Morgen geht's weiter!</span>
         </div>
         </div>
@@ -224,6 +276,7 @@ button:focus-visible { outline: 3px solid var(--sun); outline-offset: 2px; }
         <div class="overlay preview" id="preview" hidden><img id="previewImg" alt=""><span class="cap" id="previewCap"></span></div>
         <div class="overlay parent" id="parent" hidden>
           <h2>Eltern-Einstellungen</h2>
+          <div class="row"><span>Design</span><div class="seg" data-key="skin"></div></div>
           <div class="row"><span>Lernstufe</span><div class="seg" data-key="level"></div></div>
           <div class="row"><span>Pause zwischen Fotos</span><div class="seg" data-key="cooldown"></div></div>
           <div class="row"><span>Fotos pro Tag</span><div class="seg" data-key="budget"></div></div>
@@ -249,7 +302,9 @@ button:focus-visible { outline: 3px solid var(--sun); outline-offset: 2px; }
       </div>
       <div class="card">
         <p class="eyebrow">Demo-Abkürzung</p>
-        <h2>Ausrichtung</h2>
+        <h2>Design</h2>
+        <div class="seg" data-key="skin"></div>
+        <h2 style="margin-top:16px">Ausrichtung</h2>
         <div class="seg" data-key="orient"></div>
         <h2 style="margin-top:16px">Lernstufe</h2>
         <div class="seg" data-key="level"></div>
@@ -275,7 +330,7 @@ const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const state = {
   level: 1, cooldown: 3, stripCount: 5, maxVideo: 30, hand: 'right', orient: 'landscape',
-  budget: 0, timeLimit: 0, usedToday: 0, mode: 'photo', items: [], readyAt: 0, recording: null, wasReady: true,
+  budget: 0, timeLimit: 0, skin: 'rainbow', usedToday: 0, mode: 'photo', items: [], readyAt: 0, recording: null, wasReady: true,
 };
 const OPTIONS = {
   level: [[1, 'Stufe 1'], [2, 'Stufe 2'], [3, 'Stufe 3']],
@@ -283,6 +338,7 @@ const OPTIONS = {
   budget: [[0, 'Aus'], [5, '5'], [20, '20'], [50, '50']],
   timeLimit: [[0, 'Aus'], [15, '15 min'], [30, '30 min'], [60, '60 min']],
   orient: [['landscape', 'Quer'], ['portrait', 'Hoch']],
+  skin: [['classic', 'Klassisch'], ['rainbow', 'Regenbogen'], ['space', 'Raumschiff'], ['dino', 'Dino'], ['leopard', 'Leopard']],
   stripCount: [[3, '3'], [5, '5'], [7, '7']],
   maxVideo: [[10, '10 s'], [30, '30 s'], [60, '60 s'], [0, 'Aus']],
   hand: [['right', 'Rechts'], ['left', 'Links']],
@@ -377,11 +433,16 @@ function stopRecording() {
   state.wasReady = false; syncUI();
 }
 
+const SKIN_ICONS = {
+  rainbow: '<svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2.5l2.9 6 6.6.8-4.9 4.6 1.3 6.5L12 17.2l-5.9 3.2 1.3-6.5L2.5 9.3l6.6-.8z"/></svg>',
+  space: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="#1d2352"/><circle cx="12" cy="12" r="5.6" fill="#5ad1ff"/><circle cx="10" cy="10" r="1.6" fill="#fff"/></svg>',
+  dino: '<svg viewBox="0 0 24 24" fill="#1f4d2b"><ellipse cx="12" cy="15.5" rx="5" ry="5.5"/><ellipse cx="5.5" cy="7.5" rx="2" ry="3.2" transform="rotate(-25 5.5 7.5)"/><ellipse cx="12" cy="4.8" rx="2" ry="3.3"/><ellipse cx="18.5" cy="7.5" rx="2" ry="3.2" transform="rotate(25 18.5 7.5)"/></svg>',
+};
 const budgetLeft = () => state.budget ? Math.max(0, state.budget - state.usedToday) : null;
 function flashHint(el) { el.classList.add('show'); setTimeout(() => el.classList.remove('show'), 1600); }
 function renderCount() {
   const left = budgetLeft();
-  $('count').textContent = left ?? '';
+  $('count').innerHTML = left === null ? (SKIN_ICONS[state.skin] || '') : `<b class="chip">${left}</b>`;
   $('shutter').classList.toggle('empty', left === 0);
 }
 
@@ -478,6 +539,7 @@ function syncUI() {
   if ((canvas.width < canvas.height) !== portrait) [canvas.width, canvas.height] = [canvas.height, canvas.width];
   renderCount();
   screen.classList.toggle('left-hand', state.hand === 'left');
+  OPTIONS.skin.forEach(([k]) => screen.classList.toggle('t-' + k, state.skin === k));
   screen.classList.toggle('video', state.mode === 'video');
   $('modeWrap').hidden = state.level < 2;
   $('galleryWrap').hidden = state.level < 3 || !!state.recording;
