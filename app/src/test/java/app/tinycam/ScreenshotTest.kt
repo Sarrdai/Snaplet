@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.CanvasDrawScope
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.inset
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.unit.Density
@@ -34,6 +35,7 @@ import app.tinycam.ui.ParentPinGate
 import app.tinycam.ui.CameraActions
 import app.tinycam.ui.Effect
 import app.tinycam.ui.EffectPicker
+import app.tinycam.ui.Emblem
 import app.tinycam.ui.Captured
 import app.tinycam.ui.GalleryOverlay
 import app.tinycam.ui.HoldIndicator
@@ -42,6 +44,8 @@ import app.tinycam.ui.KidCameraUi
 import app.tinycam.ui.ParentScreen
 import app.tinycam.ui.SleepScreen
 import app.tinycam.ui.TouchCounter
+import app.tinycam.ui.drawRoundShutter
+import app.tinycam.ui.drawShutter
 import app.tinycam.ui.styleFor
 import app.tinycam.ui.unitFor
 import com.github.takahirom.roborazzi.captureRoboImage
@@ -125,6 +129,47 @@ class ScreenshotTest {
 
     @Test
     fun frame() = renderSkins("frame", { Settings(skin = it, effects = true) }, effect = Effect.STARS)
+
+    /** Every skin in fixed animation phases: rest, blink, cooling, recording, pressed, ready burst; then round. */
+    @Test
+    @Config(qualifiers = "w400dp-h500dp-xxhdpi")
+    fun shutterStates() {
+        val pill: List<DrawScope.(Skin) -> Unit> = listOf(
+            { drawShutter(it, styleFor(it), 1f, 0f, 1f, Emblem.SKIN, true, Tokens(3, 5)) },
+            { drawShutter(it, styleFor(it), 1f, 0f, 1f, Emblem.SKIN, true, idle = 0.43f) },
+            { drawShutter(it, styleFor(it), 0.45f, 1f, 0.88f, Emblem.SKIN, true, Tokens(3, 5)) },
+            { drawShutter(it, styleFor(it), 0.6f, 0f, 1f, Emblem.STOP, true, idle = 0.3f) },
+            { drawShutter(it, styleFor(it), 1f, 0f, 1f, Emblem.SKIN, true, press = 1f) },
+            { drawShutter(it, styleFor(it), 1f, 0f, 1.05f, Emblem.SKIN, true, reward = 0.4f) },
+        )
+        val round: List<DrawScope.(Skin) -> Unit> = listOf(
+            { drawRoundShutter(it, styleFor(it), 1f, 0f, 1f, Emblem.SKIN, Tokens(4, 6)) },
+            { drawRoundShutter(it, styleFor(it), 0.55f, 1f, 0.88f, Emblem.SKIN) },
+            { drawRoundShutter(it, styleFor(it), 1f, 0f, 1f, Emblem.SKIN, idle = 0.865f, reward = 0.45f) },
+        )
+        compose.setContent {
+            Canvas(Modifier.fillMaxSize()) {
+                drawScene(0)
+                val cols = pill.size + round.size
+                val cw = size.width / cols
+                val ch = size.height / Skin.entries.size
+                Skin.entries.forEachIndexed { row, skin ->
+                    pill.forEachIndexed { col, draw ->
+                        inset(col * cw + cw * 0.3f, row * ch + ch * 0.06f, size.width - (col + 1) * cw + cw * 0.3f, size.height - (row + 1) * ch + ch * 0.06f) {
+                            draw(skin)
+                        }
+                    }
+                    round.forEachIndexed { i, draw ->
+                        val col = pill.size + i
+                        val d = cw * 0.6f
+                        val top = row * ch + (ch - d) / 2 + ch * 0.1f
+                        inset(col * cw + cw * 0.2f, top, size.width - col * cw - cw * 0.8f, size.height - top - d) { draw(skin) }
+                    }
+                }
+            }
+        }
+        compose.onRoot().captureRoboImage("build/screenshots/shutter_states.png")
+    }
 
     @Test
     fun holdIndicator() {

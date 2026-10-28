@@ -249,35 +249,53 @@ fun Shutter(
 ) {
     var pressed by remember { mutableStateOf(false) }
     val inactive = animateFloatAsState(if (ready) 0f else 1f, tween(220), label = "inactive")
-    val pressScale by animateFloatAsState(
-        if (pressed) 0.93f else 1f, spring(dampingRatio = 0.5f, stiffness = Spring.StiffnessMedium), label = "press",
+    // Underdamped, so letting go overshoots below 0 and the button stretches briefly
+    val press = animateFloatAsState(
+        if (pressed) 1f else 0f, spring(dampingRatio = 0.4f, stiffness = Spring.StiffnessMedium), label = "press",
     )
+    // Only runs while ready, so a waiting button costs no frames
+    val idle = if (ready) {
+        rememberInfiniteTransition(label = "idle").animateFloat(
+            0f, 1f, infiniteRepeatable(tween(ShutterIdleMs, easing = LinearEasing)), label = "idle",
+        )
+    } else {
+        null
+    }
     val pop = remember { Animatable(1f) }
+    val reward = remember { Animatable(0f) }
     var wasReady by remember { mutableStateOf(ready) }
     LaunchedEffect(ready) {
-        // Small bounce when the camera becomes ready again
+        // Small bounce and a sparkle burst when the camera becomes ready again
         if (ready && !wasReady) {
-            pop.animateTo(1.08f, tween(110))
-            pop.animateTo(1f, spring(dampingRatio = 0.35f, stiffness = Spring.StiffnessMediumLow))
+            coroutineScope {
+                launch {
+                    reward.snapTo(0f)
+                    reward.animateTo(1f, tween(ShutterRewardMs, easing = LinearEasing))
+                    reward.snapTo(0f)
+                }
+                pop.animateTo(1.08f, tween(110))
+                pop.animateTo(1f, spring(dampingRatio = 0.35f, stiffness = Spring.StiffnessMediumLow))
+            }
+        } else if (!ready) {
+            // A shot taken during the burst cancels it; never leave sparkles frozen on screen
+            reward.snapTo(0f)
+            pop.snapTo(1f)
         }
         wasReady = ready
     }
     Box(
         modifier
             .size(width, height)
-            .graphicsLayer {
-                scaleX = pressScale
-                scaleY = pressScale
-                translationX = shake() * unit.toPx()
-            }
+            .graphicsLayer { translationX = shake() * unit.toPx() }
             .shadow(12.dp, if (round) CircleShape else PillShape, clip = false, ambientColor = style.shadow, spotColor = style.shadow)
             .pressDown(touches, onPressedChange = { pressed = it }, onPress = onPress)
             .drawBehind {
                 val coreScale = (1f - 0.12f * inactive.value) * pop.value
+                val phase = idle?.value ?: 0f
                 if (round) {
-                    drawRoundShutter(skin, style, progress(), inactive.value, coreScale, emblem, tokens)
+                    drawRoundShutter(skin, style, progress(), inactive.value, coreScale, emblem, tokens, phase, press.value, reward.value)
                 } else {
-                    drawShutter(skin, style, progress(), inactive.value, coreScale, emblem, spikesLeft, tokens)
+                    drawShutter(skin, style, progress(), inactive.value, coreScale, emblem, spikesLeft, tokens, phase, press.value, reward.value)
                 }
             },
     )
