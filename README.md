@@ -35,7 +35,8 @@ für eine Aufnahme. Ist alles aufgebraucht, wackelt der Auslöser.
 Im Eltern-Bereich lässt sich jede Funktion einzeln einschalten: Videos, Galerie, Selfie-Kamera, Zoom,
 Filter & Rahmen und Selbstauslöser. Außerdem: Design, Auslöser-Seite, Pause zwischen Aufnahmen,
 Aufnahmen pro Tag, Nutzungszeit pro Tag, maximale Videolänge, Selbstauslöser-Dauer, Anzahl Bilder
-in der Leiste, Teilen/Löschen aller Aufnahmen und App fixieren (Android-Bildschirmfixierung).
+in der Leiste, eine Eltern-Galerie zum gezielten Teilen oder Löschen einzelner Aufnahmen und
+App fixieren (Android-Bildschirmfixierung).
 
 Filter und Rahmen gelten für Fotos; im Video-Modus sind sie ausgeblendet.
 

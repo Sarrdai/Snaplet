@@ -144,9 +144,17 @@ class ScreenshotTest {
     @Test
     fun parent() {
         compose.setContent {
-            ParentScreen(Settings(video = true, timer = true, dailyCaptures = 20), DailyUsage("d", 4, 600_000), 37, false, {}, {}, {}, {}, {}, {})
+            ParentScreen(Settings(video = true, timer = true, dailyCaptures = 20), DailyUsage("d", 4, 600_000), items, thumbs, false, {}, {}, {}, {}, {}, {})
         }
         compose.onRoot().captureRoboImage("build/screenshots/parent.png")
+    }
+
+    @Test
+    fun parentGallery() {
+        compose.setContent {
+            ParentScreen(Settings(), DailyUsage(), items, thumbs, false, {}, {}, {}, {}, {}, {}, initialGalleryOpen = true)
+        }
+        compose.onRoot().captureRoboImage("build/screenshots/parent_gallery.png")
     }
 }
 

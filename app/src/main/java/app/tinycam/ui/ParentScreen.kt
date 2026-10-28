@@ -6,7 +6,17 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import app.tinycam.data.MediaItem
+import app.tinycam.data.Thumbnails
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.foundation.background
@@ -82,17 +92,24 @@ private val Features = listOf(
 fun ParentScreen(
     settings: Settings,
     usage: DailyUsage,
-    itemCount: Int,
+    items: List<MediaItem>,
+    thumbs: Thumbnails,
     pinned: Boolean,
     onChange: (Settings) -> Unit,
     onResetToday: () -> Unit,
-    onShareAll: () -> Unit,
-    onDeleteAll: () -> Unit,
+    onShare: (List<MediaItem>) -> Unit,
+    onDelete: (List<MediaItem>) -> Unit,
     onTogglePin: () -> Unit,
     onClose: () -> Unit,
+    initialGalleryOpen: Boolean = false,
 ) {
     val touches = remember { TouchCounter() }
+    var galleryOpen by remember { mutableStateOf(initialGalleryOpen) }
     BackHandler(onBack = onClose)
+    if (galleryOpen) {
+        ParentGallery(items, thumbs, onShare, onDelete, onClose = { galleryOpen = false })
+        return
+    }
     Box(Modifier.fillMaxSize().background(Bg).trackTouches(touches)) {
         Column(
             Modifier
@@ -154,10 +171,14 @@ fun ParentScreen(
             Section("Heutige Limits", "Setzt Aufnahmen und Nutzungszeit für heute auf null.") {
                 Button("Zurücksetzen", touches = touches, onClick = onResetToday)
             }
-            Section("Fotos & Videos", "$itemCount gespeichert. Die Aufnahmen liegen nur in der App.") {
+            Section(
+                "Fotos & Videos",
+                "${items.size} gespeichert. Die Aufnahmen liegen nur in der App. Zum Sichern auswählen und teilen, z. B. an Google Fotos, Drive oder per Nachricht.",
+            ) {
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(10.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Button("Alle teilen …", touches = touches, onClick = onShareAll)
-                    HoldButton("Alle löschen (3 s halten)", touches, onDeleteAll)
+                    Button("Auswählen …", primary = true, touches = touches) { galleryOpen = true }
+                    Button("Alle teilen …", touches = touches) { onShare(items.toList()) }
+                    HoldButton("Alle löschen (3 s halten)", touches) { onDelete(items.toList()) }
                 }
             }
             Section(
@@ -303,6 +324,93 @@ private fun SkinPicker(selected: Skin, touches: TouchCounter, onSelect: (Skin) -
                     }
                 }
                 BasicText(skin.label, style = Chip.copy(color = if (on) Accent else Text))
+            }
+        }
+    }
+}
+
+/** Pick single photos and videos to share or delete. A tap toggles the selection. */
+@Composable
+private fun ParentGallery(
+    items: List<MediaItem>,
+    thumbs: Thumbnails,
+    onShare: (List<MediaItem>) -> Unit,
+    onDelete: (List<MediaItem>) -> Unit,
+    onClose: () -> Unit,
+) {
+    val touches = remember { TouchCounter() }
+    val selected = remember { mutableStateListOf<String>() }
+    val style = remember { styleFor(Skin.CLASSIC) }
+    BackHandler(onBack = onClose)
+    // Forget selections of items that were deleted meanwhile
+    selected.retainAll(items.map { it.id }.toSet())
+    val chosen = items.filter { it.id in selected }
+    val allSelected = items.isNotEmpty() && chosen.size == items.size
+
+    fun toggle(item: MediaItem) {
+        if (!selected.remove(item.id)) selected.add(item.id)
+    }
+
+    Column(Modifier.fillMaxSize().background(Bg).trackTouches(touches).windowInsetsPadding(WindowInsets.safeDrawing)) {
+        Row(
+            Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 14.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            Button("Zurück", touches = touches, onClick = onClose)
+            BasicText(
+                if (chosen.isEmpty()) "Bilder auswählen" else "${chosen.size} ausgewählt",
+                Modifier.weight(1f), style = Heading,
+            )
+            Button(if (allSelected) "Keine" else "Alle", touches = touches) {
+                if (allSelected) selected.clear() else selected.addAll(items.map { it.id }.filterNot { it in selected })
+            }
+        }
+        Box(Modifier.weight(1f).fillMaxWidth()) {
+            if (items.isEmpty()) {
+                BasicText("Noch keine Aufnahmen.", Modifier.align(Alignment.Center), style = Body)
+            }
+            LazyVerticalGrid(
+                columns = GridCells.Adaptive(104.dp),
+                contentPadding = PaddingValues(12.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.fillMaxSize(),
+            ) {
+                items(items, key = { it.id }) { item ->
+                    val on = item.id in selected
+                    val shape = RoundedCornerShape(12.dp)
+                    Box(Modifier.aspectRatio(1f)) {
+                        Thumbnail(item, thumbs, style, 3.4.dp, touches, ::toggle, Modifier.fillMaxSize())
+                        if (on) Box(Modifier.fillMaxSize().border(3.dp, Accent, shape).background(Color(0x33000000), shape))
+                        Box(
+                            Modifier
+                                .align(Alignment.TopEnd)
+                                .padding(6.dp)
+                                .size(26.dp)
+                                .background(if (on) Accent else Color(0x59000000), CircleShape)
+                                .border(2.dp, if (on) Accent else Color.White, CircleShape),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            if (on) Image(Icons.Check, null, Modifier.size(18.dp), colorFilter = ColorFilter.tint(Ink))
+                        }
+                    }
+                }
+            }
+        }
+        Row(
+            Modifier.fillMaxWidth().background(Card).padding(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Button("Teilen (${chosen.size}) …", primary = chosen.isNotEmpty(), touches = touches) {
+                if (chosen.isNotEmpty()) onShare(chosen)
+            }
+            HoldButton("Löschen (${chosen.size}) – 3 s halten", touches) {
+                if (chosen.isNotEmpty()) {
+                    onDelete(chosen)
+                    selected.clear()
+                }
             }
         }
     }

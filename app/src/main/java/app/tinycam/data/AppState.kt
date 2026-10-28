@@ -43,9 +43,9 @@ class AppState(context: Context) {
 
     fun resetToday() = setUsage(DailyUsage(today()))
 
-    fun deleteAll() {
-        media.deleteAll()
-        items.clear()
+    fun delete(selection: List<MediaItem>) {
+        selection.forEach(media::delete)
+        items.removeAll(selection.toSet())
     }
 
     private fun setUsage(u: DailyUsage) {

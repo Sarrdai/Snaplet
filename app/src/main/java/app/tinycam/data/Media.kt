@@ -34,7 +34,6 @@ class MediaRepository(private val context: Context) {
     fun newVideo() = MediaItem(File(dir, "VID_${System.currentTimeMillis()}.mp4"), isVideo = true)
 
     fun delete(item: MediaItem) { item.file.delete() }
-    fun deleteAll() { dir.listFiles()?.forEach { it.delete() } }
 
     fun shareIntent(items: List<MediaItem>): Intent {
         val uris = items.mapTo(ArrayList<Uri>()) {

@@ -28,6 +28,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import app.tinycam.data.AppState
+import app.tinycam.data.MediaItem
 import app.tinycam.data.isTimeUp
 import app.tinycam.ui.CameraScreen
 import app.tinycam.ui.ParentScreen
@@ -81,12 +82,13 @@ class MainActivity : ComponentActivity() {
                 ParentScreen(
                     settings = settings,
                     usage = usage,
-                    itemCount = app.items.size,
+                    items = app.items,
+                    thumbs = app.thumbs,
                     pinned = pinned,
                     onChange = app::updateSettings,
                     onResetToday = app::resetToday,
-                    onShareAll = ::shareAll,
-                    onDeleteAll = app::deleteAll,
+                    onShare = ::share,
+                    onDelete = app::delete,
                     onTogglePin = ::togglePin,
                     onClose = { parentOpen = false },
                 )
@@ -143,10 +145,10 @@ class MainActivity : ComponentActivity() {
         pinned = isPinned()
     }
 
-    private fun shareAll() {
-        if (app.items.isEmpty()) return
+    private fun share(selection: List<MediaItem>) {
+        if (selection.isEmpty()) return
         // Other apps cannot open while the screen is pinned
         if (isPinned()) stopLockTask()
-        startActivity(app.media.shareIntent(app.items.toList()))
+        startActivity(app.media.shareIntent(selection))
     }
 }
