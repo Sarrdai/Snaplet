@@ -1,6 +1,7 @@
 package app.tinycam
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -35,6 +36,8 @@ import app.tinycam.ui.Effect
 import app.tinycam.ui.EffectPicker
 import app.tinycam.ui.Captured
 import app.tinycam.ui.GalleryOverlay
+import app.tinycam.ui.HoldIndicator
+import app.tinycam.ui.HoldState
 import app.tinycam.ui.KidCameraUi
 import app.tinycam.ui.ParentScreen
 import app.tinycam.ui.SleepScreen
@@ -122,6 +125,20 @@ class ScreenshotTest {
 
     @Test
     fun frame() = renderSkins("frame", { Settings(skin = it, effects = true) }, effect = Effect.STARS)
+
+    @Test
+    fun holdIndicator() {
+        val hold = HoldState().apply { progress = 0.6f }
+        compose.setContent {
+            Box(Modifier.fillMaxSize()) {
+                KidCameraUi(
+                    allFeatures, items, thumbs, null, CaptureMode.PHOTO, {}, false, {}, Effect.NONE, {}, NoCamera, {},
+                ) { Canvas(Modifier.fillMaxSize()) { drawScene(0) } }
+                HoldIndicator(hold, styleFor(Skin.CLASSIC).accent)
+            }
+        }
+        compose.onRoot().captureRoboImage("build/screenshots/hold_indicator.png")
+    }
 
     @Test
     fun effectPicker() {

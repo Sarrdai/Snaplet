@@ -20,9 +20,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemGestures
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
@@ -36,6 +41,7 @@ import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.runtime.withFrameMillis
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -146,6 +152,25 @@ class HoldState {
     var progress by mutableFloatStateOf(0f)
 }
 
+/** The hold that is running right now, mirrored in the middle of the screen where no thumb covers it. */
+val LocalHoldIndicator = staticCompositionLocalOf<HoldState?> { null }
+
+@Composable
+fun HoldIndicator(state: HoldState, color: Color, modifier: Modifier = Modifier) {
+    if (state.progress <= 0f) return
+    Canvas(modifier.fillMaxSize()) {
+        val d = minOf(size.width, size.height) * 0.32f
+        val sw = d * 0.12f
+        val topLeft = Offset((size.width - d) / 2 + sw / 2, (size.height - d) / 2 + sw / 2)
+        val ring = Size(d - sw, d - sw)
+        drawCircle(Color(0x99000000), radius = d / 2)
+        drawArc(Color(0x40FFFFFF), 0f, 360f, false, topLeft, ring, style = Stroke(sw))
+        drawArc(color, -90f, 360f * state.progress, false, topLeft, ring, style = Stroke(sw, cap = StrokeCap.Round))
+        // Full: a filled dot says "long enough"
+        if (state.progress >= 1f) drawCircle(color, radius = d * 0.22f)
+    }
+}
+
 /**
  * Activates only after the element was held for [durationMs] with a single finger.
  * Releasing early reports [onTooShort] so the UI can explain the gesture.
@@ -161,6 +186,7 @@ fun Modifier.holdToActivate(
 ): Modifier {
     val complete by rememberUpdatedState(onComplete)
     val tooShort by rememberUpdatedState(onTooShort)
+    val indicator = LocalHoldIndicator.current
     if (!enabled) return this
     return pointerInput(durationMs, touches) {
         coroutineScope {
@@ -174,20 +200,26 @@ fun Modifier.holdToActivate(
                     while (!done) {
                         val now = withFrameMillis { it }
                         state.progress = ((now - start) / durationMs.toFloat()).coerceAtMost(1f)
+                        indicator?.progress = state.progress
                         if (state.progress >= 1f) {
                             done = true
                             complete()
                         }
                     }
                 }
-                do {
-                    val event = awaitPointerEvent()
-                    event.changes.forEach { it.consume() }
-                    val pressed = event.changes.count { it.pressed }
-                } while (pressed == 1 && touches.count <= 1)
-                ticker.cancel()
-                if (!done && state.progress < 0.5f) tooShort()
-                state.progress = 0f
+                // finally: completing often removes this element mid-gesture, the indicator must not stay up
+                try {
+                    do {
+                        val event = awaitPointerEvent()
+                        event.changes.forEach { it.consume() }
+                        val pressed = event.changes.count { it.pressed }
+                    } while (pressed == 1 && touches.count <= 1)
+                    ticker.cancel()
+                    if (!done && state.progress < 0.5f) tooShort()
+                } finally {
+                    state.progress = 0f
+                    indicator?.progress = 0f
+                }
             }
         }
     }
@@ -405,12 +437,16 @@ private fun Modifier.holdFillBehind(hold: HoldState, color: Color) = drawBehind 
     if (p > 0f) drawRect(color, topLeft = Offset(0f, size.height * (1 - p)), size = Size(size.width, size.height * p))
 }
 
-/** Parent entry: deliberately small and faint, needs a 3 second hold. */
+/**
+ * Parent entry: deliberately small and faint, needs a 3 second hold. Kept out of the system gesture
+ * edges, where a pinned screen takes the touch for an unpin attempt and cancels the hold.
+ */
 @Composable
 fun LockButton(style: SkinStyle, unit: Dp, touches: TouchCounter, onOpen: () -> Unit, modifier: Modifier = Modifier) {
     val hold = remember { HoldState() }
     Box(
         modifier
+            .windowInsetsPadding(WindowInsets.systemGestures.only(WindowInsetsSides.Bottom + WindowInsetsSides.Horizontal))
             .size(unit * 10f)
             .graphicsLayer { alpha = if (hold.progress > 0f) 0.95f else 0.4f }
             .background(Color(0x66000000), CircleShape)
