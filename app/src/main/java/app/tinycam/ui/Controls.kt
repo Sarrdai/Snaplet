@@ -213,6 +213,7 @@ fun Shutter(
     onPress: () -> Unit,
     modifier: Modifier = Modifier,
     shake: () -> Float = { 0f },
+    round: Boolean = false,
 ) {
     var pressed by remember { mutableStateOf(false) }
     val inactive = animateFloatAsState(if (ready) 0f else 1f, tween(220), label = "inactive")
@@ -237,12 +238,15 @@ fun Shutter(
                 scaleY = pressScale
                 translationX = shake() * unit.toPx()
             }
-            .shadow(12.dp, PillShape, clip = false, ambientColor = style.shadow, spotColor = style.shadow)
+            .shadow(12.dp, if (round) CircleShape else PillShape, clip = false, ambientColor = style.shadow, spotColor = style.shadow)
             .pressDown(touches, onPressedChange = { pressed = it }, onPress = onPress)
             .drawBehind {
-                drawShutter(
-                    skin, style, progress(), inactive.value, (1f - 0.12f * inactive.value) * pop.value, emblem, spikesLeft, tokens,
-                )
+                val coreScale = (1f - 0.12f * inactive.value) * pop.value
+                if (round) {
+                    drawRoundShutter(skin, style, progress(), inactive.value, coreScale, emblem, tokens)
+                } else {
+                    drawShutter(skin, style, progress(), inactive.value, coreScale, emblem, spikesLeft, tokens)
+                }
             },
     )
 }

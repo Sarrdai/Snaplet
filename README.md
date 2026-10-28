@@ -33,10 +33,19 @@ Ist ein Tageslimit für Aufnahmen gesetzt, zeigt der Auslöser die restlichen Au
 für eine Aufnahme. Ist alles aufgebraucht, wackelt der Auslöser.
 
 Im Eltern-Bereich lässt sich jede Funktion einzeln einschalten: Videos, Galerie, Selfie-Kamera, Zoom,
-Filter & Rahmen und Selbstauslöser. Außerdem: Design, Auslöser-Seite, Pause zwischen Aufnahmen,
-Aufnahmen pro Tag, Nutzungszeit pro Tag, maximale Videolänge, Selbstauslöser-Dauer, Anzahl Bilder
-in der Leiste, eine Eltern-Galerie zum gezielten Teilen oder Löschen einzelner Aufnahmen und
-App fixieren (Android-Bildschirmfixierung).
+Filter & Rahmen und Selbstauslöser. Werte wie Pause, Tageslimits, Videolänge, Countdown und Anzahl
+Bilder in der Leiste stellen Schieberegler ein; abschaltbare Limits zeigen ihren Regler nur, wenn sie
+an sind. Außerdem: Design, Auslöser-Position (links, rechts oder rund in der Mitte), Foto-Format
+(4:3, 16:9, 1:1), Foto-Größe, Video-Qualität und eine Galerie mit Großansicht zum gezielten Teilen
+oder Löschen.
+
+**Zugang zum Eltern-Bereich** (nach 3 s Halten des Schlosses): nur Halten, die Bildschirmsperre des
+Handys (PIN, Muster, Fingerabdruck; ideal bei geteiltem Handy) oder eine eigene 4-stellige PIN mit
+der Geräte-Sperre als Rückweg.
+
+**App fixieren**: per Knopf oder automatisch beim Start und beim Verlassen des Eltern-Bereichs.
+Android fragt dabei jedes Mal nach einer Bestätigung. In den Android-Einstellungen unter
+Sicherheit → App fixieren „Vor dem Lösen nach PIN fragen“ einschalten.
 
 Filter und Rahmen gelten für Fotos; im Video-Modus sind sie ausgeblendet.
 

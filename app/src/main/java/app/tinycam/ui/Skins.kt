@@ -162,13 +162,7 @@ fun DrawScope.drawShutter(
     scale(coreScale, pivot = core.center) {
         withDesaturation(inactive) {
             clipPath(corePath) {
-                when (skin) {
-                    Skin.CLASSIC -> drawClassicCore(core)
-                    Skin.RAINBOW -> drawRainbowCore(core)
-                    Skin.SPACE -> drawRocketCore(core)
-                    Skin.DINO -> drawDinoCore(core)
-                    Skin.LEOPARD -> drawLeopardCore(core)
-                }
+                drawSkinCore(skin, core)
                 if (skin != Skin.SPACE) drawGloss(core)
             }
             val center = emblemCenter(skin, core, roomBelow = tokens != null)
@@ -200,6 +194,141 @@ private fun emblemCenter(skin: Skin, core: Rect, roomBelow: Boolean): Offset {
     }
     val maxY = maxOf(minY, core.bottom - cw * if (roomBelow) 1.25f else 0.9f)
     return Offset(core.center.x, core.center.y.coerceIn(minY, maxY))
+}
+
+private fun DrawScope.drawSkinCore(skin: Skin, core: Rect) = when (skin) {
+    Skin.CLASSIC -> drawClassicCore(core)
+    Skin.RAINBOW -> drawRainbowCore(core)
+    Skin.SPACE -> drawRocketCore(core)
+    Skin.DINO -> drawDinoCore(core)
+    Skin.LEOPARD -> drawLeopardCore(core)
+}
+
+/**
+ * Round shutter for the centered layout. Uses the same skin art as the pill: the pill core is
+ * drawn into a virtual rectangle shifted so that the face, rainbow or nose cone lands in the
+ * circle. Remaining capture symbols sit in a row above the button.
+ */
+fun DrawScope.drawRoundShutter(
+    skin: Skin,
+    style: SkinStyle,
+    progress: Float,
+    inactive: Float,
+    coreScale: Float,
+    emblem: Emblem,
+    tokens: Tokens? = null,
+) {
+    val d = size.minDimension
+    val c = center
+    val r = d / 2
+    val ring = Path().apply { addOval(Rect(c, r)) }
+
+    when (skin) {
+        Skin.SPACE -> {
+            drawFins(d, d)
+            drawExhaust(d, d, progress)
+        }
+        Skin.DINO -> drawRoundPlates(c, r)
+        Skin.LEOPARD -> for (dir in listOf(-1f, 1f)) {
+            val ear = c + Offset(dir * r * 0.62f, -r * 0.78f)
+            drawCircle(Color(0xFFE39B3A), r * 0.3f, ear)
+            drawCircle(Color(0xFFF7B6C0), r * 0.16f, ear)
+            drawCircle(LeopardDark, r * 0.3f, ear, style = Stroke(r * 0.05f))
+        }
+        else -> Unit
+    }
+
+    drawPath(ring, style.track)
+    clipPath(ring) { drawPath(ring, Color.Black.copy(alpha = 0.22f), style = Stroke(d * 0.06f)) }
+    val fillColors = if (emblem == Emblem.SKIN) style.fill else RecordFill
+    val fillTop = d * (1f - progress.coerceIn(0f, 1f))
+    clipPath(ring) {
+        drawRect(Brush.verticalGradient(fillColors, startY = d, endY = 0f), Offset(0f, fillTop), Size(d, d - fillTop))
+        if (progress in 0.01f..0.99f) drawLine(Color.White.copy(alpha = 0.6f), Offset(0f, fillTop), Offset(d, fillTop), d * 0.02f)
+    }
+    drawPath(ring, Color.White.copy(alpha = 0.35f), style = Stroke(d * 0.012f))
+
+    val coreR = r * 0.8f
+    val core = Rect(c, coreR)
+    val cw = core.width
+    val corePath = Path().apply { addOval(core) }
+    // Virtual pill core: shifted up so the skin's top decoration ends up inside the circle
+    val shift = when (skin) {
+        Skin.CLASSIC -> 0f
+        Skin.RAINBOW -> 0.5f
+        Skin.SPACE -> 0.55f
+        Skin.DINO -> 0.3f
+        Skin.LEOPARD -> 0.25f
+    }
+    val art = Rect(core.left, core.top - cw * shift, core.right, core.bottom + cw * 0.4f)
+    scale(coreScale, pivot = c) {
+        withDesaturation(inactive) {
+            clipPath(corePath) {
+                drawSkinCore(skin, art)
+                if (skin == Skin.LEOPARD) {
+                    val rnd = Random(4)
+                    for (a in listOf(25f, 70f, 110f, 155f, 200f, 340f)) {
+                        val rad = Math.toRadians(a.toDouble())
+                        drawRosette(c + Offset((cos(rad) * coreR * 0.82f).toFloat(), (sin(rad) * coreR * 0.82f).toFloat()), cw * 0.13f, cw, rnd)
+                    }
+                }
+                if (skin != Skin.SPACE) drawGloss(Rect(core.left, core.top - cw * 0.3f, core.right, core.bottom + cw * 0.3f))
+            }
+            when (emblem) {
+                Emblem.SKIN -> when (skin) {
+                    Skin.CLASSIC -> drawSkinEmblem(skin, c, cw * 0.95f)
+                    Skin.RAINBOW -> drawSkinEmblem(skin, c + Offset(0f, cw * 0.2f), cw * 0.62f)
+                    Skin.SPACE -> drawSkinEmblem(skin, c + Offset(0f, cw * 0.05f), cw * 0.7f)
+                    Skin.DINO -> drawSkinEmblem(skin, c + Offset(0f, cw * 0.24f), cw * 0.55f)
+                    Skin.LEOPARD -> Unit
+                }
+                Emblem.RECORD -> drawRecordEmblem(c + Offset(0f, cw * 0.12f), cw * 0.7f, recording = false)
+                Emblem.STOP -> drawRecordEmblem(c + Offset(0f, cw * 0.12f), cw * 0.7f, recording = true)
+            }
+            drawPath(corePath, Color.Black.copy(alpha = 0.14f), style = Stroke(d * 0.015f))
+        }
+    }
+
+    if (tokens != null) {
+        // Row above the button, clear of plates and ears
+        val rowW = d * 1.5f
+        val cell = minOf(rowW / tokens.total, d * 0.2f)
+        val y = -d * 0.32f
+        drawTokens(skin, Rect(c.x - cell * tokens.total / 2f, y - cell / 2f, c.x + cell * tokens.total / 2f, y + cell / 2f), tokens)
+    }
+}
+
+private fun DrawScope.drawRoundPlates(c: Offset, r: Float) {
+    val brush = Brush.verticalGradient(listOf(Color(0xFFFFD166), Color(0xFFF77F00)), c.y - r * 1.4f, c.y - r * 0.6f)
+    var i = 0
+    for (angle in listOf(-60f, -36f, -12f, 12f, 36f, 60f)) {
+        val h = r * if (i % 2 == 0) 0.42f else 0.32f
+        val w = r * 0.36f
+        rotate(angle, pivot = c) {
+            val base = c.y - r * 0.9f
+            val p = Path().apply {
+                moveTo(c.x - w / 2, base)
+                cubicTo(c.x - w / 2, base - h * 0.6f, c.x - w * 0.2f, base - h, c.x, base - h)
+                cubicTo(c.x + w * 0.2f, base - h, c.x + w / 2, base - h * 0.6f, c.x + w / 2, base)
+                close()
+            }
+            drawPath(p, brush)
+            drawPath(p, Color(0xFFC2410C).copy(alpha = 0.55f), style = Stroke(r * 0.04f, join = StrokeJoin.Round))
+        }
+        i++
+    }
+}
+
+private fun DrawScope.drawRosette(c: Offset, r: Float, cw: Float, rnd: Random) {
+    drawCircle(Color(0xCCB4621F), r * 0.7f, c)
+    val start = rnd.nextFloat() * 90f
+    for (k in 0 until 4) {
+        drawArc(
+            LeopardDark, start + k * 90f, 50f + rnd.nextFloat() * 20f, false,
+            topLeft = c - Offset(r, r), size = Size(r * 2, r * 2),
+            style = Stroke(cw * 0.05f, cap = StrokeCap.Round),
+        )
+    }
 }
 
 /** Where the face, rainbow or nose cone ends, in core widths from the top. */
@@ -617,7 +746,7 @@ private fun DrawScope.drawTokens(skin: Skin, area: Rect, tokens: Tokens) {
     if (n <= 0 || area.height <= 0f) return
     var cell = 0f
     var cols = 1
-    for (c in 1..5) {
+    for (c in 1..n) {
         val rows = (n + c - 1) / c
         val s = minOf(area.width / c, area.height / rows)
         if (s > cell) {

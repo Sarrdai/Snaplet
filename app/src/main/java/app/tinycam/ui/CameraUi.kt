@@ -71,6 +71,7 @@ import app.tinycam.data.MediaItem
 import app.tinycam.data.Settings
 import app.tinycam.data.Side
 import app.tinycam.data.Thumbnails
+import app.tinycam.data.cooldownMs
 import app.tinycam.data.maxVideoMs
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -156,10 +157,11 @@ fun KidCameraUi(
     val timerActive = settings.timer && timerOn
 
     fun startCooldown() {
-        if (settings.cooldownSec <= 0) return
+        val ms = settings.cooldownMs()
+        if (ms <= 0) return
         scope.launch {
             cooldown.snapTo(0f)
-            cooldown.animateTo(1f, tween(settings.cooldownSec * 1000, easing = LinearEasing))
+            cooldown.animateTo(1f, tween(ms, easing = LinearEasing))
         }
     }
 
@@ -272,7 +274,10 @@ fun KidCameraUi(
         val portrait = maxHeight > maxWidth
         val u = unitFor(maxWidth.value, maxHeight.value)
         val pillW = u * 21f
-        val right = settings.side == Side.RIGHT
+        val center = settings.side == Side.CENTER
+        // Centered layout keeps its tools on the right, so it behaves like a right-hand layout otherwise
+        val right = settings.side != Side.LEFT
+        val roundD = minOf(u * 30f, screenH * 0.32f)
         val edge = u * 6.5f
         val railGap = u * 3f
         val railBottom = screenH * 0.07f
@@ -304,7 +309,7 @@ fun KidCameraUi(
 
         Box(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing)) {
             // Thumbnail strip, newest next to the shutter
-            val reserve = if (portrait) u * 4f else edge + pillW + u * 5f
+            val reserve = if (portrait || center) u * 4f else edge + pillW + u * 5f
             ThumbnailStrip(
                 items = items, thumbs = thumbs, style = style, unit = u, touches = touches,
                 count = settings.stripCount, right = right, portrait = portrait, hiddenId = fly?.itemId,
@@ -322,17 +327,13 @@ fun KidCameraUi(
 
             if (settings.zoom) {
                 ZoomSlider(
-                    zoom, { zoom = it; actions.setZoom(it) }, style, u, minOf(pillH, screenH * 0.42f), touches,
+                    zoom, { zoom = it; actions.setZoom(it) }, style, u,
+                    if (center) minOf(screenH * 0.3f, u * 45f) else minOf(pillH, screenH * 0.42f), touches,
                     Modifier.align(opposite).fromSide(u * 5f, maxOf(railBottom, u * 18f), onShutterSide = false),
                 )
             }
 
-            // Tool column next to the shutter; leaves room for the dino plates in between
-            Column(
-                Modifier.align(outer).fromSide(edge + pillW + u * 9f, railBottom),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(railGap),
-            ) {
+            val tools: @Composable () -> Unit = {
                 if (settings.gallery && !recording) {
                     HintAnchor(hint, HintTarget.GALLERY, right, u) {
                         ToolButton(Icons.Grid, false, style, u, touches, { holdHint(HintTarget.GALLERY) }) {
@@ -362,13 +363,7 @@ fun KidCameraUi(
                     }
                 }
             }
-
-            // Drawn after the tools so its hints appear on top of them
-            Column(
-                Modifier.align(outer).fromSide(edge, railBottom),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(railGap),
-            ) {
+            val modeSwitch: @Composable () -> Unit = {
                 if (settings.video) {
                     HintAnchor(hint, HintTarget.MODE, right, u) {
                         ModeSwitch(
@@ -379,10 +374,13 @@ fun KidCameraUi(
                         }
                     }
                 }
+            }
+            val shutter: @Composable () -> Unit = {
                 HintAnchor(hint, HintTarget.SHUTTER, right, u) {
                     val maxMs = settings.maxVideoMs()
                     Shutter(
-                        skin = settings.skin, style = style, width = pillW, height = pillH,
+                        skin = settings.skin, style = style,
+                        width = if (center) roundD else pillW, height = if (center) roundD else pillH,
                         progress = {
                             if (recordingStart != null) maxMs?.let { 1f - recordingElapsed / it.toFloat() } ?: 1f
                             else cooldown.value
@@ -397,7 +395,41 @@ fun KidCameraUi(
                         tokens = tokens,
                         unit = u, touches = touches, onPress = ::onShutter,
                         shake = { shake.value },
+                        round = center,
                     )
+                }
+            }
+
+            if (center) {
+                // Portrait has room to stack everything in one column; landscape needs two
+                val corner = Modifier.align(Alignment.BottomEnd).padding(end = u * 5f, bottom = railBottom)
+                if (portrait) {
+                    Column(corner, horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(railGap)) {
+                        modeSwitch()
+                        tools()
+                    }
+                } else {
+                    Row(corner, verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(railGap)) {
+                        modeSwitch()
+                        Column(verticalArrangement = Arrangement.spacedBy(railGap)) { tools() }
+                    }
+                }
+                Box(Modifier.align(Alignment.BottomCenter).padding(bottom = railBottom)) { shutter() }
+            } else {
+                // Tool column next to the shutter; leaves room for the dino plates in between
+                Column(
+                    Modifier.align(outer).fromSide(edge + pillW + u * 9f, railBottom),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(railGap),
+                ) { tools() }
+                // Drawn after the tools so its hints appear on top of them
+                Column(
+                    Modifier.align(outer).fromSide(edge, railBottom),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(railGap),
+                ) {
+                    modeSwitch()
+                    shutter()
                 }
             }
 
