@@ -2,6 +2,8 @@ package app.tinycam
 
 import app.tinycam.data.DailyUsage
 import app.tinycam.data.Settings
+import app.tinycam.data.Tokens
+import app.tinycam.data.budgetTokens
 import app.tinycam.data.capturesLeft
 import app.tinycam.data.isTimeUp
 import app.tinycam.data.maxVideoMs
@@ -46,10 +48,23 @@ class LimitsTest {
     }
 
     @Test
-    fun levels_unlockFeatures() {
-        assertFalse(Settings(level = 1).videoUnlocked)
-        assertTrue(Settings(level = 2).videoUnlocked)
-        assertFalse(Settings(level = 2).galleryUnlocked)
-        assertTrue(Settings(level = 3).galleryUnlocked)
+    fun tokens_oneSymbolPerCapture_upToTen() {
+        val s = Settings(dailyCaptures = 5)
+        assertEquals(Tokens(3, 5), s.budgetTokens(DailyUsage("d", captures = 2)))
+        assertNull(Settings(dailyCaptures = 0).budgetTokens(DailyUsage("d")))
+    }
+
+    @Test
+    fun tokens_scaleToTen_forLargeLimits() {
+        val s = Settings(dailyCaptures = 50)
+        assertEquals(Tokens(10, 10), s.budgetTokens(DailyUsage("d", captures = 0)))
+        assertEquals(Tokens(1, 10), s.budgetTokens(DailyUsage("d", captures = 49)))
+        assertEquals(Tokens(0, 10), s.budgetTokens(DailyUsage("d", captures = 50)))
+    }
+
+    @Test
+    fun features_areOffByDefault() {
+        val s = Settings()
+        assertFalse(s.video || s.gallery || s.selfie || s.zoom || s.effects || s.timer)
     }
 }

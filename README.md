@@ -19,16 +19,25 @@ Updates lassen sich direkt drüber installieren, Fotos bleiben erhalten.
 |---|---|
 | Foto | Auslöser-Pille antippen. Sie füllt sich wieder, bis die nächste Aufnahme möglich ist. |
 | Bild ansehen | Vorschaubild antippen, irgendwo tippen zum Schließen. |
-| Foto ↔ Video (ab Stufe 2) | Umschalter 1,5 s halten. |
-| Galerie (ab Stufe 3) | Galerie-Knopf 1 s halten. |
+| Foto ↔ Video | Umschalter 1,5 s halten. |
+| Galerie, Selfie, Filter & Rahmen, Selbstauslöser | Werkzeug-Knopf neben dem Auslöser 1 s halten. |
+| Zoom | Knopf des großen Schiebereglers ziehen (kleiner Punkt = weit, großer Punkt = nah). |
+| Selbstauslöser abbrechen | Während des Countdowns den Auslöser erneut antippen. |
 | Eltern-Bereich | Schloss in der unteren Ecke 3 s halten. |
 
 Das Livebild reagiert auf keine Berührung. Liegen mehrere Finger oder der Handballen auf dem
-Bildschirm, wird nichts ausgelöst.
+Bildschirm, wird nichts ausgelöst. Hinweise erscheinen als Bild (Finger mit Ring = gedrückt halten).
 
-Im Eltern-Bereich: Design, Lernstufe, Auslöser-Seite, Pause zwischen Aufnahmen, Aufnahmen pro Tag,
-Nutzungszeit pro Tag, maximale Videolänge, Anzahl Bilder in der Leiste, Teilen/Löschen aller
-Aufnahmen und App fixieren (Android-Bildschirmfixierung).
+Ist ein Tageslimit für Aufnahmen gesetzt, zeigt der Auslöser die restlichen Aufnahmen als Symbole
+(Sterne, Dino-Eier, Pfoten …), die nach und nach leer werden. Bis 10 Aufnahmen steht jedes Symbol
+für eine Aufnahme. Ist alles aufgebraucht, wackelt der Auslöser.
+
+Im Eltern-Bereich lässt sich jede Funktion einzeln einschalten: Videos, Galerie, Selfie-Kamera, Zoom,
+Filter & Rahmen und Selbstauslöser. Außerdem: Design, Auslöser-Seite, Pause zwischen Aufnahmen,
+Aufnahmen pro Tag, Nutzungszeit pro Tag, maximale Videolänge, Selbstauslöser-Dauer, Anzahl Bilder
+in der Leiste, Teilen/Löschen aller Aufnahmen und App fixieren (Android-Bildschirmfixierung).
+
+Filter und Rahmen gelten für Fotos; im Video-Modus sind sie ausgeblendet.
 
 ## Entwicklung
 

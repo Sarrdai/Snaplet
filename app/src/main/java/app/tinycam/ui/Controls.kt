@@ -1,6 +1,11 @@
 package app.tinycam.ui
 
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.foundation.Canvas
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
@@ -37,6 +42,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
@@ -62,6 +68,9 @@ import app.tinycam.R
 import app.tinycam.data.MediaItem
 import app.tinycam.data.Skin
 import app.tinycam.data.Thumbnails
+import app.tinycam.data.Tokens
+import kotlin.math.abs
+import kotlin.math.roundToInt
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
@@ -198,11 +207,12 @@ fun Shutter(
     ready: Boolean,
     emblem: Emblem,
     spikesLeft: Boolean,
-    capturesLeft: Int?,
+    tokens: Tokens?,
     unit: Dp,
     touches: TouchCounter,
     onPress: () -> Unit,
     modifier: Modifier = Modifier,
+    shake: () -> Float = { 0f },
 ) {
     var pressed by remember { mutableStateOf(false) }
     val inactive = animateFloatAsState(if (ready) 0f else 1f, tween(220), label = "inactive")
@@ -219,46 +229,21 @@ fun Shutter(
         }
         wasReady = ready
     }
-    val density = LocalDensity.current
     Box(
         modifier
             .size(width, height)
             .graphicsLayer {
                 scaleX = pressScale
                 scaleY = pressScale
+                translationX = shake() * unit.toPx()
             }
             .shadow(12.dp, PillShape, clip = false, ambientColor = style.shadow, spotColor = style.shadow)
             .pressDown(touches, onPressedChange = { pressed = it }, onPress = onPress)
             .drawBehind {
                 drawShutter(
-                    skin, style, progress(), inactive.value, (1f - 0.12f * inactive.value) * pop.value, emblem, spikesLeft,
+                    skin, style, progress(), inactive.value, (1f - 0.12f * inactive.value) * pop.value, emblem, spikesLeft, tokens,
                 )
             },
-    ) {
-        if (capturesLeft != null) {
-            val centerY = with(density) { (height * chipCenterFraction(skin, width.toPx(), height.toPx())).roundToPx() }
-            CountChip(
-                capturesLeft, unit,
-                Modifier
-                    .align(Alignment.TopCenter)
-                    .layout { measurable, constraints ->
-                        val p = measurable.measure(constraints)
-                        layout(p.width, p.height) { p.place(0, centerY - p.height / 2) }
-                    },
-            )
-        }
-    }
-}
-
-@Composable
-private fun CountChip(count: Int, unit: Dp, modifier: Modifier) {
-    BasicText(
-        count.toString(),
-        modifier
-            .shadow(3.dp, CircleShape)
-            .background(Color.White, CircleShape)
-            .padding(horizontal = unit * 2.2f, vertical = unit * 0.2f),
-        style = kidText((unit * 5f).asSp(), Ink, FontWeight.ExtraBold),
     )
 }
 
@@ -308,22 +293,106 @@ private fun ModeSlot(icon: ImageVector, selected: Boolean, style: SkinStyle, uni
     }
 }
 
+/** Square tool button (gallery, selfie, effects, timer). Needs a 1 second hold; [active] shows a switched-on state. */
 @Composable
-fun GalleryButton(style: SkinStyle, unit: Dp, touches: TouchCounter, onTooShort: () -> Unit, onOpen: () -> Unit) {
+fun ToolButton(
+    icon: ImageVector,
+    active: Boolean,
+    style: SkinStyle,
+    unit: Dp,
+    touches: TouchCounter,
+    onTooShort: () -> Unit,
+    onActivate: () -> Unit,
+) {
     val hold = remember { HoldState() }
-    val shape = RoundedCornerShape(unit * 4.5f)
+    val shape = RoundedCornerShape(unit * 4f)
     Box(
         Modifier
-            .size(unit * 15f)
+            .size(unit * TOOL_SIZE)
             .shadow(6.dp, shape, ambientColor = style.shadow, spotColor = style.shadow)
             .clip(shape)
-            .background(style.button)
+            .background(if (active) style.buttonOn else style.button)
             .holdFillBehind(hold, style.holdFill)
             .border(1.dp, Color.White.copy(alpha = 0.25f), shape)
-            .holdToActivate(hold, 1000, touches, onTooShort = onTooShort, onComplete = onOpen),
+            .holdToActivate(hold, 1000, touches, onTooShort = onTooShort, onComplete = onActivate),
         contentAlignment = Alignment.Center,
     ) {
-        Image(Icons.Grid, null, Modifier.size(unit * 7.5f), colorFilter = ColorFilter.tint(style.buttonInk))
+        Image(
+            icon, null, Modifier.size(unit * 6.8f),
+            colorFilter = ColorFilter.tint(if (active) style.buttonOnInk else style.buttonInk),
+        )
+    }
+}
+
+/** Tool buttons are this many layout units wide and high. */
+const val TOOL_SIZE = 13f
+
+/**
+ * Big vertical zoom slider. Only dragging the knob changes the zoom, so a hand resting on the
+ * track does nothing. Small dot = wide view, big dot = close-up.
+ */
+@Composable
+fun ZoomSlider(
+    value: Float,
+    onChange: (Float) -> Unit,
+    style: SkinStyle,
+    unit: Dp,
+    height: Dp,
+    touches: TouchCounter,
+    modifier: Modifier = Modifier,
+) {
+    val change by rememberUpdatedState(onChange)
+    val current by rememberUpdatedState(value)
+    val knob = unit * 15f
+    Box(
+        modifier
+            .size(knob, height)
+            .pointerInput(touches) {
+                awaitEachGesture {
+                    val down = awaitFirstDown(requireUnconsumed = false)
+                    if (touches.count > 1) return@awaitEachGesture
+                    val knobPx = knob.toPx()
+                    val travel = size.height - knobPx
+                    val knobY = knobPx / 2 + (1 - current) * travel
+                    if (abs(down.position.y - knobY) > knobPx * 0.8f) return@awaitEachGesture
+                    down.consume()
+                    val grab = down.position.y - knobY
+                    while (true) {
+                        val change0 = awaitPointerEvent().changes.firstOrNull { it.id == down.id } ?: break
+                        if (!change0.pressed || touches.count > 1) break
+                        change0.consume()
+                        change((1f - (change0.position.y - grab - knobPx / 2) / travel).coerceIn(0f, 1f))
+                    }
+                }
+            }
+            .drawBehind {
+                val tw = unit.toPx() * 11f
+                val left = (size.width - tw) / 2
+                val knobPx = knob.toPx()
+                val knobY = knobPx / 2 + (1 - value) * (size.height - knobPx)
+                val corner = CornerRadius(tw / 2)
+                drawRoundRect(style.button, Offset(left, 0f), Size(tw, size.height), corner)
+                drawRoundRect(style.holdFill, Offset(left, knobY), Size(tw, size.height - knobY), corner)
+                drawRoundRect(Color.White.copy(alpha = 0.25f), Offset(left, 0f), Size(tw, size.height), corner, style = Stroke(1.dp.toPx()))
+                drawCircle(Color.White.copy(alpha = 0.75f), tw * 0.12f, Offset(size.width / 2, size.height - tw * 0.5f))
+                drawCircle(Color.White.copy(alpha = 0.75f), tw * 0.3f, Offset(size.width / 2, tw * 0.5f))
+            },
+    ) {
+        Box(
+            Modifier
+                .align(Alignment.TopCenter)
+                .layout { measurable, constraints ->
+                    val p = measurable.measure(constraints)
+                    layout(p.width, p.height) { p.place(0, ((1 - value) * (height.toPx() - knob.toPx())).roundToInt()) }
+                }
+                .size(knob)
+                .shadow(8.dp, CircleShape, ambientColor = style.shadow, spotColor = style.shadow)
+                .background(Color.White, CircleShape)
+                .border(unit * 0.8f, style.buttonOn, CircleShape),
+            contentAlignment = Alignment.Center,
+        ) {
+            Image(Icons.Search, "Zoom", Modifier.size(unit * 7.5f), colorFilter = ColorFilter.tint(Ink))
+        }
     }
 }
 
@@ -374,17 +443,42 @@ fun CloseButton(unit: Dp, touches: TouchCounter, onClose: () -> Unit, modifier: 
 
 // ---------------------------------------------------------------- Hints
 
+enum class HintKind { HOLD, EMPTY }
+
+/** Explains a gesture with a picture first (finger with a filling ring, or a moon), text second. */
 @Composable
-fun HintBubble(text: String, unit: Dp, modifier: Modifier = Modifier) {
-    BasicText(
-        text,
+fun HintBubble(kind: HintKind, text: String, unit: Dp, modifier: Modifier = Modifier) {
+    val ring by rememberInfiniteTransition(label = "hint").animateFloat(
+        0f, 1f, infiniteRepeatable(tween(1000, easing = LinearEasing)), label = "ring",
+    )
+    Row(
         modifier
             .shadow(8.dp, CircleShape)
             .background(Color.White, CircleShape)
-            .padding(horizontal = unit * 3.6f, vertical = unit * 1.6f),
-        style = kidText((unit * 4.2f).asSp(), Ink),
-        softWrap = false,
-    )
+            .padding(start = unit * 1.4f, end = unit * 3.6f, top = unit * 1.2f, bottom = unit * 1.2f),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(unit * 2f),
+    ) {
+        Canvas(Modifier.size(unit * 9f)) {
+            when (kind) {
+                HintKind.HOLD -> {
+                    val sw = size.minDimension * 0.12f
+                    drawCircle(Color(0xFFE8EAF0))
+                    drawCircle(Ink.copy(alpha = 0.85f), size.minDimension * 0.2f)
+                    drawArc(
+                        Color(0xFFFFB800), -90f, 360f * ring, false,
+                        topLeft = Offset(sw / 2, sw / 2), size = Size(size.width - sw, size.height - sw),
+                        style = Stroke(sw, cap = StrokeCap.Round),
+                    )
+                }
+                HintKind.EMPTY -> {
+                    drawCircle(Color(0xFF1E1B4B))
+                    drawMoon(center, size.minDimension * 0.26f)
+                }
+            }
+        }
+        BasicText(text, style = kidText((unit * 4.2f).asSp(), Ink), softWrap = false)
+    }
 }
 
 /** Places the content next to the anchor point it is aligned to, without taking up space. */

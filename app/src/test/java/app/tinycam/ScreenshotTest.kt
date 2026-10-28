@@ -27,7 +27,10 @@ import app.tinycam.data.Side
 import app.tinycam.data.Skin
 import app.tinycam.data.Thumb
 import app.tinycam.data.Thumbnails
+import app.tinycam.data.Tokens
 import app.tinycam.ui.CameraActions
+import app.tinycam.ui.Effect
+import app.tinycam.ui.EffectPicker
 import app.tinycam.ui.Captured
 import app.tinycam.ui.GalleryOverlay
 import app.tinycam.ui.KidCameraUi
@@ -65,17 +68,27 @@ class ScreenshotTest {
     }
 
     private object NoCamera : CameraActions {
-        override fun takePhoto(): Captured? = null
+        override fun takePhoto(effect: Effect): Captured? = null
         override fun startVideo() = false
         override fun stopVideo(elapsedMs: Long): Captured? = null
+        override fun setZoom(linear: Float) = Unit
     }
 
-    private fun renderSkins(prefix: String, settingsFor: (Skin) -> Settings, cooldown: Float = 1f, capturesLeft: Int? = null) {
+    private val allFeatures = Settings(video = true, gallery = true, selfie = true, zoom = true, effects = true, timer = true)
+
+    private fun renderSkins(
+        prefix: String,
+        settingsFor: (Skin) -> Settings,
+        cooldown: Float = 1f,
+        tokens: Tokens? = null,
+        effect: Effect = Effect.NONE,
+        countdownMs: Long? = null,
+    ) {
         var settings by mutableStateOf(settingsFor(Skin.CLASSIC))
         compose.setContent {
             KidCameraUi(
-                settings, items, thumbs, capturesLeft, CaptureMode.PHOTO, {}, NoCamera, {},
-                initialCooldown = cooldown,
+                settings, items, thumbs, tokens, CaptureMode.PHOTO, {}, false, {}, effect, {}, NoCamera, {},
+                initialCooldown = cooldown, initialCountdownMs = countdownMs,
             ) { Canvas(Modifier.fillMaxSize()) { drawScene(0) } }
         }
         Skin.entries.forEach {
@@ -86,14 +99,28 @@ class ScreenshotTest {
     }
 
     @Test
-    fun portrait() = renderSkins("portrait", { Settings(level = 3, skin = it) })
+    fun portrait() = renderSkins("portrait", { allFeatures.copy(skin = it, dailyCaptures = 5) }, tokens = Tokens(3, 5))
 
     @Test
     @Config(qualifiers = "w860dp-h400dp-land-xxhdpi")
-    fun landscape() = renderSkins("landscape", { Settings(level = 3, skin = it, side = Side.LEFT) }, capturesLeft = 12)
+    fun landscape() = renderSkins("landscape", { allFeatures.copy(skin = it, side = Side.LEFT) }, tokens = Tokens(7, 10))
 
     @Test
-    fun portraitCooling() = renderSkins("cooling", { Settings(level = 1, skin = it, side = Side.LEFT) }, cooldown = 0.45f)
+    fun portraitCooling() = renderSkins("cooling", { Settings(skin = it, side = Side.LEFT) }, cooldown = 0.45f)
+
+    @Test
+    fun countdown() = renderSkins("countdown", { Settings(skin = it, timer = true) }, countdownMs = 2400)
+
+    @Test
+    fun frame() = renderSkins("frame", { Settings(skin = it, effects = true) }, effect = Effect.STARS)
+
+    @Test
+    fun effectPicker() {
+        compose.setContent {
+            EffectPicker(Effect.HEARTS, styleFor(Skin.RAINBOW), unitFor(400f, 860f), TouchCounter(), {}, {})
+        }
+        compose.onRoot().captureRoboImage("build/screenshots/effects_picker.png")
+    }
 
     @Test
     fun overlays() {
@@ -117,7 +144,7 @@ class ScreenshotTest {
     @Test
     fun parent() {
         compose.setContent {
-            ParentScreen(Settings(level = 2, dailyCaptures = 20), DailyUsage("d", 4, 600_000), 37, false, {}, {}, {}, {}, {}, {})
+            ParentScreen(Settings(video = true, timer = true, dailyCaptures = 20), DailyUsage("d", 4, 600_000), 37, false, {}, {}, {}, {}, {}, {})
         }
         compose.onRoot().captureRoboImage("build/screenshots/parent.png")
     }

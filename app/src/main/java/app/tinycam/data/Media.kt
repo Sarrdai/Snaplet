@@ -63,14 +63,15 @@ class Thumbnails(private val sizePx: Int = 360) {
             .getOrNull()?.also { cache.put(item.id, it) }
     }
 
-    private fun photoThumb(file: File) = decodeSampled(file, sizePx)?.let { Thumb(it.asImageBitmap()) }
+    private fun photoThumb(file: File) = decodeUpright(file, sizePx)?.let { Thumb(it.asImageBitmap()) }
 }
 
 suspend fun loadFullImage(file: File, maxPx: Int): ImageBitmap? = withContext(Dispatchers.IO) {
-    runCatching { decodeSampled(file, maxPx)?.asImageBitmap() }.getOrNull()
+    runCatching { decodeUpright(file, maxPx)?.asImageBitmap() }.getOrNull()
 }
 
-private fun decodeSampled(file: File, targetPx: Int): Bitmap? {
+/** Decodes [file] downsampled to roughly [targetPx] and rotated upright according to its EXIF data. */
+fun decodeUpright(file: File, targetPx: Int): Bitmap? {
     val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
     BitmapFactory.decodeFile(file.path, bounds)
     var sample = 1

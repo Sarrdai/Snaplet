@@ -1,7 +1,14 @@
 package app.tinycam.ui
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -54,10 +61,21 @@ private val Heading = TextStyle(fontFamily = KidFont, fontWeight = FontWeight.Bo
 private val Body = TextStyle(fontSize = 15.sp, lineHeight = 21.sp, color = Muted)
 private val Chip = TextStyle(fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
 
-private val LevelInfo = mapOf(
-    1 to "Nur Fotos: Auslöser und Vorschau-Leiste.",
-    2 to "Zusätzlich Videos. Der Umschalter muss 1,5 s gehalten werden.",
-    3 to "Zusätzlich die Galerie mit allen Bildern (1 s halten).",
+private class Feature(
+    val icon: ImageVector,
+    val title: String,
+    val info: String,
+    val get: (Settings) -> Boolean,
+    val set: (Settings, Boolean) -> Settings,
+)
+
+private val Features = listOf(
+    Feature(Icons.Video, "Videos", "Umschalter Foto/Video, 1,5 s halten.", { it.video }, { s, v -> s.copy(video = v) }),
+    Feature(Icons.Grid, "Galerie", "Alle Bilder als Raster ansehen, 1 s halten.", { it.gallery }, { s, v -> s.copy(gallery = v) }),
+    Feature(Icons.Flip, "Selfie-Kamera", "Zwischen Rück- und Frontkamera wechseln, 1 s halten.", { it.selfie }, { s, v -> s.copy(selfie = v) }),
+    Feature(Icons.Search, "Zoom", "Großer Schieberegler. Bewegt sich nur, wenn man den Knopf zieht.", { it.zoom }, { s, v -> s.copy(zoom = v) }),
+    Feature(Icons.Wand, "Filter & Rahmen", "Schwarz-Weiß, Sepia, Bunt und lustige Rahmen für Fotos.", { it.effects }, { s, v -> s.copy(effects = v) }),
+    Feature(Icons.Timer, "Selbstauslöser", "Mit großem Countdown. Erneutes Tippen bricht ab.", { it.timer }, { s, v -> s.copy(timer = v) }),
 )
 
 @Composable
@@ -94,8 +112,15 @@ fun ParentScreen(
             Section("Design") {
                 SkinPicker(settings.skin, touches) { onChange(settings.copy(skin = it)) }
             }
-            Section("Lernstufe", LevelInfo[settings.level]) {
-                Options(listOf(1, 2, 3), settings.level, { "Stufe $it" }, touches) { onChange(settings.copy(level = it)) }
+            Section("Funktionen", "Fotografieren geht immer. Alles andere einzeln einschalten, wenn das Kind so weit ist.") {
+                Features.forEach { f ->
+                    FeatureRow(f, f.get(settings), touches) { onChange(f.set(settings, it)) }
+                }
+            }
+            if (settings.timer) {
+                Section("Selbstauslöser-Dauer") {
+                    Options(listOf(3, 5, 10), settings.timerSec, { "$it s" }, touches) { onChange(settings.copy(timerSec = it)) }
+                }
             }
             Section("Auslöser-Seite", "Auf welcher Seite die Hand des Kindes den Auslöser am besten erreicht.") {
                 Options(Side.entries, settings.side, { it.label }, touches) { onChange(settings.copy(side = it)) }
@@ -105,7 +130,10 @@ fun ParentScreen(
                     onChange(settings.copy(cooldownSec = it))
                 }
             }
-            Section("Aufnahmen pro Tag", "Fotos und Videos zusammen. Heute: ${usage.captures}") {
+            Section(
+                "Aufnahmen pro Tag",
+                "Fotos und Videos zusammen. Der Auslöser zeigt die restlichen als Symbole, die leer werden. Heute: ${usage.captures}",
+            ) {
                 Options(listOf(0, 10, 20, 50), settings.dailyCaptures, { if (it == 0) "Aus" else "$it" }, touches) {
                     onChange(settings.copy(dailyCaptures = it))
                 }
@@ -180,6 +208,44 @@ private fun <T> Options(values: List<T>, selected: T, label: (T) -> String, touc
                 style = Chip.copy(color = if (on) Ink else Text),
             )
         }
+    }
+}
+
+@Composable
+private fun FeatureRow(feature: Feature, on: Boolean, touches: TouchCounter, onToggle: (Boolean) -> Unit) {
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(14.dp))
+            .singleTap(touches) { onToggle(!on) }
+            .padding(vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(14.dp),
+    ) {
+        Box(
+            Modifier.size(42.dp).background(if (on) Accent else Line, RoundedCornerShape(12.dp)),
+            contentAlignment = Alignment.Center,
+        ) {
+            Image(feature.icon, null, Modifier.size(24.dp), colorFilter = ColorFilter.tint(if (on) Ink else Text))
+        }
+        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            BasicText(feature.title, style = Chip.copy(color = Text))
+            BasicText(feature.info, style = Body.copy(fontSize = 13.sp, lineHeight = 18.sp))
+        }
+        Switch(on)
+    }
+}
+
+@Composable
+private fun Switch(on: Boolean) {
+    val x by animateDpAsState(if (on) 22.dp else 0.dp, label = "switch")
+    Box(
+        Modifier
+            .size(width = 50.dp, height = 28.dp)
+            .background(if (on) Accent else Line, RoundedCornerShape(50))
+            .padding(3.dp),
+    ) {
+        Box(Modifier.offset(x = x).size(22.dp).background(if (on) Ink else Muted, CircleShape))
     }
 }
 

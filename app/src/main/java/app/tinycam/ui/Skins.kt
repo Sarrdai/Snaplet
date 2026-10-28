@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.drawscope.scale
 import app.tinycam.data.Skin
+import app.tinycam.data.Tokens
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -107,6 +108,7 @@ enum class Emblem { SKIN, RECORD, STOP }
  * @param progress cooldown or recording progress, 0..1; 1 means full.
  * @param inactive 0 = ready, 1 = not ready (desaturated and shrunk core).
  * @param spikesLeft side on which outward decorations (dino spikes) are drawn.
+ * @param tokens remaining daily captures as symbols below the emblem, or null when unlimited.
  */
 fun DrawScope.drawShutter(
     skin: Skin,
@@ -116,6 +118,7 @@ fun DrawScope.drawShutter(
     coreScale: Float,
     emblem: Emblem,
     spikesLeft: Boolean,
+    tokens: Tokens? = null,
 ) {
     val w = size.width
     val h = size.height
@@ -168,9 +171,15 @@ fun DrawScope.drawShutter(
                 }
                 if (skin != Skin.SPACE) drawGloss(core)
             }
-            val center = emblemCenter(skin, core)
+            val center = emblemCenter(skin, core, roomBelow = tokens != null)
+            // On short pills (landscape) the capture symbols matter more than the decorative emblem
+            val tight = tokens != null && emblem == Emblem.SKIN && core.height < cw * 3.6f
+            if (tokens != null) {
+                val top = if (tight) core.top + cw * decorBottom(skin) else center.y + cw * 0.4f
+                drawTokens(skin, Rect(core.left + cw * 0.1f, top, core.right - cw * 0.1f, core.bottom - cw * 0.22f), tokens)
+            }
             when (emblem) {
-                Emblem.SKIN -> drawSkinEmblem(skin, center, cw)
+                Emblem.SKIN -> if (!tight) drawSkinEmblem(skin, center, cw)
                 Emblem.RECORD -> drawRecordEmblem(center, cw, recording = false)
                 Emblem.STOP -> drawRecordEmblem(center, cw, recording = true)
             }
@@ -179,17 +188,8 @@ fun DrawScope.drawShutter(
     }
 }
 
-/** Where the count chip may sit without covering the emblem, as a fraction of the pill height from the top. */
-fun chipCenterFraction(skin: Skin, pillW: Float, pillH: Float): Float {
-    val inset = pillW * 0.11f
-    val core = Rect(inset, inset, pillW - inset, pillH - inset)
-    val emblemBottom = emblemCenter(skin, core).y + core.width * 0.34f
-    val y = (emblemBottom + core.bottom - core.width * 0.15f) / 2f
-    return y / pillH
-}
-
-/** Centered, but below the face or nose cone and with room for the count chip underneath. */
-private fun emblemCenter(skin: Skin, core: Rect): Offset {
+/** Centered, but below the face or nose cone and with room for the capture symbols underneath. */
+private fun emblemCenter(skin: Skin, core: Rect, roomBelow: Boolean): Offset {
     val cw = core.width
     val minY = core.top + cw * when (skin) {
         Skin.CLASSIC -> 0.5f
@@ -198,8 +198,15 @@ private fun emblemCenter(skin: Skin, core: Rect): Offset {
         Skin.RAINBOW -> 1.42f
         Skin.LEOPARD -> 1.45f
     }
-    val maxY = maxOf(minY, core.bottom - cw * 0.9f)
+    val maxY = maxOf(minY, core.bottom - cw * if (roomBelow) 1.25f else 0.9f)
     return Offset(core.center.x, core.center.y.coerceIn(minY, maxY))
+}
+
+/** Where the face, rainbow or nose cone ends, in core widths from the top. */
+private fun decorBottom(skin: Skin) = when (skin) {
+    Skin.CLASSIC -> 0.25f
+    Skin.SPACE, Skin.DINO -> 1.0f
+    Skin.RAINBOW, Skin.LEOPARD -> 1.15f
 }
 
 private fun pillPath(r: Rect) = Path().apply {
@@ -285,7 +292,7 @@ private fun DrawScope.drawCloud(c: Offset, r: Float) {
     drawOval(white, Offset(c.x - r * 1.7f, c.y), Size(r * 3.4f, r * 1.05f))
 }
 
-private fun DrawScope.drawSparkle(c: Offset, r: Float, color: Color = Color.White) {
+internal fun DrawScope.drawSparkle(c: Offset, r: Float, color: Color = Color.White) {
     val p = Path().apply {
         moveTo(c.x, c.y - r)
         quadraticTo(c.x, c.y, c.x + r, c.y)
@@ -297,7 +304,7 @@ private fun DrawScope.drawSparkle(c: Offset, r: Float, color: Color = Color.Whit
     drawPath(p, color)
 }
 
-private fun starPath(c: Offset, outer: Float, inner: Float) = Path().apply {
+internal fun starPath(c: Offset, outer: Float, inner: Float) = Path().apply {
     for (i in 0 until 10) {
         val r = if (i % 2 == 0) outer else inner
         val a = -PI / 2 + i * PI / 5
@@ -599,6 +606,79 @@ private fun DrawScope.drawRecordEmblem(c: Offset, cw: Float, recording: Boolean)
     if (recording) {
         val s = cw * 0.2f
         drawRoundRect(Color.White, c - Offset(s / 2, s / 2), Size(s, s), CornerRadius(cw * 0.04f))
+    }
+}
+
+// ---------------------------------------------------------------- Capture symbols
+
+/** Lays out [tokens] in the largest grid that fits [area]; used ones are drawn as empty outlines. */
+private fun DrawScope.drawTokens(skin: Skin, area: Rect, tokens: Tokens) {
+    val n = tokens.total
+    if (n <= 0 || area.height <= 0f) return
+    var cell = 0f
+    var cols = 1
+    for (c in 1..5) {
+        val rows = (n + c - 1) / c
+        val s = minOf(area.width / c, area.height / rows)
+        if (s > cell) {
+            cell = s
+            cols = c
+        }
+    }
+    val rows = (n + cols - 1) / cols
+    val origin = area.center - Offset(cols * cell / 2f, rows * cell / 2f)
+    // Light plate so the symbols stay readable on busy skins (rosettes, rocket stripes)
+    val pad = cell * 0.12f
+    drawRoundRect(
+        Color.White.copy(alpha = 0.78f), origin - Offset(pad, pad), Size(cols * cell + pad * 2, rows * cell + pad * 2),
+        CornerRadius(cell * 0.45f),
+    )
+    for (i in 0 until n) {
+        val c = origin + Offset((i % cols) * cell + cell / 2f, (i / cols) * cell + cell / 2f)
+        drawToken(skin, c, cell * 0.4f, i, filled = i < tokens.filled)
+    }
+}
+
+private fun DrawScope.drawToken(skin: Skin, c: Offset, r: Float, index: Int, filled: Boolean) {
+    val empty = Color.Black.copy(alpha = 0.3f)
+    val outline = Stroke(r * 0.18f, join = StrokeJoin.Round)
+    when (skin) {
+        Skin.RAINBOW, Skin.SPACE -> {
+            val star = starPath(c, r * 1.1f, r * 0.5f)
+            if (filled) {
+                drawPath(star, if (skin == Skin.RAINBOW) RainbowBands[index % RainbowBands.size] else Color(0xFFFFE14D))
+                drawPath(star, Color(0xFF1E1B4B).copy(alpha = 0.35f), style = Stroke(r * 0.1f, join = StrokeJoin.Round))
+            } else {
+                drawPath(star, empty, style = outline)
+            }
+        }
+        Skin.DINO -> {
+            val egg = Rect(c.x - r * 0.75f, c.y - r, c.x + r * 0.75f, c.y + r)
+            if (filled) {
+                drawOval(Brush.verticalGradient(listOf(Color.White, Color(0xFFFFF0C2)), egg.top, egg.bottom), egg.topLeft, egg.size)
+                drawCircle(Color(0xFF5FC259), r * 0.2f, c + Offset(-r * 0.25f, -r * 0.3f))
+                drawCircle(Color(0xFF5FC259), r * 0.14f, c + Offset(r * 0.3f, r * 0.25f))
+                drawOval(Color(0xFF235A2B).copy(alpha = 0.5f), egg.topLeft, egg.size, style = Stroke(r * 0.1f))
+            } else {
+                drawOval(empty, egg.topLeft, egg.size, style = outline)
+            }
+        }
+        Skin.LEOPARD -> {
+            if (filled) {
+                drawCircle(Color(0xFFFFF3DC), r, c)
+                drawPaw(c + Offset(0f, r * 0.1f), r * 2.6f, LeopardDark)
+            } else {
+                drawCircle(empty, r, c, style = outline)
+            }
+        }
+        Skin.CLASSIC -> {
+            if (filled) {
+                drawCircle(Color(0xFFFFC93C), r, c)
+                drawCircle(Color.White.copy(alpha = 0.6f), r * 0.3f, c + Offset(-r * 0.3f, -r * 0.3f))
+            } else {
+                drawCircle(empty, r, c, style = outline)
+            }
+        }
     }
 }
 

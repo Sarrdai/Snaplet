@@ -15,3 +15,16 @@ fun Settings.isTimeUp(usage: DailyUsage): Boolean =
 
 /** Video length limit in ms, or null when unlimited. */
 fun Settings.maxVideoMs(): Long? = if (maxVideoSec <= 0) null else maxVideoSec * 1000L
+
+/** Remaining captures as countable symbols: [filled] of [total] slots are still available. */
+data class Tokens(val filled: Int, val total: Int)
+
+/**
+ * Up to 10 captures get one symbol each, so kids can count what is left without reading numbers.
+ * Larger limits are shown as 10 symbols that empty proportionally.
+ */
+fun Settings.budgetTokens(usage: DailyUsage): Tokens? {
+    val left = capturesLeft(usage) ?: return null
+    if (dailyCaptures <= 10) return Tokens(left, dailyCaptures)
+    return Tokens((left * 10 + dailyCaptures - 1) / dailyCaptures, 10)
+}

@@ -54,6 +54,18 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
+import androidx.compose.foundation.border
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.text.font.FontWeight
+import app.tinycam.data.Tokens
 import app.tinycam.data.CaptureMode
 import app.tinycam.data.MediaItem
 import app.tinycam.data.Settings
@@ -69,14 +81,15 @@ class Captured(val item: MediaItem, val snapshot: ImageBitmap?)
 
 /** What the UI needs from the camera. Implemented by CameraX in the app and by fakes in tests. */
 interface CameraActions {
-    fun takePhoto(): Captured?
+    fun takePhoto(effect: Effect): Captured?
     fun startVideo(): Boolean
     fun stopVideo(elapsedMs: Long): Captured?
+    fun setZoom(linear: Float)
 }
 
-private enum class HintTarget { SHUTTER, MODE, GALLERY }
+private enum class HintTarget { SHUTTER, MODE, GALLERY, SELFIE, EFFECTS, TIMER }
 
-private class Hint(val target: HintTarget, val text: String)
+private class Hint(val target: HintTarget, val kind: HintKind, val text: String)
 
 private class Fly(val bitmap: ImageBitmap, val itemId: String) {
     val anim = Animatable(0f)
@@ -85,28 +98,38 @@ private class Fly(val bitmap: ImageBitmap, val itemId: String) {
 private sealed interface Overlay {
     data object None : Overlay
     data object Gallery : Overlay
+    data object Effects : Overlay
     data class Preview(val item: MediaItem, val fromGallery: Boolean) : Overlay
 }
 
 private const val HOLD_HINT = "Gedrückt halten"
-private const val EMPTY_HINT = "Filmrolle voll. Morgen geht's weiter!"
+private const val EMPTY_HINT = "Morgen geht's weiter!"
 
 /**
- * The kid-facing camera screen. Only the shutter, the thumbnail strip and hold-to-activate
- * buttons react to touch; the live image itself is inert.
+ * The kid-facing camera screen. Only the shutter, the thumbnail strip, the zoom knob and
+ * hold-to-activate buttons react to touch; the live image itself is inert.
+ *
+ * @param filterPreview apply the effect's color filter to [preview] in Compose. The real camera
+ *   filters its own view instead, so it passes false.
  */
 @Composable
 fun KidCameraUi(
     settings: Settings,
     items: List<MediaItem>,
     thumbs: Thumbnails,
-    capturesLeft: Int?,
+    tokens: Tokens?,
     mode: CaptureMode,
     onModeChange: (CaptureMode) -> Unit,
+    selfie: Boolean,
+    onSelfieChange: (Boolean) -> Unit,
+    effect: Effect,
+    onEffectChange: (Effect) -> Unit,
     actions: CameraActions,
     onOpenParent: () -> Unit,
     modifier: Modifier = Modifier,
+    filterPreview: Boolean = true,
     initialCooldown: Float = 1f,
+    initialCountdownMs: Long? = null,
     preview: @Composable () -> Unit,
 ) {
     val touches = remember { TouchCounter() }
@@ -115,13 +138,22 @@ fun KidCameraUi(
 
     val cooldown = remember { Animatable(initialCooldown) }
     val ready by remember { derivedStateOf { cooldown.value >= 1f } }
+    val shake = remember { Animatable(0f) }
     var recordingStart by remember { mutableStateOf<Long?>(null) }
     var recordingElapsed by remember { mutableLongStateOf(0L) }
+    var countdownEnd by remember { mutableStateOf(initialCountdownMs?.let { SystemClock.uptimeMillis() + it }) }
+    var countdownLeft by remember { mutableLongStateOf(initialCountdownMs ?: 0L) }
+    var timerOn by remember { mutableStateOf(initialCountdownMs != null) }
+    var zoom by remember { mutableFloatStateOf(0f) }
     var overlay by remember { mutableStateOf<Overlay>(Overlay.None) }
     var hint by remember { mutableStateOf<Hint?>(null) }
     var fly by remember { mutableStateOf<Fly?>(null) }
     var flyTarget by remember { mutableStateOf<Rect?>(null) }
     var rootCoords by remember { mutableStateOf<LayoutCoordinates?>(null) }
+
+    val recording = recordingStart != null
+    val activeEffect = if (settings.effects && mode == CaptureMode.PHOTO) effect else Effect.NONE
+    val timerActive = settings.timer && timerOn
 
     fun startCooldown() {
         if (settings.cooldownSec <= 0) return
@@ -143,6 +175,22 @@ fun KidCameraUi(
         }
     }
 
+    fun holdHint(target: HintTarget) {
+        hint = Hint(target, HintKind.HOLD, HOLD_HINT)
+    }
+
+    fun capture() {
+        if (mode == CaptureMode.PHOTO) {
+            actions.takePhoto(activeEffect)?.let {
+                showCaptured(it)
+                startCooldown()
+            }
+        } else if (actions.startVideo()) {
+            recordingElapsed = 0
+            recordingStart = SystemClock.uptimeMillis()
+        }
+    }
+
     fun stopRecording() {
         val start = recordingStart ?: return
         recordingStart = null
@@ -155,16 +203,17 @@ fun KidCameraUi(
         val start = recordingStart
         when {
             start != null -> if (now - start >= 1000) stopRecording() // a double tap must not end the clip
+            countdownEnd != null -> countdownEnd = null // tapping again cancels the self-timer
             !ready -> Unit
-            capturesLeft == 0 -> hint = Hint(HintTarget.SHUTTER, EMPTY_HINT)
-            mode == CaptureMode.PHOTO -> actions.takePhoto()?.let {
-                showCaptured(it)
-                startCooldown()
+            tokens?.filled == 0 -> {
+                hint = Hint(HintTarget.SHUTTER, HintKind.EMPTY, EMPTY_HINT)
+                scope.launch { for (x in listOf(-2.5f, 2.5f, -2f, 2f, -1f, 0f)) shake.animateTo(x, tween(45)) }
             }
-            actions.startVideo() -> {
-                recordingElapsed = 0
-                recordingStart = now
+            timerActive -> {
+                countdownLeft = settings.timerSec * 1000L
+                countdownEnd = now + countdownLeft
             }
+            else -> capture()
         }
     }
 
@@ -180,11 +229,28 @@ fun KidCameraUi(
             delay(100)
         }
     }
+    LaunchedEffect(countdownEnd) {
+        val end = countdownEnd ?: return@LaunchedEffect
+        while (true) {
+            countdownLeft = end - SystemClock.uptimeMillis()
+            if (countdownLeft <= 0) {
+                countdownEnd = null
+                capture()
+                break
+            }
+            delay(30)
+        }
+    }
     LaunchedEffect(hint) {
         if (hint != null) {
-            delay(1800)
+            delay(2200)
             hint = null
         }
+    }
+    // A new lens starts wide; a disabled zoom must not stay zoomed in
+    LaunchedEffect(selfie, settings.zoom) {
+        zoom = 0f
+        actions.setZoom(0f)
     }
 
     // Back never leaves the camera; it only closes overlays.
@@ -208,19 +274,33 @@ fun KidCameraUi(
         val pillW = u * 21f
         val right = settings.side == Side.RIGHT
         val edge = u * 6.5f
-        val recording = recordingStart != null
         val railGap = u * 3f
         val railBottom = screenH * 0.07f
-        // Whatever is stacked above the shutter must still fit on short landscape screens
-        val aboveShutter = (if (settings.galleryUnlocked) u * 15f + railGap else 0.dp) +
-            (if (settings.videoUnlocked) u * 25f + railGap else 0.dp)
+        // The mode switch is stacked above the shutter and must still fit on short landscape screens
+        val aboveShutter = if (settings.video) u * 25f + railGap else 0.dp
         val pillH = minOf(
             if (portrait) screenH * 0.3f else screenH * 0.5f,
             pillW * 4.4f,
             screenH - railBottom - aboveShutter - u * 6f,
         )
+        val outer = if (right) Alignment.BottomEnd else Alignment.BottomStart
+        val opposite = if (right) Alignment.BottomStart else Alignment.BottomEnd
+        fun Modifier.fromSide(sideGap: Dp, bottom: Dp, onShutterSide: Boolean = true) =
+            if (right == onShutterSide) padding(end = sideGap, bottom = bottom) else padding(start = sideGap, bottom = bottom)
 
-        preview()
+        val matrix = activeEffect.matrix
+        Box(
+            Modifier
+                .fillMaxSize()
+                .then(
+                    if (filterPreview && matrix != null) {
+                        Modifier.drawWithContent { withEffectColors(activeEffect) { this@drawWithContent.drawContent() } }
+                    } else {
+                        Modifier
+                    },
+                ),
+        ) { preview() }
+        activeEffect.frame?.let { frame -> Canvas(Modifier.fillMaxSize()) { drawFrame(frame) } }
 
         Box(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing)) {
             // Thumbnail strip, newest next to the shutter
@@ -240,31 +320,66 @@ fun KidCameraUi(
                 RecordingTimer(recordingElapsed, u, Modifier.align(Alignment.TopCenter).padding(top = u * 25f))
             }
 
+            if (settings.zoom) {
+                ZoomSlider(
+                    zoom, { zoom = it; actions.setZoom(it) }, style, u, minOf(pillH, screenH * 0.42f), touches,
+                    Modifier.align(opposite).fromSide(u * 5f, maxOf(railBottom, u * 18f), onShutterSide = false),
+                )
+            }
+
+            // Tool column next to the shutter; leaves room for the dino plates in between
             Column(
-                Modifier
-                    .align(if (right) Alignment.BottomEnd else Alignment.BottomStart)
-                    .padding(bottom = railBottom, start = if (right) 0.dp else edge, end = if (right) edge else 0.dp),
+                Modifier.align(outer).fromSide(edge + pillW + u * 9f, railBottom),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(railGap),
             ) {
-                if (settings.galleryUnlocked && !recording) {
-                    RailItem(hint, HintTarget.GALLERY, right, u) {
-                        GalleryButton(style, u, touches, onTooShort = { hint = Hint(HintTarget.GALLERY, HOLD_HINT) }) {
+                if (settings.gallery && !recording) {
+                    HintAnchor(hint, HintTarget.GALLERY, right, u) {
+                        ToolButton(Icons.Grid, false, style, u, touches, { holdHint(HintTarget.GALLERY) }) {
                             overlay = Overlay.Gallery
                         }
                     }
                 }
-                if (settings.videoUnlocked) {
-                    RailItem(hint, HintTarget.MODE, right, u) {
+                if (settings.selfie && !recording) {
+                    HintAnchor(hint, HintTarget.SELFIE, right, u) {
+                        ToolButton(Icons.Flip, selfie, style, u, touches, { holdHint(HintTarget.SELFIE) }) {
+                            onSelfieChange(!selfie)
+                        }
+                    }
+                }
+                if (settings.effects && mode == CaptureMode.PHOTO) {
+                    HintAnchor(hint, HintTarget.EFFECTS, right, u) {
+                        ToolButton(Icons.Wand, effect != Effect.NONE, style, u, touches, { holdHint(HintTarget.EFFECTS) }) {
+                            overlay = Overlay.Effects
+                        }
+                    }
+                }
+                if (settings.timer && !recording) {
+                    HintAnchor(hint, HintTarget.TIMER, right, u) {
+                        ToolButton(Icons.Timer, timerOn, style, u, touches, { holdHint(HintTarget.TIMER) }) {
+                            timerOn = !timerOn
+                        }
+                    }
+                }
+            }
+
+            // Drawn after the tools so its hints appear on top of them
+            Column(
+                Modifier.align(outer).fromSide(edge, railBottom),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(railGap),
+            ) {
+                if (settings.video) {
+                    HintAnchor(hint, HintTarget.MODE, right, u) {
                         ModeSwitch(
                             videoSelected = mode == CaptureMode.VIDEO, style = style, unit = u, touches = touches,
-                            enabled = !recording, onTooShort = { hint = Hint(HintTarget.MODE, HOLD_HINT) },
+                            enabled = !recording && countdownEnd == null, onTooShort = { holdHint(HintTarget.MODE) },
                         ) {
                             onModeChange(if (mode == CaptureMode.PHOTO) CaptureMode.VIDEO else CaptureMode.PHOTO)
                         }
                     }
                 }
-                RailItem(hint, HintTarget.SHUTTER, right, u) {
+                HintAnchor(hint, HintTarget.SHUTTER, right, u) {
                     val maxMs = settings.maxVideoMs()
                     Shutter(
                         skin = settings.skin, style = style, width = pillW, height = pillH,
@@ -272,15 +387,16 @@ fun KidCameraUi(
                             if (recordingStart != null) maxMs?.let { 1f - recordingElapsed / it.toFloat() } ?: 1f
                             else cooldown.value
                         },
-                        ready = (ready && capturesLeft != 0) || recording,
+                        ready = (ready && tokens?.filled != 0) || recording || countdownEnd != null,
                         emblem = when {
                             recording -> Emblem.STOP
                             mode == CaptureMode.VIDEO -> Emblem.RECORD
                             else -> Emblem.SKIN
                         },
                         spikesLeft = right,
-                        capturesLeft = capturesLeft,
+                        tokens = tokens,
                         unit = u, touches = touches, onPress = ::onShutter,
+                        shake = { shake.value },
                     )
                 }
             }
@@ -288,9 +404,13 @@ fun KidCameraUi(
             LockButton(
                 style, u, touches, onOpenParent,
                 Modifier
-                    .align(if (right) Alignment.BottomStart else Alignment.BottomEnd)
+                    .align(opposite)
                     .padding(u * 4f),
             )
+        }
+
+        if (countdownEnd != null) {
+            Countdown(countdownLeft, settings.timerSec, style, u, Modifier.align(Alignment.Center))
         }
 
         fly?.let { f -> FlyingSnapshot(f, flyTarget, style.frame, u) }
@@ -302,6 +422,11 @@ fun KidCameraUi(
                 onOpen = { overlay = Overlay.Preview(it, fromGallery = true) },
                 onClose = { overlay = Overlay.None },
             )
+            Overlay.Effects -> EffectPicker(
+                effect, style, u, touches,
+                onSelect = onEffectChange,
+                onClose = { overlay = Overlay.None },
+            )
             is Overlay.Preview -> MediaPreview(
                 o.item, settings.skin, style, u, touches,
                 onClose = { overlay = if (o.fromGallery) Overlay.Gallery else Overlay.None },
@@ -311,16 +436,107 @@ fun KidCameraUi(
 }
 
 @Composable
-private fun RailItem(hint: Hint?, target: HintTarget, right: Boolean, unit: Dp, content: @Composable () -> Unit) {
+private fun HintAnchor(hint: Hint?, target: HintTarget, right: Boolean, unit: Dp, content: @Composable () -> Unit) {
     Box {
         content()
         if (hint?.target == target) {
             HintBubble(
-                hint.text, unit,
+                hint.kind, hint.text, unit,
                 Modifier
                     .align(if (right) Alignment.CenterStart else Alignment.CenterEnd)
                     .beside(onLeft = right, gap = unit * 3f),
             )
+        }
+    }
+}
+
+/** Big self-timer: a number for those who can read it, a draining ring and dots for everyone else. */
+@Composable
+private fun Countdown(leftMs: Long, totalSec: Int, style: SkinStyle, unit: Dp, modifier: Modifier) {
+    val secs = ((leftMs + 999) / 1000).toInt().coerceAtLeast(1)
+    val fraction = (leftMs / (totalSec * 1000f)).coerceIn(0f, 1f)
+    // The number pops at the start of every second
+    val pop = 1f + 0.18f * ((leftMs % 1000) / 1000f).let { it * it * it }
+    Column(modifier, horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(unit * 4f)) {
+        Box(
+            Modifier
+                .size(unit * 50f)
+                .drawBehind {
+                    val sw = size.minDimension * 0.08f
+                    drawCircle(Color(0x73000000))
+                    drawArc(
+                        style.accent, -90f, 360f * fraction, false,
+                        topLeft = Offset(sw / 2, sw / 2), size = Size(size.width - sw, size.height - sw),
+                        style = Stroke(sw, cap = StrokeCap.Round),
+                    )
+                },
+            contentAlignment = Alignment.Center,
+        ) {
+            BasicText(
+                secs.toString(),
+                Modifier.graphicsLayer {
+                    scaleX = pop
+                    scaleY = pop
+                },
+                style = kidText((unit * 28f).asSp(), weight = FontWeight.ExtraBold)
+                    .copy(shadow = Shadow(Color(0x66000000), Offset(0f, 6f), 12f)),
+            )
+        }
+        Row(horizontalArrangement = Arrangement.spacedBy(unit * 2.5f)) {
+            repeat(totalSec) { i ->
+                Box(
+                    Modifier
+                        .size(unit * 5f)
+                        .shadow(3.dp, CircleShape)
+                        .background(if (i < secs) style.accent else Color(0x66FFFFFF), CircleShape),
+                )
+            }
+        }
+    }
+}
+
+/** 3x3 grid of looks; each bubble previews its effect on a tiny landscape. */
+@Composable
+internal fun EffectPicker(
+    selected: Effect,
+    style: SkinStyle,
+    unit: Dp,
+    touches: TouchCounter,
+    onSelect: (Effect) -> Unit,
+    onClose: () -> Unit,
+) {
+    Box(
+        Modifier.fillMaxSize().background(Color(0x99000000)).singleTap(touches, onClose),
+        contentAlignment = Alignment.Center,
+    ) {
+        val panel = RoundedCornerShape(unit * 7f)
+        Column(
+            Modifier
+                .shadow(16.dp, panel)
+                .background(style.button, panel)
+                .border(1.dp, Color.White.copy(alpha = 0.25f), panel)
+                .padding(unit * 4f),
+            verticalArrangement = Arrangement.spacedBy(unit * 3f),
+        ) {
+            Effect.entries.chunked(3).forEach { row ->
+                Row(horizontalArrangement = Arrangement.spacedBy(unit * 3f)) {
+                    row.forEach { e ->
+                        val shape = RoundedCornerShape(unit * 5f)
+                        val on = e == selected
+                        Canvas(
+                            Modifier
+                                .size(unit * 22f)
+                                .shadow(if (on) 10.dp else 3.dp, shape)
+                                .clip(shape)
+                                .border(if (on) unit * 1.4f else unit * 0.4f, if (on) style.buttonOn else Color.White.copy(alpha = 0.4f), shape)
+                                .singleTap(touches) { onSelect(e) },
+                        ) {
+                            withEffectColors(e) { drawMiniScene() }
+                            e.frame?.let { drawFrame(it) }
+                        }
+                    }
+                }
+            }
         }
     }
 }
