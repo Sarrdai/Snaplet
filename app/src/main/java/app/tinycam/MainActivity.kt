@@ -62,6 +62,12 @@ class MainActivity : ComponentActivity() {
     // While the device unlock is showing, our activity pauses and resumes; re-pinning then would kill the prompt.
     // Expires on its own in case the system never reports back.
     private var authUntil = 0L
+    // Answers from an earlier, abandoned prompt can arrive much later; only the current attempt counts
+    private var authId = 0
+    // The unlock waits until unpinning has settled; if Android locked the phone meanwhile, that unlock is the check
+    private var pendingUnlock: (() -> Unit)? = null
+    private var lockedWhileUnpinning = false
+    private var repinOnFail = false
     // Auto-pin only on a real start, not on every resume: parents who unpinned with the phone's PIN must stay out
     private var pinOnResume = true
 
@@ -73,7 +79,7 @@ class MainActivity : ComponentActivity() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             val success = onDeviceUnlocked
             onDeviceUnlocked = null
-            if (result.resultCode == RESULT_OK) success?.let(::finishAuth) else finishAuth(null)
+            finishAuth(authId, success.takeIf { result.resultCode == RESULT_OK })
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -101,11 +107,17 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    override fun onStop() {
+        super.onStop()
+        if (pendingUnlock != null && keyguard().isKeyguardLocked) lockedWhileUnpinning = true
+    }
+
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         if (hasFocus) {
             hideSystemBars()
             pinned = isPinned()
+            continueUnlock()
         }
     }
 
@@ -175,57 +187,87 @@ class MainActivity : ComponentActivity() {
         parentOpen = true
     }
 
-    private fun deviceSecure() = getSystemService(KeyguardManager::class.java).isDeviceSecure
+    private fun keyguard() = getSystemService(KeyguardManager::class.java)
 
-    /** Asks for the phone's own screen lock (PIN, pattern, password or fingerprint). */
+    private fun deviceSecure() = keyguard().isDeviceSecure
+
+    /**
+     * Asks for the phone's own screen lock (PIN, pattern, password or fingerprint). A pinned screen blocks
+     * the unlock dialog, so the app unpins first. If Android then locks the phone ("ask for PIN before
+     * unpinning"), unlocking it is the check.
+     */
     private fun authenticateDevice(onSuccess: () -> Unit) {
         if (!deviceSecure()) {
             onSuccess()
             return
         }
-        if (authRunning()) return // a second prompt on top of the first one crashes on some phones
+        // A new attempt replaces one that never answered (the dialog covers the app while it is really showing)
+        repinOnFail = isPinned() || (authRunning() && repinOnFail)
+        val id = ++authId
         authUntil = SystemClock.elapsedRealtime() + 120_000
-        val title = "Eltern-Bereich"
-        val subtitle = "Mit der Bildschirmsperre des Handys entsperren"
-        runCatching { showDevicePrompt(title, subtitle, onSuccess) }.onFailure { finishAuth(null) }
+        pendingUnlock = null
+        if (!repinOnFail) {
+            showDevicePrompt(id, onSuccess)
+            return
+        }
+        pendingUnlock = onSuccess
+        lockedWhileUnpinning = false
+        runCatching { stopLockTask() }
+        // Without a lock screen no focus change follows, so check again once unpinning has settled
+        window.decorView.postDelayed(::continueUnlock, 800)
     }
 
-    private fun showDevicePrompt(title: String, subtitle: String, onSuccess: () -> Unit) {
-        when {
-            Build.VERSION.SDK_INT >= 30 -> BiometricPrompt.Builder(this)
-                .setTitle(title).setSubtitle(subtitle)
-                .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_WEAK or BiometricManager.Authenticators.DEVICE_CREDENTIAL)
-                .build()
-                .authenticate(CancellationSignal(), mainExecutor, promptCallback(onSuccess))
-            Build.VERSION.SDK_INT == 29 -> @Suppress("DEPRECATION") BiometricPrompt.Builder(this)
-                .setTitle(title).setSubtitle(subtitle)
-                .setDeviceCredentialAllowed(true)
-                .build()
-                .authenticate(CancellationSignal(), mainExecutor, promptCallback(onSuccess))
-            else -> {
-                @Suppress("DEPRECATION")
-                val intent = getSystemService(KeyguardManager::class.java).createConfirmDeviceCredentialIntent(title, subtitle)
-                if (intent == null) {
-                    finishAuth(onSuccess)
-                } else {
-                    onDeviceUnlocked = onSuccess
-                    keyguardRequest.launch(intent)
+    /** Second half of [authenticateDevice], once the screen is unpinned and belongs to the app again. */
+    private fun continueUnlock() {
+        val next = pendingUnlock ?: return
+        if (!hasWindowFocus() || keyguard().isKeyguardLocked) return
+        pendingUnlock = null
+        if (lockedWhileUnpinning) finishAuth(authId, next) else showDevicePrompt(authId, next)
+    }
+
+    private fun showDevicePrompt(id: Int, onSuccess: () -> Unit) {
+        val title = "Eltern-Bereich"
+        val subtitle = "Mit der Bildschirmsperre des Handys entsperren"
+        runCatching {
+            when {
+                Build.VERSION.SDK_INT >= 30 -> BiometricPrompt.Builder(this)
+                    .setTitle(title).setSubtitle(subtitle)
+                    .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_WEAK or BiometricManager.Authenticators.DEVICE_CREDENTIAL)
+                    .build()
+                    .authenticate(CancellationSignal(), mainExecutor, promptCallback(id, onSuccess))
+                Build.VERSION.SDK_INT == 29 -> @Suppress("DEPRECATION") BiometricPrompt.Builder(this)
+                    .setTitle(title).setSubtitle(subtitle)
+                    .setDeviceCredentialAllowed(true)
+                    .build()
+                    .authenticate(CancellationSignal(), mainExecutor, promptCallback(id, onSuccess))
+                else -> {
+                    @Suppress("DEPRECATION")
+                    val intent = keyguard().createConfirmDeviceCredentialIntent(title, subtitle)
+                    if (intent == null) {
+                        finishAuth(id, onSuccess)
+                    } else {
+                        onDeviceUnlocked = onSuccess
+                        keyguardRequest.launch(intent)
+                    }
                 }
             }
-        }
+        }.onFailure { finishAuth(id, null) }
     }
 
     @RequiresApi(28)
-    private fun promptCallback(onSuccess: () -> Unit) = object : BiometricPrompt.AuthenticationCallback() {
-        override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) = finishAuth(onSuccess)
-        override fun onAuthenticationError(errorCode: Int, errString: CharSequence) = finishAuth(null)
+    private fun promptCallback(id: Int, onSuccess: () -> Unit) = object : BiometricPrompt.AuthenticationCallback() {
+        override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) = finishAuth(id, onSuccess)
+        override fun onAuthenticationError(errorCode: Int, errString: CharSequence) = finishAuth(id, null)
     }
 
-    /** Opens the parent area on success before re-pinning is allowed again, otherwise re-pins. */
-    private fun finishAuth(onSuccess: (() -> Unit)?) {
-        onSuccess?.invoke()
+    /** Opens the parent area on success; on failure restores the pinning only if the attempt removed it. */
+    private fun finishAuth(id: Int, onSuccess: (() -> Unit)?) {
+        if (id != authId) return
+        authId++
         authUntil = 0L
-        pinIfWanted()
+        onSuccess?.invoke()
+        if (onSuccess == null && repinOnFail && !isPinned()) runCatching { startLockTask() }
+        repinOnFail = false
     }
 
     private fun authRunning() = SystemClock.elapsedRealtime() < authUntil
