@@ -21,6 +21,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,9 +40,13 @@ import app.tinycam.data.ParentLock
 import app.tinycam.ui.ParentPinGate
 import app.tinycam.data.isTimeUp
 import app.tinycam.ui.CameraScreen
+import app.tinycam.ui.HoldIndicator
+import app.tinycam.ui.HoldState
+import app.tinycam.ui.LocalHoldIndicator
 import app.tinycam.ui.ParentScreen
 import app.tinycam.ui.PermissionScreen
 import app.tinycam.ui.SleepScreen
+import app.tinycam.ui.styleFor
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -106,6 +111,15 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     private fun Root() {
+        val holdIndicator = remember { HoldState() }
+        Box(Modifier.fillMaxSize()) {
+            CompositionLocalProvider(LocalHoldIndicator provides holdIndicator) { Screens() }
+            HoldIndicator(holdIndicator, remember(app.settings.skin) { styleFor(app.settings.skin) }.accent)
+        }
+    }
+
+    @Composable
+    private fun Screens() {
         val settings = app.settings
         val usage = app.usage
         Box(Modifier.fillMaxSize()) {
