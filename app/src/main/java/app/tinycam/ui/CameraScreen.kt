@@ -6,7 +6,14 @@ import android.graphics.Bitmap
 import android.graphics.ColorMatrixColorFilter
 import android.graphics.Paint
 import android.view.View
+import android.util.Size
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.resolutionselector.AspectRatioStrategy
+import androidx.camera.core.resolutionselector.ResolutionSelector
+import androidx.camera.core.resolutionselector.ResolutionStrategy
+import androidx.camera.video.FallbackStrategy
+import androidx.camera.video.Quality
+import androidx.camera.video.QualitySelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.video.FileOutputOptions
@@ -35,6 +42,9 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import app.tinycam.data.AppState
 import app.tinycam.data.CaptureMode
 import app.tinycam.data.MediaItem
+import app.tinycam.data.PhotoAspect
+import app.tinycam.data.PhotoSize
+import app.tinycam.data.VideoQuality
 import app.tinycam.data.Thumb
 import app.tinycam.data.budgetTokens
 import app.tinycam.data.decodeUpright
@@ -75,6 +85,17 @@ fun CameraScreen(app: AppState, hasAudio: Boolean, onOpenParent: () -> Unit) {
             if (mode == CaptureMode.VIDEO) CameraController.VIDEO_CAPTURE else CameraController.IMAGE_CAPTURE,
         )
     }
+    LaunchedEffect(settings.photoAspect, settings.photoSize) {
+        controller.imageCaptureResolutionSelector = photoResolution(settings.photoAspect, settings.photoSize)
+    }
+    LaunchedEffect(settings.videoQuality) {
+        val q = when (settings.videoQuality) {
+            VideoQuality.SD -> Quality.SD
+            VideoQuality.HD -> Quality.HD
+            VideoQuality.FHD -> Quality.FHD
+        }
+        controller.videoCaptureQualitySelector = QualitySelector.from(q, FallbackStrategy.lowerQualityOrHigherThan(q))
+    }
     LaunchedEffect(selfie) {
         val selector = if (selfie) CameraSelector.DEFAULT_FRONT_CAMERA else CameraSelector.DEFAULT_BACK_CAMERA
         // Devices without a front camera simply stay on the back camera
@@ -103,7 +124,8 @@ fun CameraScreen(app: AppState, hasAudio: Boolean, onOpenParent: () -> Unit) {
         }
     }
 
-    val actions = remember { CameraXActions(app, controller, previewView, context, scope, { audio }, { selfie }) }
+    val square = settings.photoAspect == PhotoAspect.SQUARE
+    val actions = remember { CameraXActions(app, controller, previewView, context, scope, { audio }, { selfie }, { square }) }
 
     KidCameraUi(
         settings = settings,
@@ -132,6 +154,7 @@ private class CameraXActions(
     private val scope: CoroutineScope,
     private val hasAudio: () -> Boolean,
     private val selfie: () -> Boolean,
+    private val square: () -> Boolean,
 ) : CameraActions {
     private val executor = ContextCompat.getMainExecutor(context)
     private var recording: Recording? = null
@@ -141,7 +164,8 @@ private class CameraXActions(
 
     override fun takePhoto(effect: Effect): Captured {
         val item = app.media.newPhoto()
-        val snapshot = previewView.bitmap?.let { renderEffect(it, effect) }
+        val crop = square()
+        val snapshot = previewView.bitmap?.let { renderEffect(if (crop) centerSquare(it) else it, effect) }
         rememberThumb(item, snapshot, null)
         app.addCapture(item)
         // Selfies are saved mirrored, exactly as the child saw them on screen
@@ -150,7 +174,7 @@ private class CameraXActions(
             ImageCapture.OutputFileOptions.Builder(item.file).setMetadata(metadata).build(), executor,
             object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
-                    if (effect != Effect.NONE) scope.launch { applyEffect(item, effect) }
+                    if (effect != Effect.NONE || crop) scope.launch { postProcess(item, effect, crop) }
                 }
 
                 override fun onError(exception: ImageCaptureException) = drop(item)
@@ -191,12 +215,13 @@ private class CameraXActions(
         runCatching { controller.setLinearZoom(linear) }
     }
 
-    /** Re-encodes the saved photo with the effect baked in. The original stays if memory runs out. */
-    private suspend fun applyEffect(item: MediaItem, effect: Effect) = withContext(Dispatchers.Default) {
+    /** Re-encodes the saved photo cropped and with the effect baked in. The original stays if memory runs out. */
+    private suspend fun postProcess(item: MediaItem, effect: Effect, crop: Boolean) = withContext(Dispatchers.Default) {
         runCatching {
-            val src = decodeUpright(item.file, Int.MAX_VALUE) ?: return@runCatching
+            val decoded = decodeUpright(item.file, Int.MAX_VALUE) ?: return@runCatching
+            val src = if (crop) centerSquare(decoded) else decoded
             val out = renderEffect(src, effect)
-            src.recycle()
+            if (src !== out) src.recycle()
             item.file.outputStream().use { out.compress(Bitmap.CompressFormat.JPEG, 92, it) }
             out.recycle()
         }
@@ -215,4 +240,21 @@ private class CameraXActions(
         )
         app.thumbs.put(item.id, Thumb(small.asImageBitmap(), durationMs))
     }
+}
+
+private fun centerSquare(b: Bitmap): Bitmap {
+    val side = minOf(b.width, b.height)
+    return Bitmap.createBitmap(b, (b.width - side) / 2, (b.height - side) / 2, side, side)
+}
+
+/** Square photos are taken as 4:3 and cropped afterwards. */
+private fun photoResolution(aspect: PhotoAspect, size: PhotoSize): ResolutionSelector {
+    val wide = aspect == PhotoAspect.WIDE
+    val strategy = size.longEdge?.let { edge ->
+        ResolutionStrategy(Size(edge, if (wide) edge * 9 / 16 else edge * 3 / 4), ResolutionStrategy.FALLBACK_RULE_CLOSEST_LOWER_THEN_HIGHER)
+    } ?: ResolutionStrategy.HIGHEST_AVAILABLE_STRATEGY
+    return ResolutionSelector.Builder()
+        .setAspectRatioStrategy(if (wide) AspectRatioStrategy.RATIO_16_9_FALLBACK_AUTO_STRATEGY else AspectRatioStrategy.RATIO_4_3_FALLBACK_AUTO_STRATEGY)
+        .setResolutionStrategy(strategy)
+        .build()
 }

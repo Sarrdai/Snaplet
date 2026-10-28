@@ -27,7 +27,9 @@ import app.tinycam.data.Side
 import app.tinycam.data.Skin
 import app.tinycam.data.Thumb
 import app.tinycam.data.Thumbnails
+import app.tinycam.data.ParentLock
 import app.tinycam.data.Tokens
+import app.tinycam.ui.ParentPinGate
 import app.tinycam.ui.CameraActions
 import app.tinycam.ui.Effect
 import app.tinycam.ui.EffectPicker
@@ -99,7 +101,14 @@ class ScreenshotTest {
     }
 
     @Test
-    fun portrait() = renderSkins("portrait", { allFeatures.copy(skin = it, dailyCaptures = 5) }, tokens = Tokens(3, 5))
+    fun portrait() = renderSkins("portrait", { allFeatures.copy(skin = it) }, tokens = Tokens(3, 5))
+
+    @Test
+    fun center() = renderSkins("center", { allFeatures.copy(skin = it, side = Side.CENTER) }, tokens = Tokens(4, 6))
+
+    @Test
+    @Config(qualifiers = "w860dp-h400dp-land-xxhdpi")
+    fun centerLandscape() = renderSkins("center_land", { allFeatures.copy(skin = it, side = Side.CENTER) })
 
     @Test
     @Config(qualifiers = "w860dp-h400dp-land-xxhdpi")
@@ -142,9 +151,14 @@ class ScreenshotTest {
     }
 
     @Test
+    @Config(qualifiers = "w400dp-h2600dp-xxhdpi")
     fun parent() {
         compose.setContent {
-            ParentScreen(Settings(video = true, timer = true, dailyCaptures = 20), DailyUsage("d", 4, 600_000), items, thumbs, false, {}, {}, {}, {}, {}, {})
+            ParentScreen(
+                Settings(video = true, timer = true, captureLimitOn = true, parentLock = ParentLock.PIN),
+                DailyUsage("d", 4, 600_000), items, thumbs, false, true, true,
+                {}, {}, {}, {}, {}, {}, {},
+            )
         }
         compose.onRoot().captureRoboImage("build/screenshots/parent.png")
     }
@@ -152,9 +166,15 @@ class ScreenshotTest {
     @Test
     fun parentGallery() {
         compose.setContent {
-            ParentScreen(Settings(), DailyUsage(), items, thumbs, false, {}, {}, {}, {}, {}, {}, initialGalleryOpen = true)
+            ParentScreen(Settings(), DailyUsage(), items, thumbs, false, true, false, {}, {}, {}, {}, {}, {}, {}, initialGalleryOpen = true)
         }
         compose.onRoot().captureRoboImage("build/screenshots/parent_gallery.png")
+    }
+
+    @Test
+    fun pinGate() {
+        compose.setContent { ParentPinGate({ false }, true, {}, {}, {}) }
+        compose.onRoot().captureRoboImage("build/screenshots/pin_gate.png")
     }
 }
 

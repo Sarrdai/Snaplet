@@ -8,13 +8,16 @@ data class DailyUsage(val day: String = "", val captures: Int = 0, val usageMs: 
 
 /** Remaining captures today, or null when the daily limit is off. */
 fun Settings.capturesLeft(usage: DailyUsage): Int? =
-    if (dailyCaptures <= 0) null else (dailyCaptures - usage.captures).coerceAtLeast(0)
+    if (!captureLimitOn) null else (dailyCaptures - usage.captures).coerceAtLeast(0)
 
 fun Settings.isTimeUp(usage: DailyUsage): Boolean =
-    dailyMinutes > 0 && usage.usageMs >= dailyMinutes * 60_000L
+    timeLimitOn && usage.usageMs >= dailyMinutes * 60_000L
 
 /** Video length limit in ms, or null when unlimited. */
-fun Settings.maxVideoMs(): Long? = if (maxVideoSec <= 0) null else maxVideoSec * 1000L
+fun Settings.maxVideoMs(): Long? = if (!videoLimitOn) null else maxVideoSec * 1000L
+
+/** Pause between captures in ms; 0 when switched off. */
+fun Settings.cooldownMs(): Int = if (cooldownOn) cooldownSec * 1000 else 0
 
 /** Remaining captures as countable symbols: [filled] of [total] slots are still available. */
 data class Tokens(val filled: Int, val total: Int)

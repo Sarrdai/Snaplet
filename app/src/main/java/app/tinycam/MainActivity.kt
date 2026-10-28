@@ -5,7 +5,13 @@ import android.app.ActivityManager
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.app.KeyguardManager
+import android.hardware.biometrics.BiometricManager
+import android.hardware.biometrics.BiometricPrompt
+import android.os.Build
 import android.os.Bundle
+import android.os.CancellationSignal
+import androidx.annotation.RequiresApi
 import android.os.SystemClock
 import android.provider.Settings as AndroidSettings
 import android.view.WindowManager
@@ -29,6 +35,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import app.tinycam.data.AppState
 import app.tinycam.data.MediaItem
+import app.tinycam.data.ParentLock
+import app.tinycam.ui.ParentPinGate
 import app.tinycam.data.isTimeUp
 import app.tinycam.ui.CameraScreen
 import app.tinycam.ui.ParentScreen
@@ -42,10 +50,20 @@ class MainActivity : ComponentActivity() {
     private var hasCamera by mutableStateOf(false)
     private var hasAudio by mutableStateOf(false)
     private var pinned by mutableStateOf(false)
+    private var parentOpen by mutableStateOf(false)
+    private var pinGate by mutableStateOf(false)
     private var askedOnce = false
+    private var onDeviceUnlocked: (() -> Unit)? = null
 
     private val permissionRequest =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { refreshPermissions() }
+
+    // Android 8 and 9: the system's "confirm device credential" screen
+    private val keyguardRequest =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) onDeviceUnlocked?.invoke()
+            onDeviceUnlocked = null
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +77,11 @@ class MainActivity : ComponentActivity() {
         setContent { Root() }
     }
 
+    override fun onResume() {
+        super.onResume()
+        pinIfWanted()
+    }
+
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         if (hasFocus) {
@@ -69,14 +92,22 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     private fun Root() {
-        var parentOpen by remember { mutableStateOf(false) }
         val settings = app.settings
         val usage = app.usage
         Box(Modifier.fillMaxSize()) {
             when {
                 !hasCamera -> PermissionScreen(::requestPermissions)
-                settings.isTimeUp(usage) -> SleepScreen(settings.skin) { parentOpen = true }
-                else -> CameraScreen(app, hasAudio) { parentOpen = true }
+                settings.isTimeUp(usage) -> SleepScreen(settings.skin, ::requestParentArea)
+                else -> CameraScreen(app, hasAudio, ::requestParentArea)
+            }
+            if (pinGate) {
+                ParentPinGate(
+                    checkPin = app::checkPin,
+                    deviceSecure = deviceSecure(),
+                    onDeviceUnlock = { authenticateDevice { openParentArea() } },
+                    onSuccess = ::openParentArea,
+                    onCancel = { pinGate = false },
+                )
             }
             if (parentOpen) {
                 ParentScreen(
@@ -85,15 +116,80 @@ class MainActivity : ComponentActivity() {
                     items = app.items,
                     thumbs = app.thumbs,
                     pinned = pinned,
+                    deviceSecure = deviceSecure(),
+                    hasPin = app.hasPin(),
                     onChange = app::updateSettings,
+                    onSetPin = app::setPin,
                     onResetToday = app::resetToday,
                     onShare = ::share,
                     onDelete = app::delete,
                     onTogglePin = ::togglePin,
-                    onClose = { parentOpen = false },
+                    onClose = {
+                        parentOpen = false
+                        pinIfWanted()
+                    },
                 )
             }
         }
+    }
+
+    /** Called after the lock was held for 3 seconds. */
+    private fun requestParentArea() {
+        when (app.settings.parentLock) {
+            ParentLock.HOLD -> openParentArea()
+            ParentLock.DEVICE -> authenticateDevice(::openParentArea)
+            ParentLock.PIN -> if (app.hasPin()) pinGate = true else openParentArea()
+        }
+    }
+
+    private fun openParentArea() {
+        pinGate = false
+        parentOpen = true
+    }
+
+    private fun deviceSecure() = getSystemService(KeyguardManager::class.java).isDeviceSecure
+
+    /** Asks for the phone's own screen lock (PIN, pattern, password or fingerprint). */
+    private fun authenticateDevice(onSuccess: () -> Unit) {
+        if (!deviceSecure()) {
+            onSuccess()
+            return
+        }
+        val title = "Eltern-Bereich"
+        val subtitle = "Mit der Bildschirmsperre des Handys entsperren"
+        when {
+            Build.VERSION.SDK_INT >= 30 -> BiometricPrompt.Builder(this)
+                .setTitle(title).setSubtitle(subtitle)
+                .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_WEAK or BiometricManager.Authenticators.DEVICE_CREDENTIAL)
+                .build()
+                .authenticate(CancellationSignal(), mainExecutor, promptCallback(onSuccess))
+            Build.VERSION.SDK_INT == 29 -> @Suppress("DEPRECATION") BiometricPrompt.Builder(this)
+                .setTitle(title).setSubtitle(subtitle)
+                .setDeviceCredentialAllowed(true)
+                .build()
+                .authenticate(CancellationSignal(), mainExecutor, promptCallback(onSuccess))
+            else -> {
+                @Suppress("DEPRECATION")
+                val intent = getSystemService(KeyguardManager::class.java).createConfirmDeviceCredentialIntent(title, subtitle)
+                if (intent == null) {
+                    onSuccess()
+                } else {
+                    onDeviceUnlocked = onSuccess
+                    keyguardRequest.launch(intent)
+                }
+            }
+        }
+    }
+
+    @RequiresApi(28)
+    private fun promptCallback(onSuccess: () -> Unit) = object : BiometricPrompt.AuthenticationCallback() {
+        override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) = onSuccess()
+    }
+
+    /** Re-pins the app when parents enabled automatic pinning and are not in the parent area. */
+    private fun pinIfWanted() {
+        if (!app.settings.autoPin || parentOpen || pinGate || isPinned()) return
+        runCatching { startLockTask() }
     }
 
     private fun refreshPermissions() {

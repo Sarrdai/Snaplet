@@ -43,6 +43,10 @@ class AppState(context: Context) {
 
     fun resetToday() = setUsage(DailyUsage(today()))
 
+    fun hasPin() = store.hasPin()
+    fun setPin(pin: String) = store.setPin(pin)
+    fun checkPin(pin: String) = store.checkPin(pin)
+
     fun delete(selection: List<MediaItem>) {
         selection.forEach(media::delete)
         items.removeAll(selection.toSet())
