@@ -20,9 +20,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemGestures
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
@@ -405,12 +410,16 @@ private fun Modifier.holdFillBehind(hold: HoldState, color: Color) = drawBehind 
     if (p > 0f) drawRect(color, topLeft = Offset(0f, size.height * (1 - p)), size = Size(size.width, size.height * p))
 }
 
-/** Parent entry: deliberately small and faint, needs a 3 second hold. */
+/**
+ * Parent entry: deliberately small and faint, needs a 3 second hold. Kept out of the system gesture
+ * edges, where a pinned screen takes the touch for an unpin attempt and cancels the hold.
+ */
 @Composable
 fun LockButton(style: SkinStyle, unit: Dp, touches: TouchCounter, onOpen: () -> Unit, modifier: Modifier = Modifier) {
     val hold = remember { HoldState() }
     Box(
         modifier
+            .windowInsetsPadding(WindowInsets.systemGestures.only(WindowInsetsSides.Bottom + WindowInsetsSides.Horizontal))
             .size(unit * 10f)
             .graphicsLayer { alpha = if (hold.progress > 0f) 0.95f else 0.4f }
             .background(Color(0x66000000), CircleShape)

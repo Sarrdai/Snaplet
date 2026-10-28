@@ -57,6 +57,8 @@ class MainActivity : ComponentActivity() {
     // While the device unlock is showing, our activity pauses and resumes; re-pinning then would kill the prompt.
     // Expires on its own in case the system never reports back.
     private var authUntil = 0L
+    // Auto-pin only on a real start, not on every resume: parents who unpinned with the phone's PIN must stay out
+    private var pinOnResume = true
 
     private val permissionRequest =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { refreshPermissions() }
@@ -81,9 +83,17 @@ class MainActivity : ComponentActivity() {
         setContent { Root() }
     }
 
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        pinOnResume = true // reopened from the launcher
+    }
+
     override fun onResume() {
         super.onResume()
-        pinIfWanted()
+        if (pinOnResume) {
+            pinOnResume = false
+            pinIfWanted()
+        }
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
