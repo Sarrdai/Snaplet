@@ -54,6 +54,9 @@ class MainActivity : ComponentActivity() {
     private var pinGate by mutableStateOf(false)
     private var askedOnce = false
     private var onDeviceUnlocked: (() -> Unit)? = null
+    // While the device unlock is showing, our activity pauses and resumes; re-pinning then would kill the prompt.
+    // Expires on its own in case the system never reports back.
+    private var authUntil = 0L
 
     private val permissionRequest =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { refreshPermissions() }
@@ -61,8 +64,9 @@ class MainActivity : ComponentActivity() {
     // Android 8 and 9: the system's "confirm device credential" screen
     private val keyguardRequest =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) onDeviceUnlocked?.invoke()
+            val success = onDeviceUnlocked
             onDeviceUnlocked = null
+            if (result.resultCode == RESULT_OK) success?.let(::finishAuth) else finishAuth(null)
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -155,8 +159,14 @@ class MainActivity : ComponentActivity() {
             onSuccess()
             return
         }
+        if (authRunning()) return // a second prompt on top of the first one crashes on some phones
+        authUntil = SystemClock.elapsedRealtime() + 120_000
         val title = "Eltern-Bereich"
         val subtitle = "Mit der Bildschirmsperre des Handys entsperren"
+        runCatching { showDevicePrompt(title, subtitle, onSuccess) }.onFailure { finishAuth(null) }
+    }
+
+    private fun showDevicePrompt(title: String, subtitle: String, onSuccess: () -> Unit) {
         when {
             Build.VERSION.SDK_INT >= 30 -> BiometricPrompt.Builder(this)
                 .setTitle(title).setSubtitle(subtitle)
@@ -172,7 +182,7 @@ class MainActivity : ComponentActivity() {
                 @Suppress("DEPRECATION")
                 val intent = getSystemService(KeyguardManager::class.java).createConfirmDeviceCredentialIntent(title, subtitle)
                 if (intent == null) {
-                    onSuccess()
+                    finishAuth(onSuccess)
                 } else {
                     onDeviceUnlocked = onSuccess
                     keyguardRequest.launch(intent)
@@ -183,12 +193,22 @@ class MainActivity : ComponentActivity() {
 
     @RequiresApi(28)
     private fun promptCallback(onSuccess: () -> Unit) = object : BiometricPrompt.AuthenticationCallback() {
-        override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) = onSuccess()
+        override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) = finishAuth(onSuccess)
+        override fun onAuthenticationError(errorCode: Int, errString: CharSequence) = finishAuth(null)
     }
+
+    /** Opens the parent area on success before re-pinning is allowed again, otherwise re-pins. */
+    private fun finishAuth(onSuccess: (() -> Unit)?) {
+        onSuccess?.invoke()
+        authUntil = 0L
+        pinIfWanted()
+    }
+
+    private fun authRunning() = SystemClock.elapsedRealtime() < authUntil
 
     /** Re-pins the app when parents enabled automatic pinning and are not in the parent area. */
     private fun pinIfWanted() {
-        if (!app.settings.autoPin || parentOpen || pinGate || isPinned()) return
+        if (!app.settings.autoPin || parentOpen || pinGate || authRunning() || isPinned()) return
         runCatching { startLockTask() }
     }
 
