@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.ColorMatrixColorFilter
 import android.graphics.Paint
+import android.media.ExifInterface
 import android.view.View
 import android.util.Size
 import androidx.camera.core.CameraSelector
@@ -16,6 +17,9 @@ import androidx.camera.video.Quality
 import androidx.camera.video.QualitySelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
+import androidx.camera.extensions.ExtensionMode
+import androidx.camera.extensions.ExtensionsManager
+import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.video.FileOutputOptions
 import androidx.camera.video.Recording
 import androidx.camera.video.VideoRecordEvent
@@ -48,9 +52,11 @@ import app.tinycam.data.VideoQuality
 import app.tinycam.data.Thumb
 import app.tinycam.data.budgetTokens
 import app.tinycam.data.decodeUpright
+import com.google.common.util.concurrent.ListenableFuture
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 
 /** Binds CameraX to the kid UI. Only one use case is active at a time, which works on every device. */
@@ -70,7 +76,7 @@ fun CameraScreen(app: AppState, hasAudio: Boolean, onOpenParent: () -> Unit) {
 
     val controller = remember {
         LifecycleCameraController(context).apply {
-            imageCaptureMode = ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY
+            imageCaptureMode = ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY
             isPinchToZoomEnabled = false
             isTapToFocusEnabled = false
             setEnabledUseCases(CameraController.IMAGE_CAPTURE)
@@ -80,10 +86,25 @@ fun CameraScreen(app: AppState, hasAudio: Boolean, onOpenParent: () -> Unit) {
         controller.bindToLifecycle(lifecycleOwner)
         onDispose { controller.unbind() }
     }
-    LaunchedEffect(mode) {
-        controller.setEnabledUseCases(
-            if (mode == CaptureMode.VIDEO) CameraController.VIDEO_CAPTURE else CameraController.IMAGE_CAPTURE,
-        )
+    // The phone's own photo processing (multi-frame HDR, night, denoise), run by the vendor camera stack on the device
+    var extensions by remember { mutableStateOf<ExtensionsManager?>(null) }
+    LaunchedEffect(Unit) {
+        extensions = runCatching {
+            ExtensionsManager.getInstanceAsync(context, ProcessCameraProvider.getInstance(context).await()).await()
+        }.getOrNull()
+    }
+    LaunchedEffect(mode, selfie, extensions) {
+        val wanted = if (selfie) CameraSelector.DEFAULT_FRONT_CAMERA else CameraSelector.DEFAULT_BACK_CAMERA
+        // Devices without a front camera simply stay on the back camera
+        val lens = if (runCatching { controller.hasCamera(wanted) }.getOrDefault(true)) wanted else CameraSelector.DEFAULT_BACK_CAMERA
+        val photo = mode == CaptureMode.PHOTO
+        // Extensions cannot record video: leave them before enabling video, enter them after enabling photos
+        if (!photo) controller.cameraSelector = lens
+        controller.setEnabledUseCases(if (photo) CameraController.IMAGE_CAPTURE else CameraController.VIDEO_CAPTURE)
+        if (photo) {
+            val enhanced = extensions?.let { runCatching { enhancedSelector(it, lens) }.getOrNull() }
+            if (enhanced == null || runCatching { controller.cameraSelector = enhanced }.isFailure) controller.cameraSelector = lens
+        }
     }
     LaunchedEffect(settings.photoAspect, settings.photoSize) {
         controller.imageCaptureResolutionSelector = photoResolution(settings.photoAspect, settings.photoSize)
@@ -95,11 +116,6 @@ fun CameraScreen(app: AppState, hasAudio: Boolean, onOpenParent: () -> Unit) {
             VideoQuality.FHD -> Quality.FHD
         }
         controller.videoCaptureQualitySelector = QualitySelector.from(q, FallbackStrategy.lowerQualityOrHigherThan(q))
-    }
-    LaunchedEffect(selfie) {
-        val selector = if (selfie) CameraSelector.DEFAULT_FRONT_CAMERA else CameraSelector.DEFAULT_BACK_CAMERA
-        // Devices without a front camera simply stay on the back camera
-        if (runCatching { controller.hasCamera(selector) }.getOrDefault(true)) controller.cameraSelector = selector
     }
 
     val previewView = remember {
@@ -218,12 +234,14 @@ private class CameraXActions(
     /** Re-encodes the saved photo cropped and with the effect baked in. The original stays if memory runs out. */
     private suspend fun postProcess(item: MediaItem, effect: Effect, crop: Boolean) = withContext(Dispatchers.Default) {
         runCatching {
+            val exif = ExifInterface(item.file.path)
             val decoded = decodeUpright(item.file, Int.MAX_VALUE) ?: return@runCatching
             val src = if (crop) centerSquare(decoded) else decoded
             val out = renderEffect(src, effect)
             if (src !== out) src.recycle()
-            item.file.outputStream().use { out.compress(Bitmap.CompressFormat.JPEG, 92, it) }
+            item.file.outputStream().use { out.compress(Bitmap.CompressFormat.JPEG, 95, it) }
             out.recycle()
+            keepExif(exif, item.file.path)
         }
     }
 
@@ -240,6 +258,29 @@ private class CameraXActions(
         )
         app.thumbs.put(item.id, Thumb(small.asImageBitmap(), durationMs))
     }
+}
+
+/** Scene-aware auto mode if the phone offers it, otherwise its HDR mode. */
+private fun enhancedSelector(manager: ExtensionsManager, lens: CameraSelector): CameraSelector? =
+    listOf(ExtensionMode.AUTO, ExtensionMode.HDR)
+        .firstOrNull { manager.isExtensionAvailable(lens, it) }
+        ?.let { manager.getExtensionEnabledCameraSelector(lens, it) }
+
+private suspend fun <T> ListenableFuture<T>.await(): T = suspendCancellableCoroutine { c ->
+    addListener({ c.resumeWith(runCatching { get() }) }, Runnable::run)
+}
+
+/** Re-encoding drops EXIF; restore capture date and camera data. The pixels are already upright. */
+private fun keepExif(original: ExifInterface, path: String) {
+    val tags = listOf(
+        ExifInterface.TAG_DATETIME, ExifInterface.TAG_DATETIME_ORIGINAL, ExifInterface.TAG_DATETIME_DIGITIZED,
+        ExifInterface.TAG_MAKE, ExifInterface.TAG_MODEL, ExifInterface.TAG_EXPOSURE_TIME, ExifInterface.TAG_F_NUMBER,
+        ExifInterface.TAG_ISO_SPEED_RATINGS, ExifInterface.TAG_FOCAL_LENGTH, ExifInterface.TAG_FLASH, ExifInterface.TAG_WHITE_BALANCE,
+    )
+    val target = ExifInterface(path)
+    for (tag in tags) original.getAttribute(tag)?.let { target.setAttribute(tag, it) }
+    target.setAttribute(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL.toString())
+    target.saveAttributes()
 }
 
 private fun centerSquare(b: Bitmap): Bitmap {
