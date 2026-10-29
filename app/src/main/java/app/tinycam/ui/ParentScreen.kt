@@ -98,7 +98,7 @@ private val Heading = TextStyle(fontFamily = KidFont, fontWeight = FontWeight.Bo
 private val Body = TextStyle(fontSize = 15.sp, lineHeight = 21.sp, color = Muted)
 private val Chip = TextStyle(fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
 
-private enum class FeatureId { VIDEO, GALLERY, SELFIE, ZOOM, EFFECTS, TIMER }
+private enum class FeatureId { VIDEO, GALLERY, SELFIE, ZOOM, EFFECTS, TIMER, SKINS }
 
 private class Feature(
     val id: FeatureId,
@@ -116,6 +116,7 @@ private val Features = listOf(
     Feature(FeatureId.ZOOM, Icons.Search, "Zoom", "Großer Schieberegler. Bewegt sich nur, wenn man den Knopf zieht.", { it.zoom }, { s, v -> s.copy(zoom = v) }),
     Feature(FeatureId.EFFECTS, Icons.Wand, "Filter & Rahmen", "Schwarz-Weiß, Sepia, Bunt und lustige Rahmen für Fotos.", { it.effects }, { s, v -> s.copy(effects = v) }),
     Feature(FeatureId.TIMER, Icons.Timer, "Selbstauslöser", "Mit großem Countdown. Erneutes Tippen bricht ab.", { it.timer }, { s, v -> s.copy(timer = v) }),
+    Feature(FeatureId.SKINS, Icons.Palette, "Design wählen", "Das Kind wechselt selbst zwischen den freigegebenen Designs, 1 s halten.", { it.skinChoice }, { s, v -> s.copy(skinChoice = v) }),
 )
 
 private val LockInfo = mapOf(
@@ -201,6 +202,16 @@ fun ParentScreen(
                         Indented {
                             BasicText("Countdown", style = Chip.copy(color = Text))
                             ValueSlider(settings.timerSec, 2..15, 1, { "$it s" }) { onChange(settings.copy(timerSec = it)) }
+                        }
+                    }
+                    if (on && f.id == FeatureId.SKINS) {
+                        Indented {
+                            BasicText("Zur Auswahl", style = Chip.copy(color = Text))
+                            // At least one design always stays offered
+                            MultiOptions(Skin.entries, settings.kidSkins, { it.label }, touches) { skin ->
+                                val next = if (skin in settings.kidSkins) settings.kidSkins - skin else settings.kidSkins + skin
+                                if (next.isNotEmpty()) onChange(settings.copy(kidSkins = next))
+                            }
                         }
                     }
                 }
@@ -357,19 +368,23 @@ private fun Section(title: String, info: String? = null, content: @Composable ()
     }
 }
 
+@Composable
+private fun <T> Options(values: List<T>, selected: T, label: (T) -> String, touches: TouchCounter, onSelect: (T) -> Unit) =
+    MultiOptions(values, setOf(selected), label, touches, onSelect)
+
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun <T> Options(values: List<T>, selected: T, label: (T) -> String, touches: TouchCounter, onSelect: (T) -> Unit) {
+private fun <T> MultiOptions(values: List<T>, selected: Set<T>, label: (T) -> String, touches: TouchCounter, onToggle: (T) -> Unit) {
     FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         values.forEach { v ->
-            val on = v == selected
+            val on = v in selected
             BasicText(
                 label(v),
                 Modifier
                     .clip(RoundedCornerShape(50))
                     .background(if (on) Accent else Bg)
                     .border(1.dp, if (on) Accent else Line, RoundedCornerShape(50))
-                    .singleTap(touches) { onSelect(v) }
+                    .singleTap(touches) { onToggle(v) }
                     .padding(horizontal = 16.dp, vertical = 10.dp),
                 style = Chip.copy(color = if (on) Ink else Text),
             )

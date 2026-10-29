@@ -42,6 +42,7 @@ import app.tinycam.ui.HoldIndicator
 import app.tinycam.ui.HoldState
 import app.tinycam.ui.KidCameraUi
 import app.tinycam.ui.ParentScreen
+import app.tinycam.ui.SkinChooser
 import app.tinycam.ui.SleepScreen
 import app.tinycam.ui.TouchCounter
 import app.tinycam.ui.drawRoundShutter
@@ -83,7 +84,7 @@ class ScreenshotTest {
         override fun setZoom(linear: Float) = Unit
     }
 
-    private val allFeatures = Settings(video = true, gallery = true, selfie = true, zoom = true, effects = true, timer = true)
+    private val allFeatures = Settings(video = true, gallery = true, selfie = true, zoom = true, effects = true, timer = true, skinChoice = true)
 
     private fun renderSkins(
         prefix: String,
@@ -96,7 +97,7 @@ class ScreenshotTest {
         var settings by mutableStateOf(settingsFor(Skin.CLASSIC))
         compose.setContent {
             KidCameraUi(
-                settings, items, thumbs, tokens, CaptureMode.PHOTO, {}, false, {}, effect, {}, NoCamera, {},
+                settings, items, thumbs, tokens, CaptureMode.PHOTO, {}, false, {}, effect, {}, {}, NoCamera, {},
                 initialCooldown = cooldown, initialCountdownMs = countdownMs,
             ) { Canvas(Modifier.fillMaxSize()) { drawScene(0) } }
         }
@@ -177,7 +178,7 @@ class ScreenshotTest {
         compose.setContent {
             Box(Modifier.fillMaxSize()) {
                 KidCameraUi(
-                    allFeatures, items, thumbs, null, CaptureMode.PHOTO, {}, false, {}, Effect.NONE, {}, NoCamera, {},
+                    allFeatures, items, thumbs, null, CaptureMode.PHOTO, {}, false, {}, Effect.NONE, {}, {}, NoCamera, {},
                 ) { Canvas(Modifier.fillMaxSize()) { drawScene(0) } }
                 HoldIndicator(hold, styleFor(Skin.CLASSIC).accent)
             }
@@ -191,6 +192,24 @@ class ScreenshotTest {
             EffectPicker(Effect.HEARTS, styleFor(Skin.RAINBOW), unitFor(400f, 860f), TouchCounter(), {}, {})
         }
         compose.onRoot().captureRoboImage("build/screenshots/effects_picker.png")
+    }
+
+    @Test
+    fun skinChooser() {
+        val skins = Settings().kidSkins.sortedBy { it.ordinal }
+        compose.setContent {
+            SkinChooser(skins, Skin.DINO, false, styleFor(Skin.DINO), unitFor(400f, 860f), TouchCounter(), {}, {})
+        }
+        compose.onRoot().captureRoboImage("build/screenshots/skin_chooser.png")
+    }
+
+    @Test
+    @Config(qualifiers = "w860dp-h400dp-land-xxhdpi")
+    fun skinChooserLandscape() {
+        compose.setContent {
+            SkinChooser(Skin.entries, Skin.SHARK, false, styleFor(Skin.SHARK), unitFor(860f, 400f), TouchCounter(), {}, {})
+        }
+        compose.onRoot().captureRoboImage("build/screenshots/skin_chooser_land.png")
     }
 
     @Test
@@ -217,7 +236,7 @@ class ScreenshotTest {
     fun parent() {
         compose.setContent {
             ParentScreen(
-                Settings(video = true, timer = true, captureLimitOn = true, parentLock = ParentLock.PIN),
+                Settings(video = true, timer = true, skinChoice = true, captureLimitOn = true, parentLock = ParentLock.PIN),
                 DailyUsage("d", 4, 600_000), items, thumbs, false, true, true,
                 {}, {}, {}, {}, {}, {}, {},
             )

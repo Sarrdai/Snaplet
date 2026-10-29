@@ -46,6 +46,7 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.clipPath
+import androidx.compose.ui.graphics.drawscope.inset
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -70,6 +71,7 @@ import app.tinycam.data.CaptureMode
 import app.tinycam.data.MediaItem
 import app.tinycam.data.Settings
 import app.tinycam.data.Side
+import app.tinycam.data.Skin
 import app.tinycam.data.Thumbnails
 import app.tinycam.data.cooldownMs
 import app.tinycam.data.maxVideoMs
@@ -88,7 +90,7 @@ interface CameraActions {
     fun setZoom(linear: Float)
 }
 
-private enum class HintTarget { SHUTTER, MODE, GALLERY, SELFIE, EFFECTS, TIMER }
+private enum class HintTarget { SHUTTER, MODE, GALLERY, SELFIE, EFFECTS, TIMER, SKINS }
 
 private class Hint(val target: HintTarget, val kind: HintKind, val text: String)
 
@@ -100,6 +102,7 @@ private sealed interface Overlay {
     data object None : Overlay
     data object Gallery : Overlay
     data object Effects : Overlay
+    data object Skins : Overlay
     data class Preview(val item: MediaItem, val fromGallery: Boolean) : Overlay
 }
 
@@ -125,6 +128,7 @@ fun KidCameraUi(
     onSelfieChange: (Boolean) -> Unit,
     effect: Effect,
     onEffectChange: (Effect) -> Unit,
+    onSkinChange: (Skin) -> Unit,
     actions: CameraActions,
     onOpenParent: () -> Unit,
     modifier: Modifier = Modifier,
@@ -333,32 +337,39 @@ fun KidCameraUi(
                 )
             }
 
-            val tools: @Composable () -> Unit = {
-                if (settings.gallery && !recording) {
+            val tools = buildList<@Composable () -> Unit> {
+                if (settings.gallery && !recording) add {
                     HintAnchor(hint, HintTarget.GALLERY, right, u) {
                         ToolButton(Icons.Grid, false, style, u, touches, { holdHint(HintTarget.GALLERY) }) {
                             overlay = Overlay.Gallery
                         }
                     }
                 }
-                if (settings.selfie && !recording) {
+                if (settings.selfie && !recording) add {
                     HintAnchor(hint, HintTarget.SELFIE, right, u) {
                         ToolButton(Icons.Flip, selfie, style, u, touches, { holdHint(HintTarget.SELFIE) }) {
                             onSelfieChange(!selfie)
                         }
                     }
                 }
-                if (settings.effects && mode == CaptureMode.PHOTO) {
+                if (settings.effects && mode == CaptureMode.PHOTO) add {
                     HintAnchor(hint, HintTarget.EFFECTS, right, u) {
                         ToolButton(Icons.Wand, effect != Effect.NONE, style, u, touches, { holdHint(HintTarget.EFFECTS) }) {
                             overlay = Overlay.Effects
                         }
                     }
                 }
-                if (settings.timer && !recording) {
+                if (settings.timer && !recording) add {
                     HintAnchor(hint, HintTarget.TIMER, right, u) {
                         ToolButton(Icons.Timer, timerOn, style, u, touches, { holdHint(HintTarget.TIMER) }) {
                             timerOn = !timerOn
+                        }
+                    }
+                }
+                if (settings.skinChoice && !recording) add {
+                    HintAnchor(hint, HintTarget.SKINS, right, u) {
+                        ToolButton(Icons.Palette, false, style, u, touches, { holdHint(HintTarget.SKINS) }) {
+                            overlay = Overlay.Skins
                         }
                     }
                 }
@@ -400,28 +411,30 @@ fun KidCameraUi(
                 }
             }
 
+            // Tools stay below the thumbnail strip; on short screens they spread into more columns
+            val toolsPerColumn = ((screenH - railBottom - u * 24f + railGap) / (u * TOOL_SIZE + railGap)).toInt().coerceAtLeast(1)
+
             if (center) {
                 // Portrait has room to stack everything in one column; landscape needs two
                 val corner = Modifier.align(Alignment.BottomEnd).padding(end = u * 5f, bottom = railBottom)
                 if (portrait) {
                     Column(corner, horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(railGap)) {
                         modeSwitch()
-                        tools()
+                        tools.forEach { it() }
                     }
                 } else {
                     Row(corner, verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(railGap)) {
                         modeSwitch()
-                        Column(verticalArrangement = Arrangement.spacedBy(railGap)) { tools() }
+                        ToolColumns(tools, toolsPerColumn, towardsEnd = false, railGap)
                     }
                 }
                 Box(Modifier.align(Alignment.BottomCenter).padding(bottom = railBottom)) { shutter() }
             } else {
                 // Tool column next to the shutter; leaves room for the dino plates in between
-                Column(
+                ToolColumns(
+                    tools, toolsPerColumn, towardsEnd = !right, railGap,
                     Modifier.align(outer).fromSide(edge + pillW + u * 9f, railBottom),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(railGap),
-                ) { tools() }
+                )
                 // Drawn after the tools so its hints appear on top of them
                 Column(
                     Modifier.align(outer).fromSide(edge, railBottom),
@@ -459,6 +472,11 @@ fun KidCameraUi(
                 onSelect = onEffectChange,
                 onClose = { overlay = Overlay.None },
             )
+            Overlay.Skins -> SkinChooser(
+                Skin.entries.filter { it in settings.kidSkins }, settings.skin, settings.side == Side.CENTER, style, u, touches,
+                onSelect = onSkinChange,
+                onClose = { overlay = Overlay.None },
+            )
             is Overlay.Preview -> MediaPreview(
                 o.item, settings.skin, style, u, touches,
                 onClose = { overlay = if (o.fromGallery) Overlay.Gallery else Overlay.None },
@@ -478,6 +496,19 @@ private fun HintAnchor(hint: Hint?, target: HintTarget, right: Boolean, unit: Dp
                     .align(if (right) Alignment.CenterStart else Alignment.CenterEnd)
                     .beside(onLeft = right, gap = unit * 3f),
             )
+        }
+    }
+}
+
+/** [tools] in bottom-aligned columns of at most [perColumn]; the first column sits nearest the shutter. */
+@Composable
+private fun ToolColumns(tools: List<@Composable () -> Unit>, perColumn: Int, towardsEnd: Boolean, gap: Dp, modifier: Modifier = Modifier) {
+    val columns = tools.chunked(perColumn)
+    Row(modifier, verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(gap)) {
+        for (column in if (towardsEnd) columns else columns.asReversed()) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(gap)) {
+                column.forEach { it() }
+            }
         }
     }
 }
@@ -565,6 +596,66 @@ internal fun EffectPicker(
                         ) {
                             withEffectColors(e) { drawMiniScene() }
                             e.frame?.let { drawFrame(it) }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/**
+ * The skins parents offered, each previewed as its shutter. A tap restyles the whole camera
+ * right away, so the child sees the result behind the panel before closing it.
+ */
+@Composable
+internal fun SkinChooser(
+    skins: List<Skin>,
+    selected: Skin,
+    round: Boolean,
+    style: SkinStyle,
+    unit: Dp,
+    touches: TouchCounter,
+    onSelect: (Skin) -> Unit,
+    onClose: () -> Unit,
+) {
+    BoxWithConstraints(
+        Modifier.fillMaxSize().background(Color(0x99000000)).singleTap(touches, onClose),
+        contentAlignment = Alignment.Center,
+    ) {
+        // Tall pill previews only fit two rows on a landscape screen
+        val columns = if (maxHeight > maxWidth) 3 else 6
+        val panel = RoundedCornerShape(unit * 7f)
+        Column(
+            Modifier
+                .shadow(16.dp, panel)
+                .background(style.button, panel)
+                .border(1.dp, Color.White.copy(alpha = 0.25f), panel)
+                .padding(unit * 4f),
+            verticalArrangement = Arrangement.spacedBy(unit * 3f),
+        ) {
+            skins.chunked(columns).forEach { row ->
+                Row(horizontalArrangement = Arrangement.spacedBy(unit * 3f)) {
+                    row.forEach { skin ->
+                        val shape = RoundedCornerShape(unit * 5f)
+                        val on = skin == selected
+                        val skinStyle = remember(skin) { styleFor(skin) }
+                        Canvas(
+                            Modifier
+                                .size(unit * 22f, unit * if (round) 22f else 34f)
+                                .shadow(if (on) 10.dp else 3.dp, shape)
+                                .clip(shape)
+                                .background(Color(0x33FFFFFF))
+                                .border(if (on) unit * 1.4f else unit * 0.4f, if (on) style.buttonOn else Color.White.copy(alpha = 0.4f), shape)
+                                .singleTap(touches) { onSelect(skin) },
+                        ) {
+                            if (round) {
+                                inset(size.width * 0.14f) { drawRoundShutter(skin, skinStyle, 1f, 0f, 1f, Emblem.SKIN) }
+                            } else {
+                                inset(size.width * 0.27f, size.height * 0.06f) {
+                                    drawShutter(skin, skinStyle, 1f, 0f, 1f, Emblem.SKIN, spikesLeft = true)
+                                }
+                            }
                         }
                     }
                 }

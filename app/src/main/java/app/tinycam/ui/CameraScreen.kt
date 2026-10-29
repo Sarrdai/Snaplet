@@ -154,6 +154,7 @@ fun CameraScreen(app: AppState, hasAudio: Boolean, onOpenParent: () -> Unit) {
         onSelfieChange = { selfie = it },
         effect = effect,
         onEffectChange = { effect = it },
+        onSkinChange = { app.updateSettings(app.settings.copy(skin = it)) },
         actions = actions,
         onOpenParent = onOpenParent,
         filterPreview = false,
