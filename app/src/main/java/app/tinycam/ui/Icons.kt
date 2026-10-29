@@ -25,6 +25,10 @@ object Icons {
     val Flip = outline("M19.5 10a8 8 0 0 0-14-3.5", "M5 3v4h4", "M4.5 14a8 8 0 0 0 14 3.5", "M19 21v-4h-4")
     val Timer = outline("M12 5a8 8 0 1 0 0 16a8 8 0 1 0 0-16z", "M12 9v4l2.5 2", "M10 2h4")
     val Wand = outline("M4 20L15 9", "M18 3v4", "M16 5h4", "M8 4v2", "M7 5h2", "M19 13v2", "M18 14h2")
+    val Palette = outline(
+        "M12 3a9 9 0 1 0 0 18c1.1 0 1.8-.7 1.8-1.6c0-.5-.2-.9-.5-1.2c-.3-.3-.5-.7-.5-1.2c0-.9.8-1.6 1.7-1.6H16a5 5 0 0 0 5-5c0-4-4-7.4-9-7.4z",
+        "M7.5 10.5a1 1 0 1 0 0 2a1 1 0 1 0 0-2z", "M10.5 6.5a1 1 0 1 0 0 2a1 1 0 1 0 0-2z", "M15 7a1 1 0 1 0 0 2a1 1 0 1 0 0-2z",
+    )
     val Search = outline("M10.5 4a6.5 6.5 0 1 0 0 13a6.5 6.5 0 1 0 0-13z", "M15.5 15.5L20 20", width = 2.6f)
 
     private fun outline(vararg paths: String, width: Float = 2.2f) = build { b ->

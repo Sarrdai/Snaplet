@@ -50,6 +50,9 @@ data class Settings(
     val effects: Boolean = false,
     val timer: Boolean = false,
     val timerSec: Int = 3,
+    /** The child may switch between [kidSkins] with a tool button. */
+    val skinChoice: Boolean = false,
+    val kidSkins: Set<Skin> = setOf(Skin.RAINBOW, Skin.SPACE, Skin.DINO, Skin.UNICORN, Skin.SHARK, Skin.FIRE_TRUCK),
     val parentLock: ParentLock = ParentLock.HOLD,
     val autoPin: Boolean = false,
     val photoAspect: PhotoAspect = PhotoAspect.STANDARD,
@@ -88,6 +91,10 @@ class SettingsStore(context: Context) {
             effects = prefs.getBoolean("effects", d.effects),
             timer = prefs.getBoolean("timer", d.timer),
             timerSec = prefs.getInt("timerSec", d.timerSec),
+            skinChoice = prefs.getBoolean("skinChoice", d.skinChoice),
+            kidSkins = prefs.getString("kidSkins", null)
+                ?.split(',')?.mapNotNull { n -> Skin.entries.firstOrNull { it.name == n } }?.toSet()
+                ?.ifEmpty { null } ?: d.kidSkins,
             parentLock = enumOr(prefs.getString("parentLock", null), d.parentLock),
             autoPin = prefs.getBoolean("autoPin", d.autoPin),
             photoAspect = enumOr(prefs.getString("photoAspect", null), d.photoAspect),
@@ -116,6 +123,8 @@ class SettingsStore(context: Context) {
         putBoolean("effects", s.effects)
         putBoolean("timer", s.timer)
         putInt("timerSec", s.timerSec)
+        putBoolean("skinChoice", s.skinChoice)
+        putString("kidSkins", s.kidSkins.joinToString(",") { it.name })
         putString("parentLock", s.parentLock.name)
         putBoolean("autoPin", s.autoPin)
         putString("photoAspect", s.photoAspect.name)

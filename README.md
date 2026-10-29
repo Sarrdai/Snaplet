@@ -1,8 +1,8 @@
 # TinyCam
 
 Eine Kamera-App für Kinder (Android). Ein großer Auslöser an der Seite, eine Vorschau-Leiste mit den
-letzten Bildern und ein Eltern-Bereich mit Lernstufen, Limits und fünf Designs
-(Klassisch, Regenbogen, Raumschiff, Dino, Leopard).
+letzten Bildern und ein Eltern-Bereich mit Lernstufen, Limits und elf Designs
+(Klassisch, Regenbogen, Raumschiff, Dino, Leopard, Einhorn, Hai, Roboter, Feuerwehr, Monster, Eiscreme).
 
 ## Installieren
 
@@ -20,8 +20,9 @@ Updates lassen sich direkt drüber installieren, Fotos bleiben erhalten.
 | Foto | Auslöser-Pille antippen. Sie füllt sich wieder, bis die nächste Aufnahme möglich ist. |
 | Bild ansehen | Vorschaubild antippen, irgendwo tippen zum Schließen. |
 | Foto ↔ Video | Umschalter 1,5 s halten. |
-| Galerie, Selfie, Filter & Rahmen, Selbstauslöser | Werkzeug-Knopf neben dem Auslöser 1 s halten. |
+| Galerie, Selfie, Filter & Rahmen, Selbstauslöser, Design | Werkzeug-Knopf neben dem Auslöser 1 s halten. |
 | Zoom | Knopf des großen Schiebereglers ziehen (kleiner Punkt = weit, großer Punkt = nah). |
+| Design wechseln | Paletten-Knopf 1 s halten, dann ein Auslöser-Bild antippen. Antippen daneben schließt. |
 | Selbstauslöser abbrechen | Während des Countdowns den Auslöser erneut antippen. |
 | Eltern-Bereich | Schloss in der unteren Ecke 3 s halten. |
 
@@ -33,7 +34,8 @@ Ist ein Tageslimit für Aufnahmen gesetzt, zeigt der Auslöser die restlichen Au
 für eine Aufnahme. Ist alles aufgebraucht, wackelt der Auslöser.
 
 Im Eltern-Bereich lässt sich jede Funktion einzeln einschalten: Videos, Galerie, Selfie-Kamera, Zoom,
-Filter & Rahmen und Selbstauslöser. Werte wie Pause, Tageslimits, Videolänge, Countdown und Anzahl
+Filter & Rahmen, Selbstauslöser und Design wählen (das Kind wechselt selbst zwischen den freigegebenen
+Designs; welche angeboten werden, legen die Eltern fest). Werte wie Pause, Tageslimits, Videolänge, Countdown und Anzahl
 Bilder in der Leiste stellen Schieberegler ein; abschaltbare Limits zeigen ihren Regler nur, wenn sie
 an sind. Außerdem: Design, Auslöser-Position (links, rechts oder rund in der Mitte), Foto-Format
 (4:3, 16:9, 1:1), Foto-Größe, Video-Qualität und eine Galerie mit Großansicht zum gezielten Teilen
