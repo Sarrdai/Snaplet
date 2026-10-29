@@ -101,6 +101,60 @@ fun styleFor(skin: Skin): SkinStyle = when (skin) {
         backdrop = listOf(Color(0xFF4A2D15), Color(0xFF1C1008)),
         accent = Color(0xFFF6C35B), shadow = Color(0xFF1C1008),
     )
+    Skin.UNICORN -> SkinStyle(
+        track = Color(0xFF5B1A63),
+        fill = listOf(Color(0xFFFF9EC7), Color(0xFFFFC48C), Color(0xFFFFE97A), Color(0xFFA8F0C6), Color(0xFF9AD8FF), Color(0xFFC9A8FF)),
+        button = Color(0xFFC026D3), buttonInk = Color.White,
+        buttonOn = Color.White, buttonOnInk = Color(0xFFA21CAF),
+        holdFill = Color(0xCCF5D0FE), frame = Color(0xFFF5D0FE),
+        backdrop = listOf(Color(0xFF86198F), Color(0xFF3B0A40)),
+        accent = Color(0xFFF0ABFC), shadow = Color(0xFF701A75),
+    )
+    Skin.SHARK -> SkinStyle(
+        track = Color(0xFF0B3B4A),
+        fill = listOf(Color(0xFF0369A1), Color(0xFF0EA5E9), Color(0xFF7DD3FC)),
+        button = Color(0xFF0F4C5C), buttonInk = Color(0xFFCCFBF1),
+        buttonOn = Color(0xFF5EEAD4), buttonOnInk = Color(0xFF083344),
+        holdFill = Color(0xCC2DD4BF), frame = Color(0xFF99F6E4),
+        backdrop = listOf(Color(0xFF0E5A6E), Color(0xFF052530)),
+        accent = Color(0xFF5EEAD4), shadow = Color(0xFF042F2E),
+    )
+    Skin.ROBOT -> SkinStyle(
+        track = Color(0xFF1E293B),
+        fill = listOf(Color(0xFF16A34A), Color(0xFF4ADE80), Color(0xFFBBF7D0)),
+        button = Color(0xFF334155), buttonInk = Color(0xFFA5F3FC),
+        buttonOn = Color(0xFF22D3EE), buttonOnInk = Color(0xFF083344),
+        holdFill = Color(0xCC22D3EE), frame = Color(0xFFA5F3FC),
+        backdrop = listOf(Color(0xFF1E293B), Color(0xFF0B1120)),
+        accent = Color(0xFF22D3EE), shadow = Color(0xFF0B1120),
+    )
+    Skin.FIRE_TRUCK -> SkinStyle(
+        track = Color(0xFF450A0A),
+        fill = listOf(Color(0xFF1D4ED8), Color(0xFF3B82F6), Color(0xFF93C5FD)),
+        button = Color(0xFF991B1B), buttonInk = Color(0xFFFEE2E2),
+        buttonOn = Color(0xFFFACC15), buttonOnInk = Color(0xFF450A0A),
+        holdFill = Color(0xCCFACC15), frame = Color(0xFFFDE68A),
+        backdrop = listOf(Color(0xFF7F1D1D), Color(0xFF2A0A0A)),
+        accent = Color(0xFFFACC15), shadow = Color(0xFF2A0A0A),
+    )
+    Skin.MONSTER -> SkinStyle(
+        track = Color(0xFF172554),
+        fill = listOf(Color(0xFF4D7C0F), Color(0xFF84CC16), Color(0xFFD9F99D)),
+        button = Color(0xFF1E3A8A), buttonInk = Color(0xFFDBEAFE),
+        buttonOn = Color(0xFFA3E635), buttonOnInk = Color(0xFF1A2E05),
+        holdFill = Color(0xCCA3E635), frame = Color(0xFFBEF264),
+        backdrop = listOf(Color(0xFF1E1B4B), Color(0xFF0B0A1F)),
+        accent = Color(0xFFA3E635), shadow = Color(0xFF0B0A1F),
+    )
+    Skin.ICE_CREAM -> SkinStyle(
+        track = Color(0xFF4A2511),
+        fill = listOf(Color(0xFFEC4899), Color(0xFFF9A8D4), Color(0xFFFFF1F2)),
+        button = Color(0xFF7C4A2D), buttonInk = Color(0xFFFFE4E6),
+        buttonOn = Color(0xFFF9A8D4), buttonOnInk = Color(0xFF4A2511),
+        holdFill = Color(0xCCF9A8D4), frame = Color(0xFFFBCFE8),
+        backdrop = listOf(Color(0xFF5C3420), Color(0xFF21110A)),
+        accent = Color(0xFFF9A8D4), shadow = Color(0xFF2B1408),
+    )
 }
 
 enum class Emblem { SKIN, RECORD, STOP }
@@ -158,6 +212,12 @@ fun DrawScope.drawShutter(
             Skin.LEOPARD -> for (dir in listOf(-1f, 1f)) {
                 drawEar(Offset(w / 2 + dir * w * 0.33f, w * 0.13f), w * 0.17f, dir, earTwitch(idle, dir) * alive)
             }
+            Skin.UNICORN -> drawUnicornBehind(w, h, spikesLeft, idle, alive)
+            Skin.SHARK -> drawSharkBehind(w, h, spikesLeft, idle, alive)
+            Skin.ROBOT -> drawRobotBehind(w, h, idle, alive)
+            Skin.FIRE_TRUCK -> drawFireTruckBehind(w, h, idle, alive)
+            Skin.MONSTER -> drawMonsterBehind(w, h, idle, alive)
+            Skin.ICE_CREAM -> drawIceCreamBehind(w, h, idle, alive)
             else -> Unit
         }
 
@@ -175,7 +235,7 @@ fun DrawScope.drawShutter(
                     clipPath(corePath) {
                         drawSkinCore(skin, core, idle, alive)
                         drawCoreShade(core, skin)
-                        if (skin != Skin.SPACE) drawGloss(core)
+                        if (!metallic(skin)) drawGloss(core)
                     }
                     val center = emblemCenter(skin, core, roomBelow = tokens != null)
                     // On short pills (landscape) the capture symbols matter more than the decorative emblem
@@ -210,6 +270,12 @@ private fun emblemCenter(skin: Skin, core: Rect, roomBelow: Boolean): Offset {
         Skin.DINO -> 1.3f
         Skin.RAINBOW -> 1.42f
         Skin.LEOPARD -> 1.45f
+        Skin.UNICORN -> 1.38f
+        Skin.SHARK -> 1.42f
+        Skin.ROBOT -> 1.55f
+        Skin.FIRE_TRUCK -> 1.6f
+        Skin.MONSTER -> 1.45f
+        Skin.ICE_CREAM -> 1.5f
     }
     val maxY = maxOf(minY, core.bottom - cw * if (roomBelow) 1.25f else 0.9f)
     return Offset(core.center.x, core.center.y.coerceIn(minY, maxY))
@@ -221,6 +287,12 @@ private fun DrawScope.drawSkinCore(skin: Skin, core: Rect, idle: Float, alive: F
     Skin.SPACE -> drawRocketCore(core, idle, alive)
     Skin.DINO -> drawDinoCore(core, idle, alive)
     Skin.LEOPARD -> drawLeopardCore(core, idle, alive)
+    Skin.UNICORN -> drawUnicornCore(core, idle, alive)
+    Skin.SHARK -> drawSharkCore(core, idle, alive)
+    Skin.ROBOT -> drawRobotCore(core, idle, alive)
+    Skin.FIRE_TRUCK -> drawFireTruckCore(core, idle, alive)
+    Skin.MONSTER -> drawMonsterCore(core, idle, alive)
+    Skin.ICE_CREAM -> drawIceCreamCore(core, idle, alive)
 }
 
 /**
@@ -256,6 +328,12 @@ fun DrawScope.drawRoundShutter(
             Skin.LEOPARD -> for (dir in listOf(-1f, 1f)) {
                 drawEar(c + Offset(dir * r * 0.62f, -r * 0.78f), r * 0.3f, dir, earTwitch(idle, dir) * alive)
             }
+            Skin.UNICORN -> drawUnicornRoundBehind(c, r, idle, alive)
+            Skin.SHARK -> drawSharkRoundBehind(c, r, idle, alive)
+            Skin.ROBOT -> drawRobotRoundBehind(c, r, idle, alive)
+            Skin.FIRE_TRUCK -> drawFireTruckRoundBehind(c, r, idle, alive)
+            Skin.MONSTER -> drawMonsterRoundBehind(c, r, idle, alive)
+            Skin.ICE_CREAM -> drawIceCreamRoundBehind(c, r, idle, alive)
             else -> Unit
         }
 
@@ -275,6 +353,12 @@ fun DrawScope.drawRoundShutter(
             Skin.SPACE -> 0.55f
             Skin.DINO -> 0.3f
             Skin.LEOPARD -> 0.25f
+            Skin.UNICORN -> 0.2f
+            Skin.SHARK -> 0.16f
+            Skin.ROBOT -> 0.08f
+            Skin.FIRE_TRUCK -> 0.12f
+            Skin.MONSTER -> 0.16f
+            Skin.ICE_CREAM -> 0.1f
         }
         val art = Rect(core.left, core.top - cw * shift, core.right, core.bottom + cw * 0.4f)
         val breath = 1f + 0.012f * alive * wave(idle, 2)
@@ -292,7 +376,7 @@ fun DrawScope.drawRoundShutter(
                             }
                         }
                         drawCoreShade(Rect(core.left, core.top - cw * 0.1f, core.right, core.bottom), skin)
-                        if (skin != Skin.SPACE) drawGloss(Rect(core.left, core.top - cw * 0.3f, core.right, core.bottom + cw * 0.3f))
+                        if (!metallic(skin)) drawGloss(Rect(core.left, core.top - cw * 0.3f, core.right, core.bottom + cw * 0.3f))
                     }
                     when (emblem) {
                         Emblem.SKIN -> when (skin) {
@@ -300,7 +384,8 @@ fun DrawScope.drawRoundShutter(
                             Skin.RAINBOW -> drawSkinEmblem(skin, c + Offset(0f, cw * 0.2f), cw * 0.62f, idle, alive)
                             Skin.SPACE -> drawSkinEmblem(skin, c + Offset(0f, cw * 0.05f), cw * 0.7f, idle, alive)
                             Skin.DINO -> drawSkinEmblem(skin, c + Offset(0f, cw * 0.26f), cw * 0.5f, idle, alive)
-                            Skin.LEOPARD -> Unit
+                            // The face fills the circle
+                            else -> Unit
                         }
                         Emblem.RECORD -> drawRecordEmblem(c + Offset(0f, cw * 0.12f), cw * 0.7f, recording = false)
                         Emblem.STOP -> drawRecordEmblem(c + Offset(0f, cw * 0.12f), cw * 0.7f, recording = true)
@@ -331,23 +416,23 @@ fun DrawScope.drawRoundShutter(
 
 // ---------------------------------------------------------------- Shared parts
 
-private const val Tau = (2 * PI).toFloat()
+internal const val Tau = (2 * PI).toFloat()
 
 /** Sine over the idle loop, [times] full periods per loop. */
-private fun wave(idle: Float, times: Int = 1, offset: Float = 0f) = sin(Tau * (idle * times + offset))
+internal fun wave(idle: Float, times: Int = 1, offset: Float = 0f) = sin(Tau * (idle * times + offset))
 
 /** Triangle 0..1..0 lasting [length] of the idle loop, starting at [at]. */
-private fun pulse(idle: Float, at: Float, length: Float): Float {
+internal fun pulse(idle: Float, at: Float, length: Float): Float {
     val t = (idle - at) / length
     return if (t in 0f..1f) 1f - abs(2f * t - 1f) else 0f
 }
 
 /** Eyelid closure 0..1: a quick double blink starting at [at]. */
-private fun blink(idle: Float, at: Float) = maxOf(pulse(idle, at, 0.045f), pulse(idle, at + 0.07f, 0.045f))
+internal fun blink(idle: Float, at: Float) = maxOf(pulse(idle, at, 0.045f), pulse(idle, at + 0.07f, 0.045f))
 
 private fun earTwitch(idle: Float, dir: Float) = if (dir < 0) pulse(idle, 0.3f, 0.06f) else pulse(idle, 0.62f, 0.06f)
 
-private fun polar(angle: Float, r: Float) = Offset(cos(angle) * r, sin(angle) * r)
+internal fun polar(angle: Float, r: Float) = Offset(cos(angle) * r, sin(angle) * r)
 
 /** Dark outer edge for a clean silhouette, the track and a recessed inner rim. */
 private fun DrawScope.drawTrack(outline: Path, style: SkinStyle, w: Float) {
@@ -426,6 +511,7 @@ private fun DrawScope.drawLevelMarkers(skin: Skin, progress: Float, y: Float, xL
                 drawPath(drop, Color(0xFFB45309), style = Stroke(r * 0.18f, join = StrokeJoin.Round))
                 drawCircle(Color.White.copy(alpha = 0.8f), r * 0.22f, c + Offset(-r * 0.3f, r * 0.1f))
             }
+            else -> drawCharacterMarker(skin, c, r)
         }
     }
 }
@@ -462,6 +548,7 @@ private fun edgeOffset(skin: Skin, u: Float, idle: Float): Float = when (skin) {
         }
         y
     }
+    else -> characterEdge(skin, u, idle)
 }
 
 private val LeopardDrips = listOf(Triple(0.2f, 1.5f, 0.075f), Triple(0.52f, 0.9f, 0.07f), Triple(0.8f, 1.9f, 0.065f))
@@ -477,8 +564,8 @@ private fun DrawScope.drawCoreShade(core: Rect, skin: Skin) {
         ),
         core.topLeft, core.size,
     )
-    // The rocket hull already has its own cylinder shading
-    if (skin == Skin.SPACE) return
+    // Rocket and robot already have their own cylinder shading
+    if (metallic(skin)) return
     drawRect(
         Brush.horizontalGradient(
             0f to Color.Black.copy(alpha = 0.12f), 0.2f to Color.Transparent,
@@ -516,13 +603,13 @@ private fun DrawScope.drawReward(skin: Skin, style: SkinStyle, from: Offset, to:
             Skin.SPACE, Skin.RAINBOW -> rotate(t * 90f, pivot = p) {
                 drawPath(starPath(p, s, s * 0.45f), if (skin == Skin.RAINBOW) RainbowBands[i % RainbowBands.size] else color)
             }
-            else -> drawSparkle(p, s, color)
+            else -> if (!drawCharacterReward(skin, p, s, i)) drawSparkle(p, s, color)
         }
     }
 }
 
 /** Point at fraction [u] around a vertical stadium of [radius] whose caps are centered at [top] and [bottom]. */
-private fun stadiumPoint(top: Offset, bottom: Offset, radius: Float, u: Float): Offset {
+internal fun stadiumPoint(top: Offset, bottom: Offset, radius: Float, u: Float): Offset {
     val len = bottom.y - top.y
     val half = PI.toFloat() * radius
     var d = (u - floor(u)) * (2 * len + 2 * half)
@@ -579,8 +666,14 @@ private fun DrawScope.drawRosette(c: Offset, r: Float, cw: Float, rnd: Random) {
 private fun decorBottom(skin: Skin) = when (skin) {
     Skin.CLASSIC -> 0.25f
     Skin.SPACE, Skin.DINO -> 1.0f
-    Skin.RAINBOW, Skin.LEOPARD -> 1.15f
+    Skin.RAINBOW, Skin.LEOPARD, Skin.UNICORN -> 1.15f
+    Skin.SHARK, Skin.ROBOT -> 1.1f
+    Skin.MONSTER, Skin.ICE_CREAM -> 1.2f
+    Skin.FIRE_TRUCK -> 1.32f
 }
+
+/** Skins with a metal body that brings its own shading, so no gloss or dome shade on top. */
+private fun metallic(skin: Skin) = skin == Skin.SPACE || skin == Skin.ROBOT
 
 private fun pillPath(r: Rect) = Path().apply {
     addRoundRect(RoundRect(r, CornerRadius(minOf(r.width, r.height) / 2f)))
@@ -617,7 +710,7 @@ private fun DrawScope.drawGloss(core: Rect) {
 }
 
 /** Closes an eye from the top: skin-colored lid over [eye] down to [amount] of its height, with a lash line. */
-private fun DrawScope.drawLid(eye: Rect, amount: Float, skinColor: Color, line: Color, stroke: Float) {
+internal fun DrawScope.drawLid(eye: Rect, amount: Float, skinColor: Color, line: Color, stroke: Float) {
     if (amount <= 0.01f) return
     val y = eye.top + eye.height * amount
     clipPath(Path().apply { addOval(eye) }) {
@@ -1146,6 +1239,12 @@ private fun DrawScope.drawSkinEmblem(skin: Skin, c: Offset, cw: Float, idle: Flo
             drawPaw(c + Offset(0f, cw * 0.03f), cw, LeopardDark)
             drawOval(Color(0xFFF29AAB), Offset(c.x - cw * 0.07f, c.y + cw * 0.04f), Size(cw * 0.14f, cw * 0.09f))
         }
+        Skin.UNICORN -> drawUnicornEmblem(c, cw, idle, alive)
+        Skin.SHARK -> drawFishEmblem(c, cw, idle, alive)
+        Skin.ROBOT -> drawGearEmblem(c, cw, idle, alive)
+        Skin.FIRE_TRUCK -> drawBadgeEmblem(c, cw, idle, alive)
+        Skin.MONSTER -> drawCandyEmblem(c, cw, idle, alive)
+        Skin.ICE_CREAM -> drawStrawberryEmblem(c, cw, idle, alive)
     }
 }
 
@@ -1237,6 +1336,7 @@ private fun DrawScope.drawToken(skin: Skin, c: Offset, r: Float, index: Int, fil
                 drawCircle(empty, r, c, style = outline)
             }
         }
+        else -> drawCharacterToken(skin, c, r, index, filled)
     }
 }
 
@@ -1271,6 +1371,7 @@ fun DrawScope.drawBackdrop(skin: Skin, style: SkinStyle) {
             }
         }
         Skin.CLASSIC -> Unit
+        else -> drawCharacterBackdrop(skin, rnd, unit)
     }
 }
 
