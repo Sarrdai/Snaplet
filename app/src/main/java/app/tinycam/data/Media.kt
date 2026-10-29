@@ -10,6 +10,9 @@ import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.Build
 import android.util.LruCache
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.core.content.FileProvider
@@ -19,6 +22,9 @@ import java.io.File
 
 data class MediaItem(val file: File, val isVideo: Boolean) {
     val id: String get() = file.name
+
+    /** The unfiltered photo, kept next to the saved one when a filter or frame was baked in. */
+    val original: File get() = File(file.parentFile, "originals/${file.name}")
 }
 
 /** Photos and videos live in app-private storage; parents export them via the share sheet. */
@@ -33,7 +39,10 @@ class MediaRepository(private val context: Context) {
     fun newPhoto() = MediaItem(File(dir, "IMG_${System.currentTimeMillis()}.jpg"), isVideo = false)
     fun newVideo() = MediaItem(File(dir, "VID_${System.currentTimeMillis()}.mp4"), isVideo = true)
 
-    fun delete(item: MediaItem) { item.file.delete() }
+    fun delete(item: MediaItem) {
+        item.file.delete()
+        item.original.delete()
+    }
 
     fun shareIntent(items: List<MediaItem>): Intent {
         val uris = items.mapTo(ArrayList<Uri>()) {
@@ -54,6 +63,12 @@ class Thumb(val image: ImageBitmap, val durationMs: Long? = null)
 class Thumbnails(private val sizePx: Int = 360) {
     private val cache = LruCache<String, Thumb>(64)
 
+    /** Bumped whenever a saved photo was rewritten, so open full-size views reload it. */
+    var revision by mutableIntStateOf(0)
+        private set
+
+    fun edited() { revision++ }
+
     fun peek(id: String): Thumb? = cache.get(id)
     fun put(id: String, thumb: Thumb) { cache.put(id, thumb) }
 
@@ -69,12 +84,16 @@ suspend fun loadFullImage(file: File, maxPx: Int): ImageBitmap? = withContext(Di
     runCatching { decodeUpright(file, maxPx)?.asImageBitmap() }.getOrNull()
 }
 
-/** Decodes [file] downsampled to roughly [targetPx] and rotated upright according to its EXIF data. */
-fun decodeUpright(file: File, targetPx: Int): Bitmap? {
+/**
+ * Decodes [file] downsampled to roughly [targetPx] (and at most [maxPixels]) and rotated upright
+ * according to its EXIF data.
+ */
+fun decodeUpright(file: File, targetPx: Int, maxPixels: Long = Long.MAX_VALUE): Bitmap? {
     val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
     BitmapFactory.decodeFile(file.path, bounds)
     var sample = 1
     while (maxOf(bounds.outWidth, bounds.outHeight) / (sample * 2) >= targetPx) sample *= 2
+    while (bounds.outWidth.toLong() / sample * (bounds.outHeight / sample) > maxPixels) sample *= 2
     val bmp = BitmapFactory.decodeFile(file.path, BitmapFactory.Options().apply { inSampleSize = sample })
         ?: return null
     val rotation = when (ExifInterface(file.path).getAttributeInt(ExifInterface.TAG_ORIENTATION, 0)) {
@@ -85,6 +104,7 @@ fun decodeUpright(file: File, targetPx: Int): Bitmap? {
     }
     if (rotation == 0f) return bmp
     return Bitmap.createBitmap(bmp, 0, 0, bmp.width, bmp.height, Matrix().apply { postRotate(rotation) }, true)
+        .also { if (it !== bmp) bmp.recycle() }
 }
 
 private fun videoThumb(file: File, sizePx: Int): Thumb? {

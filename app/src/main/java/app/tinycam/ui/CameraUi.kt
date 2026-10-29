@@ -478,7 +478,7 @@ fun KidCameraUi(
                 onClose = { overlay = Overlay.None },
             )
             is Overlay.Preview -> MediaPreview(
-                o.item, settings.skin, style, u, touches,
+                o.item, thumbs.revision, settings.skin, style, u, touches,
                 onClose = { overlay = if (o.fromGallery) Overlay.Gallery else Overlay.None },
             )
         }
