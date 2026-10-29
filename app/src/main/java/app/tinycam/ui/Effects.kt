@@ -173,7 +173,7 @@ private fun DrawScope.drawBorderShapes(colors: List<Color>, shape: DrawScope.(Of
     }
 }
 
-private fun heartPath(c: Offset, r: Float) = Path().apply {
+internal fun heartPath(c: Offset, r: Float) = Path().apply {
     moveTo(c.x, c.y + r * 0.9f)
     cubicTo(c.x - r * 1.3f, c.y + r * 0.1f, c.x - r * 0.9f, c.y - r * 1.05f, c.x, c.y - r * 0.4f)
     cubicTo(c.x + r * 0.9f, c.y - r * 1.05f, c.x + r * 1.3f, c.y + r * 0.1f, c.x, c.y + r * 0.9f)

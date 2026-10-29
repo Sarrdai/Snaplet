@@ -6,7 +6,8 @@ import java.security.MessageDigest
 import java.security.SecureRandom
 
 enum class Skin(val label: String) {
-    CLASSIC("Klassisch"), RAINBOW("Regenbogen"), SPACE("Raumschiff"), DINO("Dino"), LEOPARD("Leopard")
+    CLASSIC("Klassisch"), RAINBOW("Regenbogen"), SPACE("Raumschiff"), DINO("Dino"), LEOPARD("Leopard"),
+    UNICORN("Einhorn"), SHARK("Hai"), ROBOT("Roboter"), FIRE_TRUCK("Feuerwehr"), MONSTER("Monster"), ICE_CREAM("Eiscreme"),
 }
 
 /** Where the shutter sits. CENTER uses the round shutter at the bottom. */

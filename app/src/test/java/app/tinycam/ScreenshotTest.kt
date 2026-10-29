@@ -132,7 +132,7 @@ class ScreenshotTest {
 
     /** Every skin in fixed animation phases: rest, blink, cooling, recording, pressed, ready burst; then round. */
     @Test
-    @Config(qualifiers = "w400dp-h500dp-xxhdpi")
+    @Config(qualifiers = "w400dp-h1100dp-xxhdpi")
     fun shutterStates() {
         val pill: List<DrawScope.(Skin) -> Unit> = listOf(
             { drawShutter(it, styleFor(it), 1f, 0f, 1f, Emblem.SKIN, true, Tokens(3, 5)) },
