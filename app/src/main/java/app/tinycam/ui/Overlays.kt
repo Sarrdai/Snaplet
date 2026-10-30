@@ -23,12 +23,15 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,6 +39,7 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
@@ -80,13 +84,15 @@ fun GalleryOverlay(
     }
 }
 
-/** Full-size photo or video. One tap anywhere closes it. */
+/** Full-size photo or video. One tap anywhere closes it; the wand button switches between filtered and original. */
 @Composable
-fun MediaPreview(item: MediaItem, skin: Skin, style: SkinStyle, unit: Dp, touches: TouchCounter, onClose: () -> Unit) {
+fun MediaPreview(item: MediaItem, revision: Int, skin: Skin, style: SkinStyle, unit: Dp, touches: TouchCounter, onClose: () -> Unit) {
     val maxPx = with(LocalDensity.current) {
         val c = LocalConfiguration.current
         maxOf(c.screenWidthDp, c.screenHeightDp).dp.roundToPx()
     }
+    var showOriginal by remember(item.id) { mutableStateOf(false) }
+    val hasOriginal = remember(item.id, revision) { !item.isVideo && item.original.exists() }
     Box(
         Modifier.fillMaxSize().drawBehind { drawBackdrop(skin, style) },
         contentAlignment = Alignment.Center,
@@ -105,7 +111,8 @@ fun MediaPreview(item: MediaItem, skin: Skin, style: SkinStyle, unit: Dp, touche
                     modifier = Modifier.fillMaxSize(),
                 )
             } else {
-                val image by produceState<ImageBitmap?>(null, item.id) { value = loadFullImage(item.file, maxPx) }
+                val file = if (showOriginal && hasOriginal) item.original else item.file
+                val image by produceState<ImageBitmap?>(null, file, revision) { value = loadFullImage(file, maxPx) }
                 image?.let {
                     Image(
                         it, null,
@@ -121,6 +128,30 @@ fun MediaPreview(item: MediaItem, skin: Skin, style: SkinStyle, unit: Dp, touche
         }
         // Transparent layer on top so the video view cannot swallow the closing tap
         Box(Modifier.fillMaxSize().singleTap(touches, onClose))
+        if (hasOriginal) {
+            FilterToggle(
+                !showOriginal, style, unit, touches, { showOriginal = !showOriginal },
+                Modifier.align(Alignment.BottomCenter).windowInsetsPadding(WindowInsets.safeDrawing).padding(unit * 4f),
+            )
+        }
+    }
+}
+
+/** Round wand button: lit while the filtered photo is shown. */
+@Composable
+private fun FilterToggle(filtered: Boolean, style: SkinStyle, unit: Dp, touches: TouchCounter, onToggle: () -> Unit, modifier: Modifier) {
+    Box(
+        modifier
+            .size(unit * 15f)
+            .shadow(8.dp, CircleShape)
+            .background(if (filtered) style.buttonOn else Color.White, CircleShape)
+            .singleTap(touches, onToggle),
+        contentAlignment = Alignment.Center,
+    ) {
+        Image(
+            Icons.Wand, if (filtered) "Original zeigen" else "Mit Filter zeigen", Modifier.size(unit * 7f),
+            colorFilter = ColorFilter.tint(if (filtered) style.buttonOnInk else Ink),
+        )
     }
 }
 

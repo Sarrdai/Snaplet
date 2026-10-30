@@ -528,7 +528,7 @@ private fun ParentGallery(
 
     val start = viewing
     if (start != null && items.isNotEmpty()) {
-        ParentViewer(items, start.coerceIn(items.indices), selected, ::toggle) { viewing = null }
+        ParentViewer(items, thumbs.revision, start.coerceIn(items.indices), selected, ::toggle) { viewing = null }
         return
     }
     BackHandler(onBack = onClose)
@@ -610,10 +610,11 @@ private fun SelectionBar(chosen: List<MediaItem>, touches: TouchCounter, onShare
     }
 }
 
-/** Full-screen view for picking: swipe between photos and videos, select the current one. */
+/** Full-screen view for picking: swipe between photos and videos, select the current one, compare filter and original. */
 @Composable
 private fun ParentViewer(
     items: List<MediaItem>,
+    revision: Int,
     start: Int,
     selected: List<String>,
     onToggle: (MediaItem) -> Unit,
@@ -621,6 +622,7 @@ private fun ParentViewer(
 ) {
     val touches = remember { TouchCounter() }
     val pager = rememberPagerState(start) { items.size }
+    var showOriginal by remember { mutableStateOf(false) }
     BackHandler(onBack = onClose)
     val maxPx = with(LocalDensity.current) {
         val c = LocalConfiguration.current
@@ -644,7 +646,8 @@ private fun ParentViewer(
                         )
                     }
                 } else {
-                    val image by produceState<ImageBitmap?>(null, item.id) { value = loadFullImage(item.file, maxPx) }
+                    val file = if (showOriginal && item.original.exists()) item.original else item.file
+                    val image by produceState<ImageBitmap?>(null, file, revision) { value = loadFullImage(file, maxPx) }
                     image?.let { Image(it, null, Modifier.fillMaxSize(), contentScale = ContentScale.Fit) }
                 }
             }
@@ -661,6 +664,10 @@ private fun ParentViewer(
         ) {
             Button("Zurück", touches = touches, onClick = onClose)
             BasicText("${pager.currentPage + 1} / ${items.size}", Modifier.weight(1f), style = Heading)
+            val hasOriginal = remember(current?.id, revision) { current != null && !current.isVideo && current.original.exists() }
+            if (hasOriginal) {
+                Button(if (showOriginal) "Mit Filter" else "Original", touches = touches) { showOriginal = !showOriginal }
+            }
             if (current != null) {
                 val on = current.id in selected
                 Button(if (on) "✓ Ausgewählt" else "Auswählen", primary = on, touches = touches) { onToggle(current) }

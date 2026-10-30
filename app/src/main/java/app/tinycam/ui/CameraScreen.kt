@@ -58,6 +58,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
+import java.io.File
 
 /** Binds CameraX to the kid UI. Only one use case is active at a time, which works on every device. */
 @Composable
@@ -232,17 +233,40 @@ private class CameraXActions(
         runCatching { controller.setLinearZoom(linear) }
     }
 
-    /** Re-encodes the saved photo cropped and with the effect baked in. The original stays if memory runs out. */
-    private suspend fun postProcess(item: MediaItem, effect: Effect, crop: Boolean) = withContext(Dispatchers.Default) {
-        runCatching {
-            val exif = ExifInterface(item.file.path)
-            val decoded = decodeUpright(item.file, Int.MAX_VALUE) ?: return@runCatching
-            val src = if (crop) centerSquare(decoded) else decoded
-            val out = renderEffect(src, effect)
-            if (src !== out) src.recycle()
-            item.file.outputStream().use { out.compress(Bitmap.CompressFormat.JPEG, 95, it) }
-            out.recycle()
-            keepExif(exif, item.file.path)
+    /**
+     * Re-encodes the saved photo cropped and with the effect baked in; the unfiltered photo is kept as
+     * [MediaItem.original]. The camera's file stays untouched if anything fails.
+     */
+    private suspend fun postProcess(item: MediaItem, effect: Effect, crop: Boolean) {
+        withContext(Dispatchers.Default) {
+            runCatching {
+                val exif = ExifInterface(item.file.path)
+                // Large sensors are scaled down so the decoded photo and its copies fit into the heap
+                val maxPixels = Runtime.getRuntime().maxMemory() / (4 * 5)
+                val decoded = decodeUpright(item.file, Int.MAX_VALUE, maxPixels) ?: return@runCatching
+                val src = if (crop) centerSquare(decoded) else decoded
+                if (src !== decoded) decoded.recycle()
+                if (effect != Effect.NONE) {
+                    item.original.parentFile?.mkdirs()
+                    if (crop) writeJpeg(src, item.original, exif) else item.file.copyTo(item.original, overwrite = true)
+                }
+                val out = renderEffect(src, effect)
+                if (src !== out) src.recycle()
+                writeJpeg(out, item.file, exif)
+                out.recycle()
+            }
+        }
+        app.thumbs.edited()
+    }
+
+    /** Writes next to [target] first, so viewers never read a half-written photo. */
+    private fun writeJpeg(bitmap: Bitmap, target: File, exif: ExifInterface) {
+        val tmp = File(target.path + ".tmp")
+        tmp.outputStream().use { bitmap.compress(Bitmap.CompressFormat.JPEG, 95, it) }
+        keepExif(exif, tmp.path)
+        if (!tmp.renameTo(target)) {
+            tmp.delete()
+            error("Could not replace ${target.name}")
         }
     }
 

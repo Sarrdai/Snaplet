@@ -49,7 +49,10 @@ der Geräte-Sperre als Rückweg.
 Android fragt dabei jedes Mal nach einer Bestätigung. In den Android-Einstellungen unter
 Sicherheit → App fixieren „Vor dem Lösen nach PIN fragen“ einschalten.
 
-Filter und Rahmen gelten für Fotos; im Video-Modus sind sie ausgeblendet.
+Filter und Rahmen gelten für Fotos; im Video-Modus sind sie ausgeblendet. Sie werden fest ins
+gespeicherte Foto übernommen (auch beim Teilen). Das Original bleibt zusätzlich erhalten: In der
+Großansicht schaltet der Zauberstab-Knopf (Kind) bzw. „Original“ / „Mit Filter“ (Eltern-Galerie)
+zwischen beiden Versionen um.
 
 ## Entwicklung
 
