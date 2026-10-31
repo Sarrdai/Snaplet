@@ -404,7 +404,9 @@ fun KidCameraUi(
                         },
                         spikesLeft = right,
                         tokens = tokens,
-                        unit = u, touches = touches, onPress = ::onShutter,
+                        // A lambda, not ::onShutter: Compose memoizes local function references, which kept the
+                        // first mode and settings, so the shutter took photos in video mode
+                        unit = u, touches = touches, onPress = { onShutter() },
                         shake = { shake.value },
                         round = center,
                     )
