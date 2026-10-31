@@ -1,5 +1,6 @@
 package app.tinycam.data
 
+import app.tinycam.R
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -53,7 +54,7 @@ class MediaRepository(private val context: Context) {
             putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris)
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         }
-        return Intent.createChooser(send, "Fotos teilen")
+        return Intent.createChooser(send, context.getString(R.string.share_chooser))
     }
 }
 

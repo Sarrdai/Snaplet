@@ -1,0 +1,81 @@
+name: Play release
+
+# Builds the signed App Bundle (AAB) for Google Play. Start it by pushing a tag like v1.0.0,
+# or by hand under Actions (then the version comes from the input). Setup: see TODO.md.
+on:
+  push:
+    tags: ['v*.*.*']
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version, e.g. v1.0.0 (versionCode = 1*10000 + 0*100 + 0)'
+        required: true
+      track:
+        description: 'Play track (only used when PLAY_SERVICE_ACCOUNT_JSON is set)'
+        type: choice
+        options: [internal, alpha, beta, production]
+        default: internal
+      status:
+        description: 'Release status: "draft" until the app was published once, then "completed"'
+        type: choice
+        options: [draft, completed]
+        default: draft
+
+permissions:
+  contents: read
+
+jobs:
+  bundle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      RELEASE_VERSION: ${{ inputs.version || github.ref_name }}
+      UPLOAD_KEYSTORE_FILE: ${{ github.workspace }}/../upload.jks
+      UPLOAD_KEYSTORE_PASSWORD: ${{ secrets.UPLOAD_KEYSTORE_PASSWORD }}
+      UPLOAD_KEY_ALIAS: ${{ secrets.UPLOAD_KEY_ALIAS }}
+      UPLOAD_KEY_PASSWORD: ${{ secrets.UPLOAD_KEY_PASSWORD }}
+      PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Restore upload key
+        env:
+          UPLOAD_KEYSTORE_BASE64: ${{ secrets.UPLOAD_KEYSTORE_BASE64 }}
+        run: |
+          for name in UPLOAD_KEYSTORE_BASE64 UPLOAD_KEYSTORE_PASSWORD UPLOAD_KEY_ALIAS UPLOAD_KEY_PASSWORD; do
+            if [ -z "${!name}" ]; then echo "::error::Secret $name is missing (see TODO.md)"; exit 1; fi
+          done
+          echo "$UPLOAD_KEYSTORE_BASE64" | base64 --decode > "$UPLOAD_KEYSTORE_FILE"
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Test and build App Bundle
+        run: ./gradlew --no-daemon testDebugUnitTest bundleRelease
+
+      - name: Remove upload key
+        if: always()
+        run: rm -f "$UPLOAD_KEYSTORE_FILE"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Snaplet-${{ env.RELEASE_VERSION }}-aab
+          path: |
+            app/build/outputs/bundle/release/app-release.aab
+            app/build/outputs/mapping/release/mapping.txt
+
+      # Optional: needs the secret PLAY_SERVICE_ACCOUNT_JSON and one manual upload in the Play Console first
+      - name: Upload to Google Play
+        if: env.PLAY_SERVICE_ACCOUNT_JSON != ''
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+          packageName: app.tinycam
+          releaseFiles: app/build/outputs/bundle/release/app-release.aab
+          track: ${{ inputs.track || 'internal' }}
+          status: ${{ inputs.status || 'draft' }}
+          whatsNewDirectory: store/whatsnew

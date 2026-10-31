@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Kid camera -->
+    <string name="hint_hold">Gedrückt halten</string>
+    <string name="see_you_tomorrow">Morgen geht\'s weiter!</string>
+    <string name="sleep_title">Die Kamera schläft jetzt</string>
+    <string name="show_original">Original zeigen</string>
+    <string name="show_filtered">Mit Filter zeigen</string>
+    <string name="cd_zoom">Zoom</string>
+    <string name="cd_parent_area">Eltern-Bereich</string>
+    <string name="cd_back">Zurück</string>
+
+    <!-- Permission screen -->
+    <string name="permission_title">%1$s braucht die Kamera</string>
+    <string name="permission_text">Liebe Eltern: Bitte einmal Kamera und Mikrofon erlauben. Das Mikrofon wird nur für Videos benutzt.</string>
+    <string name="permission_allow">Erlauben</string>
+    <string name="permission_blocked_text">Die Kamera wurde abgelehnt. Eltern können sie in den Android-Einstellungen erlauben.</string>
+    <string name="permission_open_settings">Einstellungen öffnen (3 s halten)</string>
+
+    <!-- Designs -->
+    <string name="skin_classic">Klassisch</string>
+    <string name="skin_rainbow">Regenbogen</string>
+    <string name="skin_space">Raumschiff</string>
+    <string name="skin_dino">Dino</string>
+    <string name="skin_leopard">Leopard</string>
+    <string name="skin_unicorn">Einhorn</string>
+    <string name="skin_shark">Hai</string>
+    <string name="skin_robot">Roboter</string>
+    <string name="skin_fire_truck">Feuerwehr</string>
+    <string name="skin_monster">Monster</string>
+    <string name="skin_ice_cream">Eiscreme</string>
+
+    <!-- Option labels -->
+    <string name="side_left">Links</string>
+    <string name="side_center">Mitte</string>
+    <string name="side_right">Rechts</string>
+    <string name="lock_hold">Nur halten</string>
+    <string name="lock_device">Geräte-Sperre</string>
+    <string name="lock_pin">Eigene PIN</string>
+    <string name="size_small">Klein (≈ 2 MP)</string>
+    <string name="size_medium">Mittel (≈ 5 MP)</string>
+    <string name="size_full">Voll</string>
+
+    <!-- Parent area -->
+    <string name="parent_title">Eltern-Bereich</string>
+    <string name="parent_done">Fertig</string>
+    <string name="section_design">Design</string>
+    <string name="section_side">Auslöser-Position</string>
+    <string name="section_side_info">Links oder rechts: Pille an der Seite. Mitte: runder Auslöser unten in der Mitte.</string>
+    <string name="section_features">Funktionen</string>
+    <string name="section_features_info">Fotografieren geht immer. Alles andere einzeln einschalten, wenn das Kind so weit ist.</string>
+    <string name="feature_video">Videos</string>
+    <string name="feature_video_info">Umschalter Foto/Video, 1,5 s halten.</string>
+    <string name="feature_gallery">Galerie</string>
+    <string name="feature_gallery_info">Alle Bilder als Raster ansehen, 1 s halten.</string>
+    <string name="feature_selfie">Selfie-Kamera</string>
+    <string name="feature_selfie_info">Zwischen Rück- und Frontkamera wechseln, 1 s halten.</string>
+    <string name="feature_zoom">Zoom</string>
+    <string name="feature_zoom_info">Großer Schieberegler. Bewegt sich nur, wenn man den Knopf zieht.</string>
+    <string name="feature_effects">Filter &amp; Rahmen</string>
+    <string name="feature_effects_info">Schwarz-Weiß, Sepia, Bunt und lustige Rahmen für Fotos.</string>
+    <string name="feature_timer">Selbstauslöser</string>
+    <string name="feature_timer_info">Mit großem Countdown. Erneutes Tippen bricht ab.</string>
+    <string name="feature_skins">Design wählen</string>
+    <string name="feature_skins_info">Das Kind wechselt selbst zwischen den freigegebenen Designs, 1 s halten.</string>
+    <string name="video_limit">Videolänge begrenzen</string>
+    <string name="countdown">Countdown</string>
+    <string name="kid_skins">Zur Auswahl</string>
+    <string name="section_limits">Grenzen</string>
+    <string name="cooldown">Pause zwischen Aufnahmen</string>
+    <string name="cooldown_info">Verhindert viele Bilder durch wiederholtes Drücken.</string>
+    <string name="daily_captures">Aufnahmen pro Tag</string>
+    <string name="daily_captures_info">Fotos und Videos zusammen. Der Auslöser zeigt die restlichen als Symbole. Heute: %1$d</string>
+    <string name="daily_time">Nutzungszeit pro Tag</string>
+    <string name="daily_time_info">Danach schläft die Kamera bis morgen. Heute genutzt: %1$d min</string>
+    <string name="reset_today">Heutige Aufnahmen und Zeit zurücksetzen</string>
+    <string name="section_strip">Vorschau-Leiste</string>
+    <string name="section_strip_info">Wie viele der letzten Bilder über dem Kamerabild zu sehen sind.</string>
+    <plurals name="strip_count">
+        <item quantity="one">%d Bild</item>
+        <item quantity="other">%d Bilder</item>
+    </plurals>
+    <string name="unit_seconds">%1$d s</string>
+    <string name="unit_minutes">%1$d min</string>
+    <string name="section_photo_video">Foto &amp; Video</string>
+    <string name="section_photo_video_info">Kleinere Formate sparen Speicher. 1:1 wird nach der Aufnahme quadratisch zugeschnitten.</string>
+    <string name="photo_aspect">Foto-Format</string>
+    <string name="photo_size">Foto-Größe</string>
+    <string name="video_quality">Video-Qualität</string>
+    <string name="section_media">Fotos &amp; Videos</string>
+    <string name="section_media_info">%1$d gespeichert. Die Aufnahmen liegen nur in der App. Zum Sichern auswählen und teilen, z. B. an Google Fotos, Drive oder per Nachricht.</string>
+    <string name="media_view">Ansehen &amp; auswählen …</string>
+    <string name="media_share_all">Alle teilen …</string>
+    <string name="media_delete_all">Alle löschen (3 s halten)</string>
+    <string name="section_access">Zugang zum Eltern-Bereich</string>
+    <string name="lock_info_hold">Wer das Schloss 3 s hält, kommt hinein.</string>
+    <string name="lock_info_device">Nach dem Halten fragt Android die Bildschirmsperre des Handys ab (PIN, Muster oder Fingerabdruck). Ideal für ein geteiltes Handy.</string>
+    <string name="lock_info_pin">Eigene 4-stellige PIN, unabhängig von der Handy-Sperre. Vergessen? Mit der Geräte-Sperre kommt man trotzdem hinein.</string>
+    <string name="no_screen_lock">Auf diesem Handy ist keine Bildschirmsperre eingerichtet. „Geräte-Sperre“ geht erst, wenn eine eingerichtet ist.</string>
+    <string name="pin_change">PIN ändern</string>
+    <string name="section_pinning">App fixieren</string>
+    <string name="pinning_on_info">%1$s ist fixiert. Kinder können die App nicht verlassen.</string>
+    <string name="pinning_off_info">Fixiert %1$s auf dem Bildschirm (Android-Bildschirmfixierung). Lösen geht hier oder mit Zurück + Übersicht gleichzeitig halten.</string>
+    <string name="pinning_unpin">Fixierung lösen</string>
+    <string name="pinning_pin">App fixieren</string>
+    <string name="auto_pin">Automatisch fixieren</string>
+    <string name="auto_pin_info">Beim Start und beim Verlassen des Eltern-Bereichs. Android fragt jedes Mal kurz nach einer Bestätigung. Tipp: In den Android-Einstellungen unter Sicherheit → App fixieren „Vor dem Lösen nach PIN fragen“ einschalten.</string>
+    <string name="device_prompt_subtitle">Mit der Bildschirmsperre des Handys entsperren</string>
+
+    <!-- Parent gallery -->
+    <string name="back">Zurück</string>
+    <string name="selected_count">%1$d ausgewählt</string>
+    <string name="select_none">Keine</string>
+    <string name="select_all">Alle</string>
+    <string name="no_media">Noch keine Aufnahmen.</string>
+    <string name="share_count">Teilen (%1$d) …</string>
+    <string name="delete_count">Löschen (%1$d) – 3 s halten</string>
+    <string name="with_filter">Mit Filter</string>
+    <string name="original">Original</string>
+    <string name="selected">✓ Ausgewählt</string>
+    <string name="select">Auswählen</string>
+    <string name="share_chooser">Fotos teilen</string>
+
+    <!-- PIN -->
+    <string name="pin_new">Neue PIN</string>
+    <string name="pin_repeat">PIN wiederholen</string>
+    <string name="pin_mismatch">Die PINs waren verschieden. Bitte neu eingeben.</string>
+    <string name="pin_setup_info">4 Ziffern, nur für den Eltern-Bereich.</string>
+    <string name="pin_gate_title">Eltern-PIN</string>
+    <string name="pin_wait">Zu viele Versuche. Bitte %1$d s warten.</string>
+    <string name="pin_wrong">Falsche PIN.</string>
+    <string name="pin_enter">Bitte PIN eingeben.</string>
+    <string name="pin_forgot">PIN vergessen? Mit Geräte-Sperre</string>
+    <string name="cancel">Abbrechen</string>
+</resources>
