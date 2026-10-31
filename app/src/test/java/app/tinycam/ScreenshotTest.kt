@@ -259,14 +259,14 @@ class ScreenshotTest {
     }
 }
 
-private fun sceneBitmap(w: Int, h: Int, seed: Int): ImageBitmap {
+internal fun sceneBitmap(w: Int, h: Int, seed: Int): ImageBitmap {
     val bmp = ImageBitmap(w, h)
     CanvasDrawScope().draw(Density(1f), LayoutDirection.Ltr, Canvas(bmp), Size(w.toFloat(), h.toFloat())) { drawScene(seed) }
     return bmp
 }
 
 /** Stand-in for the camera image: sky, sun, hills and a ball. */
-private fun DrawScope.drawScene(seed: Int) {
+internal fun DrawScope.drawScene(seed: Int) {
     val w = size.width
     val h = size.height
     drawRect(Brush.verticalGradient(listOf(Color(0xFF5AA8E6 + seed * 0x050300), Color(0xFFCFEAF7))))

@@ -1,4 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Default language: English. Every other language lives in values-<lang>/strings.xml with the same keys. -->
 <resources>
-    <string name="app_name">TinyCam</string>
+    <string name="app_name" translatable="false">Snaplet</string>
+
+    <!-- Kid camera -->
+    <string name="hint_hold">Press and hold</string>
+    <string name="see_you_tomorrow">See you tomorrow!</string>
+    <string name="sleep_title">The camera is sleeping now</string>
+    <string name="show_original">Show original</string>
+    <string name="show_filtered">Show with filter</string>
+    <string name="cd_zoom">Zoom</string>
+    <string name="cd_parent_area">Parent area</string>
+    <string name="cd_back">Back</string>
+
+    <!-- Permission screen -->
+    <string name="permission_title">%1$s needs the camera</string>
+    <string name="permission_text">Dear parents: please allow the camera and microphone once. The microphone is only used for videos.</string>
+    <string name="permission_allow">Allow</string>
+    <string name="permission_blocked_text">The camera was declined. Parents can allow it in the Android settings.</string>
+    <string name="permission_open_settings">Open settings (hold 3 s)</string>
+
+    <!-- Designs -->
+    <string name="skin_classic">Classic</string>
+    <string name="skin_rainbow">Rainbow</string>
+    <string name="skin_space">Spaceship</string>
+    <string name="skin_dino">Dino</string>
+    <string name="skin_leopard">Leopard</string>
+    <string name="skin_unicorn">Unicorn</string>
+    <string name="skin_shark">Shark</string>
+    <string name="skin_robot">Robot</string>
+    <string name="skin_fire_truck">Fire truck</string>
+    <string name="skin_monster">Monster</string>
+    <string name="skin_ice_cream">Ice cream</string>
+
+    <!-- Option labels -->
+    <string name="side_left">Left</string>
+    <string name="side_center">Center</string>
+    <string name="side_right">Right</string>
+    <string name="lock_hold">Hold only</string>
+    <string name="lock_device">Device lock</string>
+    <string name="lock_pin">Own PIN</string>
+    <string name="aspect_standard" translatable="false">4:3</string>
+    <string name="aspect_wide" translatable="false">16:9</string>
+    <string name="aspect_square" translatable="false">1:1</string>
+    <string name="size_small">Small (≈ 2 MP)</string>
+    <string name="size_medium">Medium (≈ 5 MP)</string>
+    <string name="size_full">Full</string>
+    <string name="quality_sd" translatable="false">480p</string>
+    <string name="quality_hd" translatable="false">720p</string>
+    <string name="quality_fhd" translatable="false">1080p</string>
+
+    <!-- Parent area -->
+    <string name="parent_title">Parent area</string>
+    <string name="parent_done">Done</string>
+    <string name="section_design">Design</string>
+    <string name="section_side">Shutter position</string>
+    <string name="section_side_info">Left or right: pill at the side. Center: round shutter at the bottom center.</string>
+    <string name="section_features">Features</string>
+    <string name="section_features_info">Taking photos always works. Turn everything else on one by one when your child is ready.</string>
+    <string name="feature_video">Videos</string>
+    <string name="feature_video_info">Photo/video switch, hold for 1.5 s.</string>
+    <string name="feature_gallery">Gallery</string>
+    <string name="feature_gallery_info">See all pictures in a grid, hold for 1 s.</string>
+    <string name="feature_selfie">Selfie camera</string>
+    <string name="feature_selfie_info">Switch between back and front camera, hold for 1 s.</string>
+    <string name="feature_zoom">Zoom</string>
+    <string name="feature_zoom_info">Big slider. Only moves when the knob is dragged.</string>
+    <string name="feature_effects">Filters &amp; frames</string>
+    <string name="feature_effects_info">Black and white, sepia, vivid and fun frames for photos.</string>
+    <string name="feature_timer">Self-timer</string>
+    <string name="feature_timer_info">With a big countdown. Tapping again cancels it.</string>
+    <string name="feature_skins">Choose design</string>
+    <string name="feature_skins_info">Your child switches between the allowed designs, hold for 1 s.</string>
+    <string name="video_limit">Limit video length</string>
+    <string name="countdown">Countdown</string>
+    <string name="kid_skins">Available designs</string>
+    <string name="section_limits">Limits</string>
+    <string name="cooldown">Pause between shots</string>
+    <string name="cooldown_info">Prevents lots of pictures from pressing again and again.</string>
+    <string name="daily_captures">Shots per day</string>
+    <string name="daily_captures_info">Photos and videos together. The shutter shows the remaining ones as symbols. Today: %1$d</string>
+    <string name="daily_time">Usage time per day</string>
+    <string name="daily_time_info">After that the camera sleeps until tomorrow. Used today: %1$d min</string>
+    <string name="reset_today">Reset today\'s shots and time</string>
+    <string name="section_strip">Preview strip</string>
+    <string name="section_strip_info">How many of the latest pictures are shown above the camera image.</string>
+    <plurals name="strip_count">
+        <item quantity="one">%d picture</item>
+        <item quantity="other">%d pictures</item>
+    </plurals>
+    <string name="unit_seconds">%1$d s</string>
+    <string name="unit_minutes">%1$d min</string>
+    <string name="section_photo_video">Photo &amp; video</string>
+    <string name="section_photo_video_info">Smaller formats save storage. 1:1 is cropped to a square after the shot.</string>
+    <string name="photo_aspect">Photo format</string>
+    <string name="photo_size">Photo size</string>
+    <string name="video_quality">Video quality</string>
+    <string name="section_media">Photos &amp; videos</string>
+    <string name="section_media_info">Saved: %1$d. The pictures are only stored inside the app. To back them up, select and share them, e.g. to Google Photos, Drive or by message.</string>
+    <string name="media_view">View &amp; select …</string>
+    <string name="media_share_all">Share all …</string>
+    <string name="media_delete_all">Delete all (hold 3 s)</string>
+    <string name="section_access">Access to the parent area</string>
+    <string name="lock_info_hold">Anyone who holds the lock for 3 s gets in.</string>
+    <string name="lock_info_device">After holding, Android asks for the phone\'s screen lock (PIN, pattern or fingerprint). Ideal for a shared phone.</string>
+    <string name="lock_info_pin">Your own 4-digit PIN, independent of the phone\'s lock. Forgot it? The device lock still gets you in.</string>
+    <string name="no_screen_lock">This phone has no screen lock set up. “Device lock” only works once one is set up.</string>
+    <string name="pin_change">Change PIN</string>
+    <string name="section_pinning">Pin app</string>
+    <string name="pinning_on_info">%1$s is pinned. Children cannot leave the app.</string>
+    <string name="pinning_off_info">Pins %1$s to the screen (Android screen pinning). Unpin here or by holding Back and Overview at the same time.</string>
+    <string name="pinning_unpin">Unpin</string>
+    <string name="pinning_pin">Pin app</string>
+    <string name="auto_pin">Pin automatically</string>
+    <string name="auto_pin_info">At start and when leaving the parent area. Android briefly asks for confirmation each time. Tip: in the Android settings under Security → App pinning, turn on “Ask for PIN before unpinning”.</string>
+    <string name="device_prompt_subtitle">Unlock with the phone\'s screen lock</string>
+
+    <!-- Parent gallery -->
+    <string name="back">Back</string>
+    <string name="selected_count">%1$d selected</string>
+    <string name="select_none">None</string>
+    <string name="select_all">All</string>
+    <string name="no_media">No pictures yet.</string>
+    <string name="share_count">Share (%1$d) …</string>
+    <string name="delete_count">Delete (%1$d) – hold 3 s</string>
+    <string name="page_position" translatable="false">%1$d / %2$d</string>
+    <string name="with_filter">With filter</string>
+    <string name="original">Original</string>
+    <string name="selected">✓ Selected</string>
+    <string name="select">Select</string>
+    <string name="share_chooser">Share photos</string>
+
+    <!-- PIN -->
+    <string name="pin_new">New PIN</string>
+    <string name="pin_repeat">Repeat PIN</string>
+    <string name="pin_mismatch">The PINs did not match. Please enter it again.</string>
+    <string name="pin_setup_info">4 digits, only for the parent area.</string>
+    <string name="pin_gate_title">Parent PIN</string>
+    <string name="pin_wait">Too many attempts. Please wait %1$d s.</string>
+    <string name="pin_wrong">Wrong PIN.</string>
+    <string name="pin_enter">Please enter the PIN.</string>
+    <string name="pin_forgot">Forgot the PIN? Use device lock</string>
+    <string name="cancel">Cancel</string>
 </resources>

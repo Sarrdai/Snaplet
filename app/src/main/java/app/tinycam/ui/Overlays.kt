@@ -1,5 +1,7 @@
 package app.tinycam.ui
 
+import androidx.compose.ui.res.stringResource
+import app.tinycam.R
 import android.widget.VideoView
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
@@ -149,7 +151,7 @@ private fun FilterToggle(filtered: Boolean, style: SkinStyle, unit: Dp, touches:
         contentAlignment = Alignment.Center,
     ) {
         Image(
-            Icons.Wand, if (filtered) "Original zeigen" else "Mit Filter zeigen", Modifier.size(unit * 7f),
+            Icons.Wand, stringResource(if (filtered) R.string.show_original else R.string.show_filtered), Modifier.size(unit * 7f),
             colorFilter = ColorFilter.tint(if (filtered) style.buttonOnInk else Ink),
         )
     }
@@ -168,12 +170,12 @@ fun SleepScreen(skin: Skin, onOpenParent: () -> Unit) {
         ) {
             Canvas(Modifier.size(u * 44f)) { drawMoon(Offset(size.width / 2, size.height / 2), size.minDimension * 0.3f) }
             BasicText(
-                "Die Kamera schläft jetzt",
+                stringResource(R.string.sleep_title),
                 style = kidText((u * 9f).asSp(), weight = FontWeight.ExtraBold).copy(textAlign = TextAlign.Center),
             )
             Spacer(Modifier.height(u * 2f))
             BasicText(
-                "Morgen geht's weiter!",
+                stringResource(R.string.see_you_tomorrow),
                 style = kidText((u * 6f).asSp(), Color.White.copy(alpha = 0.8f), FontWeight.Medium).copy(textAlign = TextAlign.Center),
             )
         }
@@ -184,10 +186,14 @@ fun SleepScreen(skin: Skin, onOpenParent: () -> Unit) {
     }
 }
 
-/** For parents: the camera permission is needed once. */
+/**
+ * For parents: the camera permission is needed once. Once Android stops asking, only the system settings can
+ * grant it; that way out of the app needs a 3 s hold and then the parent check, so children cannot wander off.
+ */
 @Composable
-fun PermissionScreen(onRequest: () -> Unit) {
+fun PermissionScreen(blocked: Boolean, onRequest: () -> Unit, onOpenSettings: () -> Unit) {
     val touches = remember { TouchCounter() }
+    val hold = remember { HoldState() }
     BoxWithConstraints(
         Modifier.fillMaxSize().trackTouches(touches).drawBehind { drawBackdrop(Skin.RAINBOW, styleFor(Skin.RAINBOW)) },
     ) {
@@ -198,21 +204,28 @@ fun PermissionScreen(onRequest: () -> Unit) {
             verticalArrangement = Arrangement.spacedBy(u * 4f),
         ) {
             BasicText(
-                "TinyCam braucht die Kamera",
+                stringResource(R.string.permission_title, stringResource(R.string.app_name)),
                 style = kidText((u * 8f).asSp(), weight = FontWeight.ExtraBold).copy(textAlign = TextAlign.Center),
             )
             BasicText(
-                "Liebe Eltern: Bitte einmal Kamera und Mikrofon erlauben. Das Mikrofon wird nur für Videos benutzt.",
+                stringResource(if (blocked) R.string.permission_blocked_text else R.string.permission_text),
                 style = kidText((u * 4.4f).asSp(), Color.White.copy(alpha = 0.85f), FontWeight.Medium).copy(textAlign = TextAlign.Center),
             )
+            val action = if (blocked) {
+                Modifier.holdToActivate(hold, 3000, touches, onComplete = onOpenSettings)
+            } else {
+                Modifier.singleTap(touches, onRequest)
+            }
             BasicText(
-                "Erlauben",
+                stringResource(if (blocked) R.string.permission_open_settings else R.string.permission_allow),
                 Modifier
                     .shadow(8.dp, RoundedCornerShape(50))
-                    .background(Color.White, RoundedCornerShape(50))
-                    .singleTap(touches, onRequest)
+                    .clip(RoundedCornerShape(50))
+                    .background(Color.White)
+                    .drawBehind { if (blocked) drawRect(Color(0xFFFFD34D), size = size.copy(width = size.width * hold.progress)) }
+                    .then(action)
                     .padding(horizontal = u * 8f, vertical = u * 2.5f),
-                style = kidText((u * 6f).asSp(), Ink, FontWeight.ExtraBold),
+                style = kidText((u * (if (blocked) 4.6f else 6f)).asSp(), Ink, FontWeight.ExtraBold).copy(textAlign = TextAlign.Center),
             )
         }
     }

@@ -1,4 +1,4 @@
-# TinyCam
+# Snaplet
 
 Eine Kamera-App für Kinder (Android). Ein großer Auslöser an der Seite, eine Vorschau-Leiste mit den
 letzten Bildern und ein Eltern-Bereich mit Lernstufen, Limits und elf Designs
@@ -6,7 +6,7 @@ letzten Bildern und ein Eltern-Bereich mit Lernstufen, Limits und elf Designs
 
 ## Installieren
 
-1. Auf dem Handy die Seite **Releases → „TinyCam (neuester Stand)“** öffnen und `TinyCam.apk` laden.
+1. Auf dem Handy die Seite **Releases → „Snaplet (neuester Stand)“** öffnen und `Snaplet.apk` laden.
    Alternativ unter **Actions** den letzten Lauf öffnen und das Artefakt herunterladen.
 2. Installation aus unbekannten Quellen für den Browser bzw. Dateimanager erlauben.
 3. Beim ersten Start Kamera und Mikrofon erlauben.
@@ -63,12 +63,25 @@ zwischen beiden Versionen um.
   (zur Design-Kontrolle ohne Gerät).
 - Die GitHub Action baut bei jedem Push. Auf dem Standard-Branch (oder per manuellem Start)
   wird das APK als Release „latest“ veröffentlicht.
+- **Play release** (Tag `vX.Y.Z` oder manuell): baut das signierte App Bundle (AAB) für Google Play,
+  optional mit Upload. Einrichtung und weitere Schritte bis zur Veröffentlichung: [TODO.md](TODO.md).
+- **Store assets** (manuell): rendert Store-Screenshots je Sprache, Feature-Grafik und 512-px-Icon nach
+  `app/build/store/`, optional mit eigenem Foto als Kamerabild. Lokal:
+  `./gradlew recordRoborazziDebug --tests '*StoreScreenshot*' -PstoreCamera=/pfad/foto.jpg`.
+  Store-Texte liegen in `store/listing/`, die Datenschutzerklärung in `docs/` (GitHub Pages).
+
+### Sprachen
+
+Alle Texte stehen in `app/src/main/res/values/strings.xml` (Englisch, Standard) und
+`values-de/strings.xml` (Deutsch). Neue Sprache: siehe [TODO.md](TODO.md#5-weitere-sprachen);
+`TranslationsTest` prüft, dass jede Sprache vollständig ist.
 
 ### Signatur
 
 `app/signing/throwaway.jks` ist ein absichtlich eingecheckter Wegwerf-Schlüssel, damit jeder
-CI-Build das installierte App-Update akzeptiert. Vor einer Veröffentlichung (z. B. Play Store) durch
-einen geheimen Schlüssel aus GitHub-Secrets ersetzen.
+CI-Build das installierte App-Update akzeptiert. Play-Releases signiert der Workflow „Play release“
+mit dem Upload-Schlüssel aus den GitHub-Secrets (`UPLOAD_KEYSTORE_*`, siehe [TODO.md](TODO.md)).
+Play- und APK-Version haben verschiedene Signaturen und lassen sich nicht übereinander installieren.
 
 ## Lizenzen
 

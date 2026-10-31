@@ -1,6 +1,10 @@
 package app.tinycam.ui
 
 import androidx.activity.compose.BackHandler
+import androidx.annotation.StringRes
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
+import app.tinycam.R
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
@@ -103,26 +107,20 @@ private enum class FeatureId { VIDEO, GALLERY, SELFIE, ZOOM, EFFECTS, TIMER, SKI
 private class Feature(
     val id: FeatureId,
     val icon: ImageVector,
-    val title: String,
-    val info: String,
+    @StringRes val title: Int,
+    @StringRes val info: Int,
     val get: (Settings) -> Boolean,
     val set: (Settings, Boolean) -> Settings,
 )
 
 private val Features = listOf(
-    Feature(FeatureId.VIDEO, Icons.Video, "Videos", "Umschalter Foto/Video, 1,5 s halten.", { it.video }, { s, v -> s.copy(video = v) }),
-    Feature(FeatureId.GALLERY, Icons.Grid, "Galerie", "Alle Bilder als Raster ansehen, 1 s halten.", { it.gallery }, { s, v -> s.copy(gallery = v) }),
-    Feature(FeatureId.SELFIE, Icons.Flip, "Selfie-Kamera", "Zwischen Rück- und Frontkamera wechseln, 1 s halten.", { it.selfie }, { s, v -> s.copy(selfie = v) }),
-    Feature(FeatureId.ZOOM, Icons.Search, "Zoom", "Großer Schieberegler. Bewegt sich nur, wenn man den Knopf zieht.", { it.zoom }, { s, v -> s.copy(zoom = v) }),
-    Feature(FeatureId.EFFECTS, Icons.Wand, "Filter & Rahmen", "Schwarz-Weiß, Sepia, Bunt und lustige Rahmen für Fotos.", { it.effects }, { s, v -> s.copy(effects = v) }),
-    Feature(FeatureId.TIMER, Icons.Timer, "Selbstauslöser", "Mit großem Countdown. Erneutes Tippen bricht ab.", { it.timer }, { s, v -> s.copy(timer = v) }),
-    Feature(FeatureId.SKINS, Icons.Palette, "Design wählen", "Das Kind wechselt selbst zwischen den freigegebenen Designs, 1 s halten.", { it.skinChoice }, { s, v -> s.copy(skinChoice = v) }),
-)
-
-private val LockInfo = mapOf(
-    ParentLock.HOLD to "Wer das Schloss 3 s hält, kommt hinein.",
-    ParentLock.DEVICE to "Nach dem Halten fragt Android die Bildschirmsperre des Handys ab (PIN, Muster oder Fingerabdruck). Ideal für ein geteiltes Handy.",
-    ParentLock.PIN to "Eigene 4-stellige PIN, unabhängig von der Handy-Sperre. Vergessen? Mit der Geräte-Sperre kommt man trotzdem hinein.",
+    Feature(FeatureId.VIDEO, Icons.Video, R.string.feature_video, R.string.feature_video_info, { it.video }, { s, v -> s.copy(video = v) }),
+    Feature(FeatureId.GALLERY, Icons.Grid, R.string.feature_gallery, R.string.feature_gallery_info, { it.gallery }, { s, v -> s.copy(gallery = v) }),
+    Feature(FeatureId.SELFIE, Icons.Flip, R.string.feature_selfie, R.string.feature_selfie_info, { it.selfie }, { s, v -> s.copy(selfie = v) }),
+    Feature(FeatureId.ZOOM, Icons.Search, R.string.feature_zoom, R.string.feature_zoom_info, { it.zoom }, { s, v -> s.copy(zoom = v) }),
+    Feature(FeatureId.EFFECTS, Icons.Wand, R.string.feature_effects, R.string.feature_effects_info, { it.effects }, { s, v -> s.copy(effects = v) }),
+    Feature(FeatureId.TIMER, Icons.Timer, R.string.feature_timer, R.string.feature_timer_info, { it.timer }, { s, v -> s.copy(timer = v) }),
+    Feature(FeatureId.SKINS, Icons.Palette, R.string.feature_skins, R.string.feature_skins_info, { it.skinChoice }, { s, v -> s.copy(skinChoice = v) }),
 )
 
 @Composable
@@ -174,39 +172,39 @@ fun ParentScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                BasicText("Eltern-Bereich", Modifier.weight(1f), style = Title)
-                Button("Fertig", primary = true, touches = touches, onClick = onClose)
+                BasicText(stringResource(R.string.parent_title), Modifier.weight(1f), style = Title)
+                Button(stringResource(R.string.parent_done), primary = true, touches = touches, onClick = onClose)
             }
 
-            Section("Design") {
+            Section(stringResource(R.string.section_design)) {
                 SkinPicker(settings.skin, settings.side == Side.CENTER, touches) { onChange(settings.copy(skin = it)) }
             }
-            Section("Auslöser-Position", "Links oder rechts: Pille an der Seite. Mitte: runder Auslöser unten in der Mitte.") {
+            Section(stringResource(R.string.section_side), stringResource(R.string.section_side_info)) {
                 Options(Side.entries, settings.side, { it.label }, touches) { onChange(settings.copy(side = it)) }
             }
-            Section("Funktionen", "Fotografieren geht immer. Alles andere einzeln einschalten, wenn das Kind so weit ist.") {
+            Section(stringResource(R.string.section_features), stringResource(R.string.section_features_info)) {
                 Features.forEach { f ->
                     val on = f.get(settings)
-                    SwitchRow(f.title, f.info, on, touches, f.icon) { onChange(f.set(settings, it)) }
+                    SwitchRow(stringResource(f.title), stringResource(f.info), on, touches, f.icon) { onChange(f.set(settings, it)) }
                     if (on && f.id == FeatureId.VIDEO) {
                         Indented {
-                            SwitchRow("Videolänge begrenzen", null, settings.videoLimitOn, touches) {
+                            SwitchRow(stringResource(R.string.video_limit), null, settings.videoLimitOn, touches) {
                                 onChange(settings.copy(videoLimitOn = it))
                             }
                             if (settings.videoLimitOn) {
-                                ValueSlider(settings.maxVideoSec, 5..180, 5, { "$it s" }) { onChange(settings.copy(maxVideoSec = it)) }
+                                ValueSlider(settings.maxVideoSec, 5..180, 5, { stringResource(R.string.unit_seconds, it) }) { onChange(settings.copy(maxVideoSec = it)) }
                             }
                         }
                     }
                     if (on && f.id == FeatureId.TIMER) {
                         Indented {
-                            BasicText("Countdown", style = Chip.copy(color = Text))
-                            ValueSlider(settings.timerSec, 2..15, 1, { "$it s" }) { onChange(settings.copy(timerSec = it)) }
+                            BasicText(stringResource(R.string.countdown), style = Chip.copy(color = Text))
+                            ValueSlider(settings.timerSec, 2..15, 1, { stringResource(R.string.unit_seconds, it) }) { onChange(settings.copy(timerSec = it)) }
                         }
                     }
                     if (on && f.id == FeatureId.SKINS) {
                         Indented {
-                            BasicText("Zur Auswahl", style = Chip.copy(color = Text))
+                            BasicText(stringResource(R.string.kid_skins), style = Chip.copy(color = Text))
                             // At least one design always stays offered
                             MultiOptions(Skin.entries, settings.kidSkins, { it.label }, touches) { skin ->
                                 val next = if (skin in settings.kidSkins) settings.kidSkins - skin else settings.kidSkins + skin
@@ -216,53 +214,53 @@ fun ParentScreen(
                     }
                 }
             }
-            Section("Grenzen") {
-                SwitchRow("Pause zwischen Aufnahmen", "Verhindert viele Bilder durch wiederholtes Drücken.", settings.cooldownOn, touches) {
+            Section(stringResource(R.string.section_limits)) {
+                SwitchRow(stringResource(R.string.cooldown), stringResource(R.string.cooldown_info), settings.cooldownOn, touches) {
                     onChange(settings.copy(cooldownOn = it))
                 }
                 if (settings.cooldownOn) {
-                    ValueSlider(settings.cooldownSec, 1..10, 1, { "$it s" }) { onChange(settings.copy(cooldownSec = it)) }
+                    ValueSlider(settings.cooldownSec, 1..10, 1, { stringResource(R.string.unit_seconds, it) }) { onChange(settings.copy(cooldownSec = it)) }
                 }
                 SwitchRow(
-                    "Aufnahmen pro Tag",
-                    "Fotos und Videos zusammen. Der Auslöser zeigt die restlichen als Symbole. Heute: ${usage.captures}",
+                    stringResource(R.string.daily_captures),
+                    stringResource(R.string.daily_captures_info, usage.captures),
                     settings.captureLimitOn, touches,
                 ) { onChange(settings.copy(captureLimitOn = it)) }
                 if (settings.captureLimitOn) {
                     ValueSlider(settings.dailyCaptures, 1..100, 1, { "$it" }) { onChange(settings.copy(dailyCaptures = it)) }
                 }
                 SwitchRow(
-                    "Nutzungszeit pro Tag",
-                    "Danach schläft die Kamera bis morgen. Heute genutzt: ${usage.usageMs / 60_000} min",
+                    stringResource(R.string.daily_time),
+                    stringResource(R.string.daily_time_info, (usage.usageMs / 60_000).toInt()),
                     settings.timeLimitOn, touches,
                 ) { onChange(settings.copy(timeLimitOn = it)) }
                 if (settings.timeLimitOn) {
-                    ValueSlider(settings.dailyMinutes, 5..180, 5, { "$it min" }) { onChange(settings.copy(dailyMinutes = it)) }
+                    ValueSlider(settings.dailyMinutes, 5..180, 5, { stringResource(R.string.unit_minutes, it) }) { onChange(settings.copy(dailyMinutes = it)) }
                 }
-                Button("Heutige Aufnahmen und Zeit zurücksetzen", touches = touches, onClick = onResetToday)
+                Button(stringResource(R.string.reset_today), touches = touches, onClick = onResetToday)
             }
-            Section("Vorschau-Leiste", "Wie viele der letzten Bilder über dem Kamerabild zu sehen sind.") {
-                ValueSlider(settings.stripCount, 1..8, 1, { "$it Bilder" }) { onChange(settings.copy(stripCount = it)) }
+            Section(stringResource(R.string.section_strip), stringResource(R.string.section_strip_info)) {
+                ValueSlider(settings.stripCount, 1..8, 1, { pluralStringResource(R.plurals.strip_count, it, it) }) { onChange(settings.copy(stripCount = it)) }
             }
-            Section("Foto & Video", "Kleinere Formate sparen Speicher. 1:1 wird nach der Aufnahme quadratisch zugeschnitten.") {
-                BasicText("Foto-Format", style = Chip.copy(color = Text))
+            Section(stringResource(R.string.section_photo_video), stringResource(R.string.section_photo_video_info)) {
+                BasicText(stringResource(R.string.photo_aspect), style = Chip.copy(color = Text))
                 Options(PhotoAspect.entries, settings.photoAspect, { it.label }, touches) { onChange(settings.copy(photoAspect = it)) }
-                BasicText("Foto-Größe", style = Chip.copy(color = Text))
+                BasicText(stringResource(R.string.photo_size), style = Chip.copy(color = Text))
                 Options(PhotoSize.entries, settings.photoSize, { it.label }, touches) { onChange(settings.copy(photoSize = it)) }
-                BasicText("Video-Qualität", style = Chip.copy(color = Text))
+                BasicText(stringResource(R.string.video_quality), style = Chip.copy(color = Text))
                 Options(VideoQuality.entries, settings.videoQuality, { it.label }, touches) { onChange(settings.copy(videoQuality = it)) }
             }
             Section(
-                "Fotos & Videos",
-                "${items.size} gespeichert. Die Aufnahmen liegen nur in der App. Zum Sichern auswählen und teilen, z. B. an Google Fotos, Drive oder per Nachricht.",
+                stringResource(R.string.section_media),
+                stringResource(R.string.section_media_info, items.size),
             ) {
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(10.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Button("Ansehen & auswählen …", primary = true, touches = touches) { galleryOpen = true }
-                    Button("Alle teilen …", touches = touches) { onShare(items.toList()) }
-                    HoldButton("Alle löschen (3 s halten)", touches) { onDelete(items.toList()) }
+                    Button(stringResource(R.string.media_view), primary = true, touches = touches) { galleryOpen = true }
+                    Button(stringResource(R.string.media_share_all), touches = touches) { onShare(items.toList()) }
+                    HoldButton(stringResource(R.string.media_delete_all), touches) { onDelete(items.toList()) }
                 }
             }
-            Section("Zugang zum Eltern-Bereich", LockInfo[settings.parentLock]) {
+            Section(stringResource(R.string.section_access), stringResource(settings.parentLock.info)) {
                 Options(ParentLock.entries, settings.parentLock, { it.label }, touches) { lock ->
                     when {
                         lock == ParentLock.PIN && !hasPin -> pinSetup = true
@@ -272,27 +270,22 @@ fun ParentScreen(
                 }
                 if (!deviceSecure) {
                     BasicText(
-                        "Auf diesem Handy ist keine Bildschirmsperre eingerichtet. „Geräte-Sperre“ geht erst, wenn eine eingerichtet ist.",
+                        stringResource(R.string.no_screen_lock),
                         style = Body.copy(color = Accent),
                     )
                 }
                 if (settings.parentLock == ParentLock.PIN) {
-                    Button("PIN ändern", touches = touches) { pinSetup = true }
+                    Button(stringResource(R.string.pin_change), touches = touches) { pinSetup = true }
                 }
             }
             Section(
-                "App fixieren",
-                if (pinned) {
-                    "TinyCam ist fixiert. Kinder können die App nicht verlassen."
-                } else {
-                    "Fixiert TinyCam auf dem Bildschirm (Android-Bildschirmfixierung). Lösen geht hier oder mit Zurück + Übersicht gleichzeitig halten."
-                },
+                stringResource(R.string.section_pinning),
+                stringResource(if (pinned) R.string.pinning_on_info else R.string.pinning_off_info, stringResource(R.string.app_name)),
             ) {
-                Button(if (pinned) "Fixierung lösen" else "App fixieren", primary = !pinned, touches = touches, onClick = onTogglePin)
+                Button(stringResource(if (pinned) R.string.pinning_unpin else R.string.pinning_pin), primary = !pinned, touches = touches, onClick = onTogglePin)
                 SwitchRow(
-                    "Automatisch fixieren",
-                    "Beim Start und beim Verlassen des Eltern-Bereichs. Android fragt jedes Mal kurz nach einer Bestätigung. " +
-                        "Tipp: In den Android-Einstellungen unter Sicherheit → App fixieren „Vor dem Lösen nach PIN fragen“ einschalten.",
+                    stringResource(R.string.auto_pin),
+                    stringResource(R.string.auto_pin_info),
                     settings.autoPin, touches,
                 ) { onChange(settings.copy(autoPin = it)) }
             }
@@ -314,7 +307,7 @@ private fun Indented(content: @Composable () -> Unit) {
 
 /** Parent-area slider: tap or drag anywhere on the track; vertical scrolling still works. */
 @Composable
-private fun ValueSlider(value: Int, range: IntRange, step: Int, label: (Int) -> String, onChange: (Int) -> Unit) {
+private fun ValueSlider(value: Int, range: IntRange, step: Int, label: @Composable (Int) -> String, onChange: (Int) -> Unit) {
     val change by rememberUpdatedState(onChange)
     val current by rememberUpdatedState(value)
     fun valueAt(x: Float, width: Int): Int {
@@ -369,17 +362,17 @@ private fun Section(title: String, info: String? = null, content: @Composable ()
 }
 
 @Composable
-private fun <T> Options(values: List<T>, selected: T, label: (T) -> String, touches: TouchCounter, onSelect: (T) -> Unit) =
+private fun <T> Options(values: List<T>, selected: T, label: (T) -> Int, touches: TouchCounter, onSelect: (T) -> Unit) =
     MultiOptions(values, setOf(selected), label, touches, onSelect)
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun <T> MultiOptions(values: List<T>, selected: Set<T>, label: (T) -> String, touches: TouchCounter, onToggle: (T) -> Unit) {
+private fun <T> MultiOptions(values: List<T>, selected: Set<T>, label: (T) -> Int, touches: TouchCounter, onToggle: (T) -> Unit) {
     FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         values.forEach { v ->
             val on = v in selected
             BasicText(
-                label(v),
+                stringResource(label(v)),
                 Modifier
                     .clip(RoundedCornerShape(50))
                     .background(if (on) Accent else Bg)
@@ -498,7 +491,7 @@ private fun SkinPicker(selected: Skin, round: Boolean, touches: TouchCounter, on
                         }
                     }
                 }
-                BasicText(skin.label, style = Chip.copy(color = if (on) Accent else Text))
+                BasicText(stringResource(skin.label), style = Chip.copy(color = if (on) Accent else Text))
             }
         }
     }
@@ -539,18 +532,18 @@ private fun ParentGallery(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            Button("Zurück", touches = touches, onClick = onClose)
+            Button(stringResource(R.string.back), touches = touches, onClick = onClose)
             BasicText(
-                if (chosen.isEmpty()) "Fotos & Videos" else "${chosen.size} ausgewählt",
+                if (chosen.isEmpty()) stringResource(R.string.section_media) else stringResource(R.string.selected_count, chosen.size),
                 Modifier.weight(1f), style = Heading,
             )
-            Button(if (allSelected) "Keine" else "Alle", touches = touches) {
+            Button(stringResource(if (allSelected) R.string.select_none else R.string.select_all), touches = touches) {
                 if (allSelected) selected.clear() else selected.addAll(items.map { it.id }.filterNot { it in selected })
             }
         }
         Box(Modifier.weight(1f).fillMaxWidth()) {
             if (items.isEmpty()) {
-                BasicText("Noch keine Aufnahmen.", Modifier.align(Alignment.Center), style = Body)
+                BasicText(stringResource(R.string.no_media), Modifier.align(Alignment.Center), style = Body)
             }
             LazyVerticalGrid(
                 columns = GridCells.Adaptive(104.dp),
@@ -601,10 +594,10 @@ private fun SelectionBar(chosen: List<MediaItem>, touches: TouchCounter, onShare
         horizontalArrangement = Arrangement.spacedBy(10.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Button("Teilen (${chosen.size}) …", primary = chosen.isNotEmpty(), touches = touches) {
+        Button(stringResource(R.string.share_count, chosen.size), primary = chosen.isNotEmpty(), touches = touches) {
             if (chosen.isNotEmpty()) onShare(chosen)
         }
-        HoldButton("Löschen (${chosen.size}) – 3 s halten", touches) {
+        HoldButton(stringResource(R.string.delete_count, chosen.size), touches) {
             if (chosen.isNotEmpty()) onDelete()
         }
     }
@@ -662,15 +655,15 @@ private fun ParentViewer(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            Button("Zurück", touches = touches, onClick = onClose)
-            BasicText("${pager.currentPage + 1} / ${items.size}", Modifier.weight(1f), style = Heading)
+            Button(stringResource(R.string.back), touches = touches, onClick = onClose)
+            BasicText(stringResource(R.string.page_position, pager.currentPage + 1, items.size), Modifier.weight(1f), style = Heading)
             val hasOriginal = remember(current?.id, revision) { current != null && !current.isVideo && current.original.exists() }
             if (hasOriginal) {
-                Button(if (showOriginal) "Mit Filter" else "Original", touches = touches) { showOriginal = !showOriginal }
+                Button(stringResource(if (showOriginal) R.string.with_filter else R.string.original), touches = touches) { showOriginal = !showOriginal }
             }
             if (current != null) {
                 val on = current.id in selected
-                Button(if (on) "✓ Ausgewählt" else "Auswählen", primary = on, touches = touches) { onToggle(current) }
+                Button(stringResource(if (on) R.string.selected else R.string.select), primary = on, touches = touches) { onToggle(current) }
             }
         }
     }
@@ -737,8 +730,8 @@ private fun PinSetup(onDone: (String) -> Unit, onCancel: () -> Unit) {
     val touches = remember { TouchCounter() }
     BackHandler(onBack = onCancel)
     PinPad(
-        title = if (first == null) "Neue PIN" else "PIN wiederholen",
-        message = if (mismatch) "Die PINs waren verschieden. Bitte neu eingeben." else "4 Ziffern, nur für den Eltern-Bereich.",
+        title = stringResource(if (first == null) R.string.pin_new else R.string.pin_repeat),
+        message = stringResource(if (mismatch) R.string.pin_mismatch else R.string.pin_setup_info),
         onComplete = { pin ->
             val f = first
             when {
@@ -754,7 +747,7 @@ private fun PinSetup(onDone: (String) -> Unit, onCancel: () -> Unit) {
             }
         },
     ) {
-        Button("Abbrechen", touches = touches, onClick = onCancel)
+        Button(stringResource(R.string.cancel), touches = touches, onClick = onCancel)
     }
 }
 
@@ -784,11 +777,11 @@ fun ParentPinGate(
     val waitSec = ((lockedUntil - now + 999) / 1000).coerceAtLeast(0)
     BackHandler(onBack = onCancel)
     PinPad(
-        title = "Eltern-PIN",
+        title = stringResource(R.string.pin_gate_title),
         message = when {
-            waitSec > 0 -> "Zu viele Versuche. Bitte $waitSec s warten."
-            failures > 0 -> "Falsche PIN."
-            else -> "Bitte PIN eingeben."
+            waitSec > 0 -> stringResource(R.string.pin_wait, waitSec.toInt())
+            failures > 0 -> stringResource(R.string.pin_wrong)
+            else -> stringResource(R.string.pin_enter)
         },
         enabled = waitSec == 0L,
         onComplete = { pin ->
@@ -801,8 +794,8 @@ fun ParentPinGate(
         },
     ) {
         FlowRow(horizontalArrangement = Arrangement.spacedBy(10.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            if (deviceSecure) Button("PIN vergessen? Mit Geräte-Sperre", touches = touches, onClick = onDeviceUnlock)
-            Button("Abbrechen", touches = touches, onClick = onCancel)
+            if (deviceSecure) Button(stringResource(R.string.pin_forgot), touches = touches, onClick = onDeviceUnlock)
+            Button(stringResource(R.string.cancel), touches = touches, onClick = onCancel)
         }
     }
 }

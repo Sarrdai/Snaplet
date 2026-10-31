@@ -1,5 +1,8 @@
 package app.tinycam.ui
 
+import androidx.annotation.StringRes
+import androidx.compose.ui.res.stringResource
+import app.tinycam.R
 import android.os.SystemClock
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.Animatable
@@ -92,7 +95,7 @@ interface CameraActions {
 
 private enum class HintTarget { SHUTTER, MODE, GALLERY, SELFIE, EFFECTS, TIMER, SKINS }
 
-private class Hint(val target: HintTarget, val kind: HintKind, val text: String)
+private class Hint(val target: HintTarget, val kind: HintKind, @StringRes val text: Int)
 
 private class Fly(val bitmap: ImageBitmap, val itemId: String) {
     val anim = Animatable(0f)
@@ -105,9 +108,6 @@ private sealed interface Overlay {
     data object Skins : Overlay
     data class Preview(val item: MediaItem, val fromGallery: Boolean) : Overlay
 }
-
-private const val HOLD_HINT = "Gedrückt halten"
-private const val EMPTY_HINT = "Morgen geht's weiter!"
 
 /**
  * The kid-facing camera screen. Only the shutter, the thumbnail strip, the zoom knob and
@@ -182,7 +182,7 @@ fun KidCameraUi(
     }
 
     fun holdHint(target: HintTarget) {
-        hint = Hint(target, HintKind.HOLD, HOLD_HINT)
+        hint = Hint(target, HintKind.HOLD, R.string.hint_hold)
     }
 
     fun capture() {
@@ -212,7 +212,7 @@ fun KidCameraUi(
             countdownEnd != null -> countdownEnd = null // tapping again cancels the self-timer
             !ready -> Unit
             tokens?.filled == 0 -> {
-                hint = Hint(HintTarget.SHUTTER, HintKind.EMPTY, EMPTY_HINT)
+                hint = Hint(HintTarget.SHUTTER, HintKind.EMPTY, R.string.see_you_tomorrow)
                 scope.launch { for (x in listOf(-2.5f, 2.5f, -2f, 2f, -1f, 0f)) shake.animateTo(x, tween(45)) }
             }
             timerActive -> {
@@ -493,7 +493,7 @@ private fun HintAnchor(hint: Hint?, target: HintTarget, right: Boolean, unit: Dp
         content()
         if (hint?.target == target) {
             HintBubble(
-                hint.kind, hint.text, unit,
+                hint.kind, stringResource(hint.text), unit,
                 Modifier
                     .align(if (right) Alignment.CenterStart else Alignment.CenterEnd)
                     .beside(onLeft = right, gap = unit * 3f),

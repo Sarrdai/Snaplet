@@ -1,31 +1,38 @@
 package app.tinycam.data
 
 import android.content.Context
+import androidx.annotation.StringRes
 import androidx.core.content.edit
+import app.tinycam.R
 import java.security.MessageDigest
 import java.security.SecureRandom
 
-enum class Skin(val label: String) {
-    CLASSIC("Klassisch"), RAINBOW("Regenbogen"), SPACE("Raumschiff"), DINO("Dino"), LEOPARD("Leopard"),
-    UNICORN("Einhorn"), SHARK("Hai"), ROBOT("Roboter"), FIRE_TRUCK("Feuerwehr"), MONSTER("Monster"), ICE_CREAM("Eiscreme"),
+enum class Skin(@StringRes val label: Int) {
+    CLASSIC(R.string.skin_classic), RAINBOW(R.string.skin_rainbow), SPACE(R.string.skin_space), DINO(R.string.skin_dino),
+    LEOPARD(R.string.skin_leopard), UNICORN(R.string.skin_unicorn), SHARK(R.string.skin_shark), ROBOT(R.string.skin_robot),
+    FIRE_TRUCK(R.string.skin_fire_truck), MONSTER(R.string.skin_monster), ICE_CREAM(R.string.skin_ice_cream),
 }
 
 /** Where the shutter sits. CENTER uses the round shutter at the bottom. */
-enum class Side(val label: String) { LEFT("Links"), CENTER("Mitte"), RIGHT("Rechts") }
+enum class Side(@StringRes val label: Int) { LEFT(R.string.side_left), CENTER(R.string.side_center), RIGHT(R.string.side_right) }
 
 enum class CaptureMode { PHOTO, VIDEO }
 
 /** How parents get into the parent area after holding the lock. */
-enum class ParentLock(val label: String) { HOLD("Nur halten"), DEVICE("Geräte-Sperre"), PIN("Eigene PIN") }
-
-enum class PhotoAspect(val label: String) { STANDARD("4:3"), WIDE("16:9"), SQUARE("1:1") }
-
-/** [longEdge] caps the photo size in pixels; null means the camera's full resolution. */
-enum class PhotoSize(val label: String, val longEdge: Int?) {
-    SMALL("Klein (≈ 2 MP)", 1600), MEDIUM("Mittel (≈ 5 MP)", 2560), FULL("Voll", null)
+enum class ParentLock(@StringRes val label: Int, @StringRes val info: Int) {
+    HOLD(R.string.lock_hold, R.string.lock_info_hold),
+    DEVICE(R.string.lock_device, R.string.lock_info_device),
+    PIN(R.string.lock_pin, R.string.lock_info_pin),
 }
 
-enum class VideoQuality(val label: String) { SD("480p"), HD("720p"), FHD("1080p") }
+enum class PhotoAspect(@StringRes val label: Int) { STANDARD(R.string.aspect_standard), WIDE(R.string.aspect_wide), SQUARE(R.string.aspect_square) }
+
+/** [longEdge] caps the photo size in pixels; null means the camera's full resolution. */
+enum class PhotoSize(@StringRes val label: Int, val longEdge: Int?) {
+    SMALL(R.string.size_small, 1600), MEDIUM(R.string.size_medium, 2560), FULL(R.string.size_full, null)
+}
+
+enum class VideoQuality(@StringRes val label: Int) { SD(R.string.quality_sd), HD(R.string.quality_hd), FHD(R.string.quality_fhd) }
 
 /**
  * Everything parents can configure. Optional limits have an on/off flag next to their value,

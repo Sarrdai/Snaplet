@@ -1,0 +1,50 @@
+name: Store assets
+
+# Renders the Google Play images (phone screenshots per language, feature graphic, 512 px icon) without a device.
+# Optional: a photo that replaces the drawn camera scene, as an https URL or a path inside the repository.
+on:
+  workflow_dispatch:
+    inputs:
+      camera_image:
+        description: 'Camera image: https URL or repo path (e.g. store/camera.jpg); JPEG/PNG/WebP. Empty = drawn scene'
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Get camera image
+        env:
+          IMAGE: ${{ inputs.camera_image }}
+        run: |
+          [ -z "$IMAGE" ] && exit 0
+          if [[ "$IMAGE" == https://* ]]; then
+            path="$RUNNER_TEMP/camera-image"
+            curl -fsSL --max-filesize 30000000 "$IMAGE" -o "$path"
+          else
+            path="$GITHUB_WORKSPACE/$IMAGE"
+          fi
+          if [ ! -s "$path" ]; then echo "::error::Camera image not found: $IMAGE"; exit 1; fi
+          echo "STORE_CAMERA=$path" >> "$GITHUB_ENV"
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Render store images
+        run: ./gradlew --no-daemon recordRoborazziDebug --tests '*StoreScreenshot*' ${STORE_CAMERA:+"-PstoreCamera=$STORE_CAMERA"}
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: store-assets-${{ github.run_number }}
+          path: app/build/store

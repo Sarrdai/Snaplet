@@ -56,8 +56,12 @@ class MainActivity : ComponentActivity() {
     private var hasAudio by mutableStateOf(false)
     private var pinned by mutableStateOf(false)
     private var parentOpen by mutableStateOf(false)
-    private var pinGate by mutableStateOf(false)
+    private var hasCameraBlocked by mutableStateOf(false)
+    // Runs after the parent PIN was entered; null while the PIN gate is closed
+    private var pinGateAction by mutableStateOf<(() -> Unit)?>(null)
     private var askedOnce = false
+    // The system dialog is showing; the activity resumes underneath it before the answer arrives
+    private var permissionPending = false
     private var onDeviceUnlocked: (() -> Unit)? = null
     // While the device unlock is showing, our activity pauses and resumes; re-pinning then would kill the prompt.
     // Expires on its own in case the system never reports back.
@@ -72,7 +76,10 @@ class MainActivity : ComponentActivity() {
     private var pinOnResume = true
 
     private val permissionRequest =
-        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { refreshPermissions() }
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+            permissionPending = false
+            refreshPermissions()
+        }
 
     // Android 8 and 9: the system's "confirm device credential" screen
     private val keyguardRequest =
@@ -101,6 +108,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
+        refreshPermissions() // parents may have granted the camera in the system settings
         if (pinOnResume) {
             pinOnResume = false
             pinIfWanted()
@@ -136,17 +144,26 @@ class MainActivity : ComponentActivity() {
         val usage = app.usage
         Box(Modifier.fillMaxSize()) {
             when {
-                !hasCamera -> PermissionScreen(::requestPermissions)
+                !hasCamera -> PermissionScreen(hasCameraBlocked, ::requestPermissions, ::openAppSettings)
                 settings.isTimeUp(usage) -> SleepScreen(settings.skin, ::requestParentArea)
                 else -> CameraScreen(app, hasAudio, ::requestParentArea)
             }
-            if (pinGate) {
+            pinGateAction?.let { action ->
                 ParentPinGate(
                     checkPin = app::checkPin,
                     deviceSecure = deviceSecure(),
-                    onDeviceUnlock = { authenticateDevice { openParentArea() } },
-                    onSuccess = ::openParentArea,
-                    onCancel = { pinGate = false },
+                    // The PIN gate stays open behind the device prompt in case that is cancelled
+                    onDeviceUnlock = {
+                        authenticateDevice {
+                            pinGateAction = null
+                            action()
+                        }
+                    },
+                    onSuccess = {
+                        pinGateAction = null
+                        action()
+                    },
+                    onCancel = { pinGateAction = null },
                 )
             }
             if (parentOpen) {
@@ -174,17 +191,15 @@ class MainActivity : ComponentActivity() {
     }
 
     /** Called after the lock was held for 3 seconds. */
-    private fun requestParentArea() {
-        when (app.settings.parentLock) {
-            ParentLock.HOLD -> openParentArea()
-            ParentLock.DEVICE -> authenticateDevice(::openParentArea)
-            ParentLock.PIN -> if (app.hasPin()) pinGate = true else openParentArea()
-        }
-    }
+    private fun requestParentArea() = withParentCheck { parentOpen = true }
 
-    private fun openParentArea() {
-        pinGate = false
-        parentOpen = true
+    /** Runs [action] once the parent check chosen in the parent area passed (the 3 s hold before counts for HOLD). */
+    private fun withParentCheck(action: () -> Unit) {
+        when (app.settings.parentLock) {
+            ParentLock.HOLD -> action()
+            ParentLock.DEVICE -> authenticateDevice(action)
+            ParentLock.PIN -> if (app.hasPin()) pinGateAction = action else action()
+        }
     }
 
     private fun keyguard() = getSystemService(KeyguardManager::class.java)
@@ -226,8 +241,8 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun showDevicePrompt(id: Int, onSuccess: () -> Unit) {
-        val title = "Eltern-Bereich"
-        val subtitle = "Mit der Bildschirmsperre des Handys entsperren"
+        val title = getString(R.string.parent_title)
+        val subtitle = getString(R.string.device_prompt_subtitle)
         runCatching {
             when {
                 Build.VERSION.SDK_INT >= 30 -> BiometricPrompt.Builder(this)
@@ -274,25 +289,31 @@ class MainActivity : ComponentActivity() {
 
     /** Re-pins the app when parents enabled automatic pinning and are not in the parent area. */
     private fun pinIfWanted() {
-        if (!app.settings.autoPin || parentOpen || pinGate || authRunning() || isPinned()) return
+        if (!app.settings.autoPin || parentOpen || pinGateAction != null || authRunning() || isPinned()) return
         runCatching { startLockTask() }
     }
 
     private fun refreshPermissions() {
         hasCamera = granted(Manifest.permission.CAMERA)
         hasAudio = granted(Manifest.permission.RECORD_AUDIO)
+        // Android no longer shows its dialog: only the system settings can grant the camera now
+        hasCameraBlocked = askedOnce && !permissionPending && !hasCamera && !shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)
     }
 
     private fun granted(p: String) = ContextCompat.checkSelfPermission(this, p) == PackageManager.PERMISSION_GRANTED
 
     private fun requestPermissions() {
-        if (askedOnce && !shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
-            // Permanently denied: only the system settings can grant it now
-            startActivity(Intent(AndroidSettings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", packageName, null)))
-            return
-        }
+        if (hasCameraBlocked || permissionPending) return
         askedOnce = true
+        permissionPending = true
         permissionRequest.launch(arrayOf(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO))
+    }
+
+    /** Leaves the app for the system settings, so it sits behind the parent check (Families policy). */
+    private fun openAppSettings() = withParentCheck {
+        // Other apps cannot open while the screen is pinned
+        if (isPinned()) stopLockTask()
+        startActivity(Intent(AndroidSettings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", packageName, null)))
     }
 
     private fun hideSystemBars() {

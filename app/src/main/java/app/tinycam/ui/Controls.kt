@@ -1,5 +1,6 @@
 package app.tinycam.ui
 
+import androidx.compose.ui.res.stringResource
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloat
@@ -445,7 +446,7 @@ fun ZoomSlider(
                 .border(unit * 0.8f, style.buttonOn, CircleShape),
             contentAlignment = Alignment.Center,
         ) {
-            Image(Icons.Search, "Zoom", Modifier.size(unit * 7.5f), colorFilter = ColorFilter.tint(Ink))
+            Image(Icons.Search, stringResource(R.string.cd_zoom), Modifier.size(unit * 7.5f), colorFilter = ColorFilter.tint(Ink))
         }
     }
 }
@@ -481,7 +482,7 @@ fun LockButton(style: SkinStyle, unit: Dp, touches: TouchCounter, onOpen: () -> 
             .holdToActivate(hold, 3000, touches, onComplete = onOpen),
         contentAlignment = Alignment.Center,
     ) {
-        Image(Icons.Lock, "Eltern-Bereich", Modifier.size(unit * 5f), colorFilter = ColorFilter.tint(Color.White))
+        Image(Icons.Lock, stringResource(R.string.cd_parent_area), Modifier.size(unit * 5f), colorFilter = ColorFilter.tint(Color.White))
     }
 }
 
@@ -495,7 +496,7 @@ fun CloseButton(unit: Dp, touches: TouchCounter, onClose: () -> Unit, modifier: 
             .singleTap(touches, onClose),
         contentAlignment = Alignment.Center,
     ) {
-        Image(Icons.Close, "Zurück", Modifier.size(unit * 7f), colorFilter = ColorFilter.tint(Ink))
+        Image(Icons.Close, stringResource(R.string.cd_back), Modifier.size(unit * 7f), colorFilter = ColorFilter.tint(Ink))
     }
 }
 
