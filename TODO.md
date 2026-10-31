@@ -59,8 +59,8 @@ Play-Support ihn zurücksetzen – trotzdem sicher aufbewahren.
 - [ ] Repository → **Settings → Pages → Build and deployment**: Source „Deploy from a branch“, Branch `main`,
       Ordner `/docs`. Pages braucht ein öffentliches Repository (oder einen kostenpflichtigen GitHub-Plan).
 - [ ] Prüfen: `https://sarrdai.github.io/TinyCam/privacy.html` (Pfad = Repository-Name).
-- [ ] Impressum in `docs/privacy.html` prüfen: Der **Ort fehlt** hinter der PLZ 55758 (fehlt auch auf
-      rainbow.kleinphilipp.de). Kontakt-Adresse `mail+snaplet@…` muss zustellbar sein. Verweis jetzt auf
+- [ ] Impressum in `docs/privacy.html` prüfen: Anschrift ist jetzt 20359 Hamburg (auf
+      rainbow.kleinphilipp.de steht noch die falsche PLZ 55758 ohne Ort). Kontakt-Adresse `mail+snaplet@…` muss zustellbar sein. Verweis jetzt auf
       § 5 DDG (ersetzt seit Mai 2024 § 5 TMG).
 
 ## 4. Play Console
