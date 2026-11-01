@@ -74,6 +74,56 @@ abstract class StoreScreenshotTest(private val locale: String) {
         private val Tagline = mapOf(
             "en" to "The first camera for little photographers",
             "de" to "Die erste Kamera für kleine Fotografen",
+            "ar" to "أول كاميرا للمصورين الصغار",
+            "az" to "Balaca fotoqraflar üçün ilk kamera",
+            "bg" to "Първата камера за малки фотографи",
+            "bn" to "ছোট্ট ফটোগ্রাফারদের প্রথম ক্যামেরা",
+            "ca" to "La primera càmera per a petits fotògrafs",
+            "cs" to "První fotoaparát pro malé fotografy",
+            "da" to "Det første kamera til små fotografer",
+            "el" to "Η πρώτη κάμερα για μικρούς φωτογράφους",
+            "es" to "La primera cámara para pequeños fotógrafos",
+            "et" to "Esimene kaamera väikestele fotograafidele",
+            "fa" to "اولین دوربین عکاس‌های کوچک",
+            "fi" to "Ensimmäinen kamera pienille kuvaajille",
+            "fil" to "Ang unang camera ng maliliit na photographer",
+            "fr" to "Le premier appareil photo des petits photographes",
+            "gu" to "નાના ફોટોગ્રાફર્સનો પહેલો કૅમેરા",
+            "he" to "המצלמה הראשונה לצלמים קטנים",
+            "hi" to "नन्हे फ़ोटोग्राफ़रों का पहला कैमरा",
+            "hr" to "Prva kamera za male fotografe",
+            "hu" to "Az első kamera kis fotósoknak",
+            "id" to "Kamera pertama untuk fotografer cilik",
+            "it" to "La prima fotocamera per piccoli fotografi",
+            "ja" to "小さな写真家のための、はじめてのカメラ",
+            "kn" to "ಪುಟಾಣಿ ಫೋಟೋಗ್ರಾಫರ್‌ಗಳ ಮೊದಲ ಕ್ಯಾಮರಾ",
+            "ko" to "꼬마 사진가를 위한 첫 카메라",
+            "lt" to "Pirmasis fotoaparatas mažiesiems fotografams",
+            "lv" to "Pirmā kamera mazajiem fotogrāfiem",
+            "ml" to "കുഞ്ഞു ഫോട്ടോഗ്രാഫർമാരുടെ ആദ്യ ക്യാമറ",
+            "mr" to "छोट्या फोटोग्राफर्सचा पहिला कॅमेरा",
+            "ms" to "Kamera pertama untuk jurugambar cilik",
+            "my" to "ဓာတ်ပုံဆရာ ကလေးငယ်များ၏ ပထမဆုံး ကင်မရာ",
+            "nb" to "Det første kameraet for små fotografer",
+            "nl" to "De eerste camera voor kleine fotografen",
+            "pl" to "Pierwszy aparat dla małych fotografów",
+            "pt" to "A primeira câmera para pequenos fotógrafos",
+            "ro" to "Prima cameră pentru micii fotografi",
+            "ru" to "Первая камера для маленьких фотографов",
+            "sk" to "Prvý fotoaparát pre malých fotografov",
+            "sl" to "Prvi fotoaparat za male fotografe",
+            "sr" to "Прва камера за мале фотографе",
+            "sv" to "Den första kameran för små fotografer",
+            "sw" to "Kamera ya kwanza kwa wapiga picha wadogo",
+            "ta" to "குட்டி புகைப்படக்காரர்களின் முதல் கேமரா",
+            "te" to "చిన్నారి ఫోటోగ్రాఫర్‌ల మొదటి కెమెరా",
+            "th" to "กล้องตัวแรกสำหรับช่างภาพตัวน้อย",
+            "tr" to "Küçük fotoğrafçılar için ilk kamera",
+            "uk" to "Перша камера для маленьких фотографів",
+            "ur" to "ننھے فوٹوگرافرز کا پہلا کیمرا",
+            "vi" to "Máy ảnh đầu tiên cho nhiếp ảnh gia nhí",
+            "zh-CN" to "小小摄影师的第一台相机",
+            "zh-TW" to "小小攝影師的第一台相機",
         )
     }
 
@@ -220,6 +270,156 @@ class StoreScreenshotEn : StoreScreenshotTest("en")
 
 @Config(sdk = [35], qualifiers = "de-w360dp-h640dp-xxhdpi")
 class StoreScreenshotDe : StoreScreenshotTest("de")
+
+@Config(sdk = [35], qualifiers = "ar-w360dp-h640dp-xxhdpi")
+class StoreScreenshotAr : StoreScreenshotTest("ar")
+
+@Config(sdk = [35], qualifiers = "az-w360dp-h640dp-xxhdpi")
+class StoreScreenshotAz : StoreScreenshotTest("az")
+
+@Config(sdk = [35], qualifiers = "bg-w360dp-h640dp-xxhdpi")
+class StoreScreenshotBg : StoreScreenshotTest("bg")
+
+@Config(sdk = [35], qualifiers = "bn-w360dp-h640dp-xxhdpi")
+class StoreScreenshotBn : StoreScreenshotTest("bn")
+
+@Config(sdk = [35], qualifiers = "ca-w360dp-h640dp-xxhdpi")
+class StoreScreenshotCa : StoreScreenshotTest("ca")
+
+@Config(sdk = [35], qualifiers = "cs-w360dp-h640dp-xxhdpi")
+class StoreScreenshotCs : StoreScreenshotTest("cs")
+
+@Config(sdk = [35], qualifiers = "da-w360dp-h640dp-xxhdpi")
+class StoreScreenshotDa : StoreScreenshotTest("da")
+
+@Config(sdk = [35], qualifiers = "el-w360dp-h640dp-xxhdpi")
+class StoreScreenshotEl : StoreScreenshotTest("el")
+
+@Config(sdk = [35], qualifiers = "es-w360dp-h640dp-xxhdpi")
+class StoreScreenshotEs : StoreScreenshotTest("es")
+
+@Config(sdk = [35], qualifiers = "et-w360dp-h640dp-xxhdpi")
+class StoreScreenshotEt : StoreScreenshotTest("et")
+
+@Config(sdk = [35], qualifiers = "fa-w360dp-h640dp-xxhdpi")
+class StoreScreenshotFa : StoreScreenshotTest("fa")
+
+@Config(sdk = [35], qualifiers = "fi-w360dp-h640dp-xxhdpi")
+class StoreScreenshotFi : StoreScreenshotTest("fi")
+
+@Config(sdk = [35], qualifiers = "tl-w360dp-h640dp-xxhdpi")
+class StoreScreenshotFil : StoreScreenshotTest("fil")
+
+@Config(sdk = [35], qualifiers = "fr-w360dp-h640dp-xxhdpi")
+class StoreScreenshotFr : StoreScreenshotTest("fr")
+
+@Config(sdk = [35], qualifiers = "gu-w360dp-h640dp-xxhdpi")
+class StoreScreenshotGu : StoreScreenshotTest("gu")
+
+@Config(sdk = [35], qualifiers = "iw-w360dp-h640dp-xxhdpi")
+class StoreScreenshotHe : StoreScreenshotTest("he")
+
+@Config(sdk = [35], qualifiers = "hi-w360dp-h640dp-xxhdpi")
+class StoreScreenshotHi : StoreScreenshotTest("hi")
+
+@Config(sdk = [35], qualifiers = "hr-w360dp-h640dp-xxhdpi")
+class StoreScreenshotHr : StoreScreenshotTest("hr")
+
+@Config(sdk = [35], qualifiers = "hu-w360dp-h640dp-xxhdpi")
+class StoreScreenshotHu : StoreScreenshotTest("hu")
+
+@Config(sdk = [35], qualifiers = "in-w360dp-h640dp-xxhdpi")
+class StoreScreenshotId : StoreScreenshotTest("id")
+
+@Config(sdk = [35], qualifiers = "it-w360dp-h640dp-xxhdpi")
+class StoreScreenshotIt : StoreScreenshotTest("it")
+
+@Config(sdk = [35], qualifiers = "ja-w360dp-h640dp-xxhdpi")
+class StoreScreenshotJa : StoreScreenshotTest("ja")
+
+@Config(sdk = [35], qualifiers = "kn-w360dp-h640dp-xxhdpi")
+class StoreScreenshotKn : StoreScreenshotTest("kn")
+
+@Config(sdk = [35], qualifiers = "ko-w360dp-h640dp-xxhdpi")
+class StoreScreenshotKo : StoreScreenshotTest("ko")
+
+@Config(sdk = [35], qualifiers = "lt-w360dp-h640dp-xxhdpi")
+class StoreScreenshotLt : StoreScreenshotTest("lt")
+
+@Config(sdk = [35], qualifiers = "lv-w360dp-h640dp-xxhdpi")
+class StoreScreenshotLv : StoreScreenshotTest("lv")
+
+@Config(sdk = [35], qualifiers = "ml-w360dp-h640dp-xxhdpi")
+class StoreScreenshotMl : StoreScreenshotTest("ml")
+
+@Config(sdk = [35], qualifiers = "mr-w360dp-h640dp-xxhdpi")
+class StoreScreenshotMr : StoreScreenshotTest("mr")
+
+@Config(sdk = [35], qualifiers = "ms-w360dp-h640dp-xxhdpi")
+class StoreScreenshotMs : StoreScreenshotTest("ms")
+
+@Config(sdk = [35], qualifiers = "my-w360dp-h640dp-xxhdpi")
+class StoreScreenshotMy : StoreScreenshotTest("my")
+
+@Config(sdk = [35], qualifiers = "nb-w360dp-h640dp-xxhdpi")
+class StoreScreenshotNb : StoreScreenshotTest("nb")
+
+@Config(sdk = [35], qualifiers = "nl-w360dp-h640dp-xxhdpi")
+class StoreScreenshotNl : StoreScreenshotTest("nl")
+
+@Config(sdk = [35], qualifiers = "pl-w360dp-h640dp-xxhdpi")
+class StoreScreenshotPl : StoreScreenshotTest("pl")
+
+@Config(sdk = [35], qualifiers = "pt-w360dp-h640dp-xxhdpi")
+class StoreScreenshotPt : StoreScreenshotTest("pt")
+
+@Config(sdk = [35], qualifiers = "ro-w360dp-h640dp-xxhdpi")
+class StoreScreenshotRo : StoreScreenshotTest("ro")
+
+@Config(sdk = [35], qualifiers = "ru-w360dp-h640dp-xxhdpi")
+class StoreScreenshotRu : StoreScreenshotTest("ru")
+
+@Config(sdk = [35], qualifiers = "sk-w360dp-h640dp-xxhdpi")
+class StoreScreenshotSk : StoreScreenshotTest("sk")
+
+@Config(sdk = [35], qualifiers = "sl-w360dp-h640dp-xxhdpi")
+class StoreScreenshotSl : StoreScreenshotTest("sl")
+
+@Config(sdk = [35], qualifiers = "sr-w360dp-h640dp-xxhdpi")
+class StoreScreenshotSr : StoreScreenshotTest("sr")
+
+@Config(sdk = [35], qualifiers = "sv-w360dp-h640dp-xxhdpi")
+class StoreScreenshotSv : StoreScreenshotTest("sv")
+
+@Config(sdk = [35], qualifiers = "sw-w360dp-h640dp-xxhdpi")
+class StoreScreenshotSw : StoreScreenshotTest("sw")
+
+@Config(sdk = [35], qualifiers = "ta-w360dp-h640dp-xxhdpi")
+class StoreScreenshotTa : StoreScreenshotTest("ta")
+
+@Config(sdk = [35], qualifiers = "te-w360dp-h640dp-xxhdpi")
+class StoreScreenshotTe : StoreScreenshotTest("te")
+
+@Config(sdk = [35], qualifiers = "th-w360dp-h640dp-xxhdpi")
+class StoreScreenshotTh : StoreScreenshotTest("th")
+
+@Config(sdk = [35], qualifiers = "tr-w360dp-h640dp-xxhdpi")
+class StoreScreenshotTr : StoreScreenshotTest("tr")
+
+@Config(sdk = [35], qualifiers = "uk-w360dp-h640dp-xxhdpi")
+class StoreScreenshotUk : StoreScreenshotTest("uk")
+
+@Config(sdk = [35], qualifiers = "ur-w360dp-h640dp-xxhdpi")
+class StoreScreenshotUr : StoreScreenshotTest("ur")
+
+@Config(sdk = [35], qualifiers = "vi-w360dp-h640dp-xxhdpi")
+class StoreScreenshotVi : StoreScreenshotTest("vi")
+
+@Config(sdk = [35], qualifiers = "zh-rCN-w360dp-h640dp-xxhdpi")
+class StoreScreenshotZhCn : StoreScreenshotTest("zh-CN")
+
+@Config(sdk = [35], qualifiers = "zh-rTW-w360dp-h640dp-xxhdpi")
+class StoreScreenshotZhTw : StoreScreenshotTest("zh-TW")
 
 /** Different square sections of the camera image, so the preview strip shows varied pictures. */
 private fun crop(source: ImageBitmap, seed: Int): ImageBitmap {

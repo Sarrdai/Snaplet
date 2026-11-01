@@ -1,0 +1,34 @@
+Snaplet là ứng dụng máy ảnh mà trẻ có thể tự dùng – và phụ huynh có thể yên tâm thiết lập.
+
+DỄ DÙNG CHO TRẺ
+• Một nút chụp lớn ở cạnh hoặc tròn ở giữa, bàn tay nhỏ dễ dàng chạm tới
+• Ảnh mới nhất nằm trong dải xem trước, chạm một lần để xem lớn
+• Gợi ý bằng hình thay vì chữ, để trẻ chưa biết đọc cũng hiểu
+• Hình ảnh trực tiếp bỏ qua thao tác chạm; nhiều ngón tay hay cả lòng bàn tay trên màn hình đều không kích hoạt gì
+• Mười một giao diện: Cổ điển, Cầu vồng, Tàu vũ trụ, Khủng long, Báo hoa, Kỳ lân, Cá mập, Rô-bốt, Xe cứu hỏa, Quái vật và Kem
+
+LỚN LÊN CÙNG CON
+Chụp ảnh luôn hoạt động. Phụ huynh mở dần từng tính năng khác khi con đã sẵn sàng:
+• Video (có thể giới hạn thời lượng)
+• Thư viện
+• Camera selfie
+• Thu phóng với thanh trượt lớn
+• Bộ lọc và khung ảnh vui nhộn
+• Hẹn giờ chụp với bộ đếm ngược lớn
+• Chọn giao diện (trong số các giao diện phụ huynh cho phép)
+
+GIỚI HẠN MÀ TRẺ HIỂU ĐƯỢC
+• Nghỉ giữa các lần chụp để không có hàng trăm tấm ảnh giống nhau
+• Số lần chụp mỗi ngày – nút chụp hiển thị số còn lại bằng ngôi sao, trứng khủng long hoặc dấu chân
+• Thời gian dùng mỗi ngày – sau đó máy ảnh ngủ đến ngày mai
+
+DÀNH CHO PHỤ HUYNH
+• Khu vực phụ huynh mở bằng cách giữ 3 giây, có thể bảo vệ thêm bằng khóa màn hình điện thoại hoặc mã PIN riêng
+• Ghim ứng dụng để trẻ không thể thoát ra
+• Chọn ảnh để chia sẻ (ví dụ lên Google Photos) hoặc xóa
+• Tùy chỉnh tỷ lệ ảnh, kích thước ảnh và chất lượng video
+
+QUYỀN RIÊNG TƯ
+Snaplet không truy cập Internet, không quảng cáo, không theo dõi và không cần tài khoản. Ảnh và video ở lại trên thiết bị cho đến khi phụ huynh chia sẻ.
+
+Lưu ý: bản ghi chỉ được lưu trong ứng dụng và sẽ bị xóa khi gỡ cài đặt – hãy sao lưu trước trong khu vực phụ huynh.

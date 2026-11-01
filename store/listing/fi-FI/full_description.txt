@@ -1,0 +1,34 @@
+Snaplet on kamerasovellus, jota lapset voivat käyttää täysin itse – ja jonka vanhemmat määrittävät rauhassa.
+
+HELPPO LAPSILLE
+• Yksi iso laukaisin sivussa tai pyöreä keskellä, pienten käsien helppo ylettää
+• Viimeisimmät kuvat esikatselunauhassa, yksi napautus näyttää ne isona
+• Vihjeet kuvina tekstin sijaan, jotta myös lukutaidottomat lapset ymmärtävät
+• Kamerakuva ei reagoi kosketukseen; useampi sormi tai kämmen näytöllä ei käynnistä mitään
+• Yksitoista ulkoasua: Klassinen, Sateenkaari, Avaruusalus, Dino, Leopardi, Yksisarvinen, Hai, Robotti, Paloauto, Hirviö ja Jäätelö
+
+KASVAA LAPSESI MUKANA
+Kuvaaminen toimii aina. Vanhemmat avaavat muut toiminnot yksi kerrallaan, kun lapsi on valmis:
+• Videot (valinnaisella pituusrajalla)
+• Galleria
+• Selfiekamera
+• Zoomaus isolla liukusäätimellä
+• Suodattimet ja hauskat kehykset
+• Itselaukaisin isolla lähtölaskennalla
+• Ulkoasun valinta (vanhempien sallimista)
+
+RAJOJA, JOTKA LAPSET YMMÄRTÄVÄT
+• Tauko kuvien välillä sataa samanlaista kuvaa vastaan
+• Kuvia päivässä – laukaisin näyttää jäljellä olevat tähtinä, dinon munina tai tassuina
+• Käyttöaika päivässä – sitten kamera nukkuu huomiseen
+
+VANHEMMILLE
+• Vanhempien alue 3 sekunnin painalluksen takana, halutessa suojattuna myös puhelimen näytön lukituksella tai omalla PIN-koodilla
+• Sovelluksen kiinnitys, jotta lapset eivät voi poistua siitä
+• Valitse kuvat jaettaviksi (esim. Google Kuviin) tai poistettaviksi
+• Säädettävä kuvasuhde, kuvakoko ja videon laatu
+
+YKSITYISYYS
+Snapletilla ei ole internetyhteyttä, mainoksia eikä seurantaa, eikä se vaadi tiliä. Kuvat ja videot pysyvät laitteella, kunnes vanhemmat jakavat ne.
+
+Huom: tallenteet säilytetään vain sovelluksessa ja ne poistuvat, kun sovellus poistetaan – varmuuskopioi ne ensin vanhempien alueelta.
