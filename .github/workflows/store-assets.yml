@@ -2,6 +2,7 @@ name: Store assets
 
 # Renders the Google Play images (phone screenshots per language, feature graphic, 512 px icon) without a device.
 # Optional: a photo that replaces the drawn camera scene, as an https URL or a path inside the repository.
+# Optional: upload texts (store/listing) and images to the Play store listing; needs PLAY_SERVICE_ACCOUNT_JSON (TODO.md).
 on:
   workflow_dispatch:
     inputs:
@@ -9,6 +10,11 @@ on:
         description: 'Camera image: https URL or repo path (e.g. store/camera.jpg); JPEG/PNG/WebP. Empty = drawn scene'
         required: false
         default: ''
+      play_upload:
+        description: 'Play store listing: "validate" checks the upload without saving, "upload" replaces texts and images'
+        type: choice
+        options: [none, validate, upload]
+        default: none
 
 permissions:
   contents: read
@@ -48,3 +54,39 @@ jobs:
         with:
           name: store-assets-${{ github.run_number }}
           path: app/build/store
+
+      - name: Prepare Play listing
+        if: inputs.play_upload != 'none'
+        run: |
+          # Play locale -> rendered app language; otherwise the part before "-" (de-DE -> de)
+          declare -A lang_of=([iw-IL]=he [no-NO]=nb [zh-HK]=zh-TW)
+          for dir in store/listing/*/; do
+            play=$(basename "$dir")
+            lang=${lang_of[$play]:-$play}
+            [ -d "app/build/store/$lang" ] || lang=${lang%%-*}
+            src=app/build/store/$lang
+            if [ ! -f "$src/feature_graphic.png" ]; then echo "::error::No store images for $play ($src)"; exit 1; fi
+            out=$RUNNER_TEMP/play/$play
+            mkdir -p "$out/images/phoneScreenshots"
+            cp "$dir"*.txt "$out/"
+            cp "$src"/phone_*.png "$out/images/phoneScreenshots/"
+            cp "$src/feature_graphic.png" "$out/images/featureGraphic.png"
+            cp app/build/store/icon_512.png "$out/images/icon.png"
+          done
+
+      - uses: ruby/setup-ruby@v1
+        if: inputs.play_upload != 'none'
+        with:
+          ruby-version: '3.3'
+
+      - name: Upload to Google Play
+        if: inputs.play_upload != 'none'
+        env:
+          SUPPLY_JSON_KEY_DATA: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+        run: |
+          if [ -z "$SUPPLY_JSON_KEY_DATA" ]; then echo "::error::Secret PLAY_SERVICE_ACCOUNT_JSON is missing (see TODO.md)"; exit 1; fi
+          gem install fastlane -v '~> 2.220' --no-document
+          # Adds missing languages to the listing; only texts and images, no app bundle or release notes
+          fastlane supply --package_name de.kleinphilipp.snaplet --metadata_path "$RUNNER_TEMP/play" \
+            --skip_upload_apk true --skip_upload_aab true --skip_upload_changelogs true \
+            --sync_image_upload true --validate_only ${{ inputs.play_upload == 'validate' }}

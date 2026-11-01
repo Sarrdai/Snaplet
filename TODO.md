@@ -49,10 +49,40 @@ Play-Support ihn zurücksetzen – trotzdem sicher aufbewahren.
    Später reicht ein Tag: `git tag v1.0.1 && git push origin v1.0.1`.
    Versionsschema: `vX.Y.Z` → versionCode `X*10000 + Y*100 + Z` (Y und Z unter 100). Jede Play-Version braucht
    einen höheren versionCode, also für jeden Upload eine neue Version.
-7. [ ] Optional, automatischer Upload aus GitHub: In der Google Cloud Console ein Dienstkonto mit JSON-Schlüssel
-   anlegen, in der Play Console unter **Nutzer und Berechtigungen** mit Release-Rechten für die App einladen und
-   den JSON-Inhalt als Secret `PLAY_SERVICE_ACCOUNT_JSON` speichern. Erst möglich, nachdem das erste AAB von Hand
+7. [ ] Optional, automatischer Upload aus GitHub (Releases und Store-Eintrag): Dienstkonto einrichten, siehe
+   [Zugang für Uploads](#zugang-für-uploads-play_service_account_json). Erst nutzbar, nachdem das erste AAB von Hand
    hochgeladen wurde. Bis die App einmal veröffentlicht ist, den Workflow mit Status `draft` laufen lassen.
+
+### Zugang für Uploads (`PLAY_SERVICE_ACCOUNT_JSON`)
+
+Ein Dienstkonto ist ein technischer Google-Nutzer mit eigenem Schlüssel. Die Workflows „Play release“ und
+„Store assets“ melden sich damit bei der Google Play Developer API an.
+
+1. [ ] [Google Cloud Console](https://console.cloud.google.com) mit demselben Google-Konto wie die Play Console
+   öffnen, oben **Projekt auswählen → Neues Projekt**, z. B. `snaplet-play`. Kostenlos, kein Rechnungskonto nötig.
+2. [ ] **APIs & Dienste → Bibliothek** → „Google Play Android Developer API“ → **Aktivieren**.
+3. [ ] **IAM & Verwaltung → Dienstkonten → Dienstkonto erstellen**: Name z. B. `github-play-upload`. Rollen im
+   Cloud-Projekt sind nicht nötig, Schritte 2 und 3 des Assistenten überspringen.
+4. [ ] Dienstkonto öffnen → **Schlüssel → Schlüssel hinzufügen → Neuen Schlüssel erstellen → JSON**. Die Datei
+   wird heruntergeladen. Sie ist ein Passwort: nicht ins Repo, nicht weitergeben.
+   (Meldet Google „Erstellung von Dienstkontoschlüsseln ist deaktiviert“, verbietet eine Organisationsrichtlinie
+   das; bei privaten Konten ohne Organisation kommt das nicht vor.)
+5. [ ] E-Mail-Adresse des Dienstkontos kopieren (`github-play-upload@snaplet-play.iam.gserviceaccount.com`).
+6. [ ] [Play Console](https://play.google.com/console) → **Nutzer und Berechtigungen → Neue Nutzer einladen** →
+   diese E-Mail-Adresse. Unter **App-Berechtigungen** die App Snaplet hinzufügen und mindestens erlauben:
+   - App-Informationen ansehen (nur Lesezugriff)
+   - Store-Präsenz verwalten (für „Store assets“)
+   - Releases für Test-Tracks erstellen, bearbeiten und einführen (für „Play release“)
+   - später zusätzlich: Releases in der Produktion veröffentlichen
+
+   **Nutzer einladen** → bestätigen. Eine Einladungs-Mail muss das Dienstkonto nicht annehmen.
+7. [ ] Auf GitHub: **Settings → Secrets and variables → Actions → New repository secret**, Name
+   `PLAY_SERVICE_ACCOUNT_JSON`, Wert = kompletter Inhalt der JSON-Datei (mit `{` und `}`).
+8. [ ] JSON-Datei im Passwort-Manager ablegen und vom Rechner löschen. Bei Verlust in der Cloud Console einen
+   neuen Schlüssel erzeugen, den alten löschen und das Secret ersetzen.
+9. [ ] Test: **Actions → Store assets → Run workflow** mit „Play store listing“ = `validate`. Grün = Zugang passt,
+   nichts wurde gespeichert. Meldet Google „The caller does not have permission“, sind die Berechtigungen aus
+   Schritt 6 noch nicht aktiv (kann bis zu 24 h dauern) oder das erste AAB wurde noch nicht von Hand hochgeladen.
 
 ## 3. Datenschutzerklärung veröffentlichen (GitHub Pages)
 
@@ -79,6 +109,9 @@ Play-Support ihn zurücksetzen – trotzdem sicher aufbewahren.
 - [ ] **Store-Eintrag**: Texte aus `store/listing/<sprache>/`, Bilder aus dem Workflow
       **Actions → Store assets** (Artefakt: Screenshots je Sprache, `feature_graphic.png`, `icon_512.png`).
       Optional eigenes Kamerabild: URL oder Pfad im Repo (z. B. `store/camera.jpg`) als Eingabe.
+      Automatisch: „Play store listing“ = `upload` legt alle Sprachen an und ersetzt Texte, Screenshots,
+      Feature-Grafik und Icon (braucht `PLAY_SERVICE_ACCOUNT_JSON` und das erste AAB). Kategorie, Kontaktdaten
+      und Datenschutz-URL bleiben Handarbeit in der Console.
 - [ ] Bei privatem Entwicklerkonto: **geschlossener Test mit mindestens 12 Testern über 14 Tage**, erst danach
       ist „Produktion“ freigeschaltet. Vorher interner Test zum eigenen Prüfen.
 - [ ] Release-Build (R8) auf mehreren echten Geräten prüfen: Android 8, aktuelles Android, ein Tablet.
@@ -95,9 +128,10 @@ von Muttersprachlern gegenlesen lassen, vor allem Store-Titel und Kurzbeschreibu
 - [x] **Play-Store-Texte** in `store/listing/<play-locale>/` und `store/whatsnew/whatsnew-<play-locale>`.
   Mehrere Play-Locales teilen sich einen Text: `es-ES`/`es-419`/`es-US`, `fr-FR`/`fr-CA`, `zh-TW`/`zh-HK`,
   `ms`/`ms-MY`.
-- [ ] In der Play Console unter **Store-Eintrag → Übersetzungen verwalten** alle Sprachen aus `store/listing/`
-  hinzufügen und Texte eintragen – **vor** dem ersten Release-Upload, sonst kann der Upload der Release-Notes
-  aus `store/whatsnew/` für fehlende Sprachen fehlschlagen. Alternativ nicht benötigte `whatsnew-*`-Dateien löschen.
+- [ ] Alle Sprachen aus `store/listing/` im Store-Eintrag anlegen: automatisch per **Store assets** mit
+  „Play store listing“ = `upload`, oder von Hand unter **Store-Eintrag → Übersetzungen verwalten**. Nötig **vor**
+  dem ersten automatischen Release-Upload, sonst kann der Upload der Release-Notes aus `store/whatsnew/` für
+  fehlende Sprachen fehlschlagen. Alternativ nicht benötigte `whatsnew-*`-Dateien löschen.
 - [ ] Store-Screenshots je Sprache prüfen (Workflow **Store assets**): Schriften ohne Baloo-2-Abdeckung
   (z. B. CJK, Arabisch, Thai, indische Schriften außer Devanagari) fallen auf Systemschriften zurück.
 - [x] RTL: Elternbereich und PIN-Eingabe spiegeln sich für Arabisch, Persisch, Urdu und Hebräisch
