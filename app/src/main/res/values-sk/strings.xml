@@ -8,6 +8,10 @@
     <string name="cd_zoom">Priblíženie</string>
     <string name="cd_parent_area">Rodičovská sekcia</string>
     <string name="cd_back">Späť</string>
+    <string name="cd_shutter">Spúšť</string>
+    <string name="cd_photo">Fotka</string>
+    <string name="cd_video">Video</string>
+    <string name="cd_delete_digit">Odstrániť číslicu</string>
     <string name="permission_title">%1$s potrebuje fotoaparát</string>
     <string name="permission_text">Milí rodičia, povoľte prosím raz fotoaparát a mikrofón. Mikrofón sa používa len na videá.</string>
     <string name="permission_allow">Povoliť</string>

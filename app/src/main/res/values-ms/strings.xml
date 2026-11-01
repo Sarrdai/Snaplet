@@ -8,6 +8,10 @@
     <string name="cd_zoom">Zum</string>
     <string name="cd_parent_area">Ruang ibu bapa</string>
     <string name="cd_back">Kembali</string>
+    <string name="cd_shutter">Butang pengatup</string>
+    <string name="cd_photo">Foto</string>
+    <string name="cd_video">Video</string>
+    <string name="cd_delete_digit">Padam digit</string>
     <string name="permission_title">%1$s memerlukan kamera</string>
     <string name="permission_text">Ibu bapa yang dihormati: sila benarkan kamera dan mikrofon sekali. Mikrofon hanya digunakan untuk video.</string>
     <string name="permission_allow">Benarkan</string>

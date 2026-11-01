@@ -1,6 +1,8 @@
 package app.tinycam.ui
 
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import app.tinycam.R
 import android.widget.VideoView
 import androidx.compose.foundation.Canvas
@@ -67,7 +69,7 @@ fun GalleryOverlay(
     onOpen: (MediaItem) -> Unit,
     onClose: () -> Unit,
 ) {
-    Box(Modifier.fillMaxSize().drawBehind { drawBackdrop(skin, style) }.singleTap(touches) {}) {
+    Box(Modifier.fillMaxSize().drawBehind { drawBackdrop(skin, style) }.singleTap(touches, accessible = false) {}) {
         LazyVerticalGrid(
             columns = GridCells.Adaptive(unit * 30f),
             contentPadding = PaddingValues(start = unit * 5f, end = unit * 5f, top = unit * 24f, bottom = unit * 8f),
@@ -129,7 +131,8 @@ fun MediaPreview(item: MediaItem, revision: Int, skin: Skin, style: SkinStyle, u
             }
         }
         // Transparent layer on top so the video view cannot swallow the closing tap
-        Box(Modifier.fillMaxSize().singleTap(touches, onClose))
+        val back = stringResource(R.string.cd_back)
+        Box(Modifier.fillMaxSize().singleTap(touches, role = null, onTap = onClose).semantics { contentDescription = back })
         if (hasOriginal) {
             FilterToggle(
                 !showOriginal, style, unit, touches, { showOriginal = !showOriginal },

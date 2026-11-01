@@ -97,8 +97,13 @@ von Muttersprachlern gegenlesen lassen, vor allem Store-Titel und Kurzbeschreibu
   aus `store/whatsnew/` für fehlende Sprachen fehlschlagen. Alternativ nicht benötigte `whatsnew-*`-Dateien löschen.
 - [ ] Store-Screenshots je Sprache prüfen (Workflow **Store assets**): Schriften ohne Baloo-2-Abdeckung
   (z. B. CJK, Arabisch, Thai, indische Schriften außer Devanagari) fallen auf Systemschriften zurück.
-- [ ] RTL: `android:supportsRtl="false"` – Arabisch, Persisch, Urdu und Hebräisch werden als Text korrekt
-  rechts-nach-links gesetzt, das Layout wird aber nicht gespiegelt. Bei Bedarf RTL aktivieren und prüfen.
+- [x] RTL: Elternbereich und PIN-Eingabe spiegeln sich für Arabisch, Persisch, Urdu und Hebräisch
+  (Tastenfeld bleibt 1-2-3). Die Kinderkamera bleibt bewusst links-nach-rechts, weil „Auslöser links/rechts“
+  die echte Seite meint. Auf einem Gerät mit arabischer Systemsprache einmal durchklicken.
+- [x] Screenreader: alle Tipp- und Halte-Gesten haben Bedienungshilfe-Aktionen (Halten = „doppelt tippen und
+  halten“), Schalter/Optionen melden ihren Zustand, Regler sind per Lautstärketaste einstellbar
+  (`AccessibilityTest`). Offen: einmal mit TalkBack auf einem echten Gerät prüfen; die Filter-Auswahl der
+  Kinderkamera hat noch keine Namen je Filter.
 - [ ] Datenschutzerklärung (`docs/privacy.html`) ggf. um weitere Sprachen ergänzen.
 - Neue Sprache später: `values-<sprache>/strings.xml` aus `values/strings.xml` kopieren (ohne
   `translatable="false"`), Klasse `StoreScreenshot<Sprache>` + `Tagline` in `StoreScreenshotTest.kt`,

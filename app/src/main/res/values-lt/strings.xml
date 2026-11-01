@@ -8,6 +8,10 @@
     <string name="cd_zoom">Mastelis</string>
     <string name="cd_parent_area">Tėvų skiltis</string>
     <string name="cd_back">Atgal</string>
+    <string name="cd_shutter">Užrakto mygtukas</string>
+    <string name="cd_photo">Nuotrauka</string>
+    <string name="cd_video">Vaizdo įrašas</string>
+    <string name="cd_delete_digit">Ištrinti skaitmenį</string>
     <string name="permission_title">%1$s reikia fotoaparato</string>
     <string name="permission_text">Mieli tėvai, vieną kartą leiskite naudoti fotoaparatą ir mikrofoną. Mikrofonas naudojamas tik vaizdo įrašams.</string>
     <string name="permission_allow">Leisti</string>

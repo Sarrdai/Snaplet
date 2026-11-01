@@ -8,6 +8,10 @@
     <string name="cd_zoom">ઝૂમ</string>
     <string name="cd_parent_area">વાલી વિભાગ</string>
     <string name="cd_back">પાછળ</string>
+    <string name="cd_shutter">શટર</string>
+    <string name="cd_photo">ફોટો</string>
+    <string name="cd_video">વીડિયો</string>
+    <string name="cd_delete_digit">અંક ડિલીટ કરો</string>
     <string name="permission_title">%1$sને કૅમેરાની જરૂર છે</string>
     <string name="permission_text">પ્રિય વાલીઓ: કૃપા કરીને એક વાર કૅમેરા અને માઇક્રોફોનની મંજૂરી આપો. માઇક્રોફોનનો ઉપયોગ ફક્ત વીડિયો માટે થાય છે.</string>
     <string name="permission_allow">મંજૂરી આપો</string>

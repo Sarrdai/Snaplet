@@ -8,6 +8,10 @@
     <string name="cd_zoom">Zoom</string>
     <string name="cd_parent_area">Strefa rodzica</string>
     <string name="cd_back">Wstecz</string>
+    <string name="cd_shutter">Spust migawki</string>
+    <string name="cd_photo">Zdjęcie</string>
+    <string name="cd_video">Film</string>
+    <string name="cd_delete_digit">Usuń cyfrę</string>
     <string name="permission_title">%1$s potrzebuje aparatu</string>
     <string name="permission_text">Drodzy rodzice: zezwólcie jednorazowo na dostęp do aparatu i mikrofonu. Mikrofon służy tylko do filmów.</string>
     <string name="permission_allow">Zezwól</string>

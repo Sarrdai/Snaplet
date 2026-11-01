@@ -8,6 +8,10 @@
     <string name="cd_zoom">缩放</string>
     <string name="cd_parent_area">家长区</string>
     <string name="cd_back">返回</string>
+    <string name="cd_shutter">快门</string>
+    <string name="cd_photo">照片</string>
+    <string name="cd_video">视频</string>
+    <string name="cd_delete_digit">删除数字</string>
     <string name="permission_title">%1$s 需要使用相机</string>
     <string name="permission_text">亲爱的家长：请允许一次相机和麦克风权限。麦克风仅用于录制视频。</string>
     <string name="permission_allow">允许</string>

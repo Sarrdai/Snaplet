@@ -8,6 +8,10 @@
     <string name="cd_zoom">Zoom</string>
     <string name="cd_parent_area">Area genitori</string>
     <string name="cd_back">Indietro</string>
+    <string name="cd_shutter">Pulsante di scatto</string>
+    <string name="cd_photo">Foto</string>
+    <string name="cd_video">Video</string>
+    <string name="cd_delete_digit">Cancella cifra</string>
     <string name="permission_title">%1$s ha bisogno della fotocamera</string>
     <string name="permission_text">Cari genitori: consentite una volta fotocamera e microfono. Il microfono serve solo per i video.</string>
     <string name="permission_allow">Consenti</string>

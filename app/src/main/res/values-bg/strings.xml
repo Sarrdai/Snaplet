@@ -8,6 +8,10 @@
     <string name="cd_zoom">Мащаб</string>
     <string name="cd_parent_area">Зона за родители</string>
     <string name="cd_back">Назад</string>
+    <string name="cd_shutter">Спусък</string>
+    <string name="cd_photo">Снимка</string>
+    <string name="cd_video">Видео</string>
+    <string name="cd_delete_digit">Изтриване на цифра</string>
     <string name="permission_title">%1$s се нуждае от камерата</string>
     <string name="permission_text">Уважаеми родители, разрешете еднократно камерата и микрофона. Микрофонът се използва само за видеоклипове.</string>
     <string name="permission_allow">Разрешаване</string>

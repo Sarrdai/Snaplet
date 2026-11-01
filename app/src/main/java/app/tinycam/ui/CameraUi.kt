@@ -2,6 +2,10 @@ package app.tinycam.ui
 
 import androidx.annotation.StringRes
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 import app.tinycam.R
 import android.os.SystemClock
 import androidx.activity.compose.BackHandler
@@ -340,35 +344,35 @@ fun KidCameraUi(
             val tools = buildList<@Composable () -> Unit> {
                 if (settings.gallery && !recording) add {
                     HintAnchor(hint, HintTarget.GALLERY, right, u) {
-                        ToolButton(Icons.Grid, false, style, u, touches, { holdHint(HintTarget.GALLERY) }) {
+                        ToolButton(Icons.Grid, stringResource(R.string.feature_gallery), false, style, u, touches, { holdHint(HintTarget.GALLERY) }) {
                             overlay = Overlay.Gallery
                         }
                     }
                 }
                 if (settings.selfie && !recording) add {
                     HintAnchor(hint, HintTarget.SELFIE, right, u) {
-                        ToolButton(Icons.Flip, selfie, style, u, touches, { holdHint(HintTarget.SELFIE) }) {
+                        ToolButton(Icons.Flip, stringResource(R.string.feature_selfie), selfie, style, u, touches, { holdHint(HintTarget.SELFIE) }) {
                             onSelfieChange(!selfie)
                         }
                     }
                 }
                 if (settings.effects && mode == CaptureMode.PHOTO) add {
                     HintAnchor(hint, HintTarget.EFFECTS, right, u) {
-                        ToolButton(Icons.Wand, effect != Effect.NONE, style, u, touches, { holdHint(HintTarget.EFFECTS) }) {
+                        ToolButton(Icons.Wand, stringResource(R.string.feature_effects), effect != Effect.NONE, style, u, touches, { holdHint(HintTarget.EFFECTS) }) {
                             overlay = Overlay.Effects
                         }
                     }
                 }
                 if (settings.timer && !recording) add {
                     HintAnchor(hint, HintTarget.TIMER, right, u) {
-                        ToolButton(Icons.Timer, timerOn, style, u, touches, { holdHint(HintTarget.TIMER) }) {
+                        ToolButton(Icons.Timer, stringResource(R.string.feature_timer), timerOn, style, u, touches, { holdHint(HintTarget.TIMER) }) {
                             timerOn = !timerOn
                         }
                     }
                 }
                 if (settings.skinChoice && !recording) add {
                     HintAnchor(hint, HintTarget.SKINS, right, u) {
-                        ToolButton(Icons.Palette, false, style, u, touches, { holdHint(HintTarget.SKINS) }) {
+                        ToolButton(Icons.Palette, stringResource(R.string.feature_skins), false, style, u, touches, { holdHint(HintTarget.SKINS) }) {
                             overlay = Overlay.Skins
                         }
                     }
@@ -570,8 +574,10 @@ internal fun EffectPicker(
     onSelect: (Effect) -> Unit,
     onClose: () -> Unit,
 ) {
+    val back = stringResource(R.string.cd_back)
     Box(
-        Modifier.fillMaxSize().background(Color(0x99000000)).singleTap(touches, onClose),
+        Modifier.fillMaxSize().background(Color(0x99000000)).singleTap(touches, role = null, onTap = onClose)
+            .semantics { contentDescription = back },
         contentAlignment = Alignment.Center,
     ) {
         val panel = RoundedCornerShape(unit * 7f)
@@ -594,7 +600,8 @@ internal fun EffectPicker(
                                 .shadow(if (on) 10.dp else 3.dp, shape)
                                 .clip(shape)
                                 .border(if (on) unit * 1.4f else unit * 0.4f, if (on) style.buttonOn else Color.White.copy(alpha = 0.4f), shape)
-                                .singleTap(touches) { onSelect(e) },
+                                .singleTap(touches, Role.RadioButton) { onSelect(e) }
+                                .semantics { this.selected = on },
                         ) {
                             withEffectColors(e) { drawMiniScene() }
                             e.frame?.let { drawFrame(it) }
@@ -621,8 +628,10 @@ internal fun SkinChooser(
     onSelect: (Skin) -> Unit,
     onClose: () -> Unit,
 ) {
+    val back = stringResource(R.string.cd_back)
     BoxWithConstraints(
-        Modifier.fillMaxSize().background(Color(0x99000000)).singleTap(touches, onClose),
+        Modifier.fillMaxSize().background(Color(0x99000000)).singleTap(touches, role = null, onTap = onClose)
+            .semantics { contentDescription = back },
         contentAlignment = Alignment.Center,
     ) {
         // Tall pill previews only fit two rows on a landscape screen
@@ -642,6 +651,7 @@ internal fun SkinChooser(
                         val shape = RoundedCornerShape(unit * 5f)
                         val on = skin == selected
                         val skinStyle = remember(skin) { styleFor(skin) }
+                        val name = stringResource(skin.label)
                         Canvas(
                             Modifier
                                 .size(unit * 22f, unit * if (round) 22f else 34f)
@@ -649,7 +659,11 @@ internal fun SkinChooser(
                                 .clip(shape)
                                 .background(Color(0x33FFFFFF))
                                 .border(if (on) unit * 1.4f else unit * 0.4f, if (on) style.buttonOn else Color.White.copy(alpha = 0.4f), shape)
-                                .singleTap(touches) { onSelect(skin) },
+                                .singleTap(touches, Role.RadioButton) { onSelect(skin) }
+                                .semantics {
+                                    contentDescription = name
+                                    this.selected = on
+                                },
                         ) {
                             if (round) {
                                 inset(size.width * 0.14f) { drawRoundShutter(skin, skinStyle, 1f, 0f, 1f, Emblem.SKIN) }

@@ -8,6 +8,10 @@
     <string name="cd_zoom">Kuza</string>
     <string name="cd_parent_area">Sehemu ya wazazi</string>
     <string name="cd_back">Rudi</string>
+    <string name="cd_shutter">Kitufe cha kupiga picha</string>
+    <string name="cd_photo">Picha</string>
+    <string name="cd_video">Video</string>
+    <string name="cd_delete_digit">Futa tarakimu</string>
     <string name="permission_title">%1$s inahitaji kamera</string>
     <string name="permission_text">Wazazi wapendwa: tafadhali ruhusu kamera na maikrofoni mara moja. Maikrofoni inatumika kwa video pekee.</string>
     <string name="permission_allow">Ruhusu</string>

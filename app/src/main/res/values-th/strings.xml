@@ -8,6 +8,10 @@
     <string name="cd_zoom">ซูม</string>
     <string name="cd_parent_area">ส่วนของผู้ปกครอง</string>
     <string name="cd_back">กลับ</string>
+    <string name="cd_shutter">ปุ่มชัตเตอร์</string>
+    <string name="cd_photo">ภาพถ่าย</string>
+    <string name="cd_video">วิดีโอ</string>
+    <string name="cd_delete_digit">ลบตัวเลข</string>
     <string name="permission_title">%1$s ต้องใช้กล้อง</string>
     <string name="permission_text">เรียนผู้ปกครอง: โปรดอนุญาตกล้องและไมโครโฟนหนึ่งครั้ง ไมโครโฟนใช้สำหรับวิดีโอเท่านั้น</string>
     <string name="permission_allow">อนุญาต</string>

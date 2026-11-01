@@ -8,6 +8,10 @@
     <string name="cd_zoom">జూమ్</string>
     <string name="cd_parent_area">తల్లిదండ్రుల విభాగం</string>
     <string name="cd_back">వెనుకకు</string>
+    <string name="cd_shutter">షట్టర్</string>
+    <string name="cd_photo">ఫోటో</string>
+    <string name="cd_video">వీడియో</string>
+    <string name="cd_delete_digit">అంకెను తొలగించు</string>
     <string name="permission_title">%1$sకు కెమెరా అవసరం</string>
     <string name="permission_text">ప్రియమైన తల్లిదండ్రులారా: దయచేసి కెమెరా, మైక్రోఫోన్‌కు ఒకసారి అనుమతి ఇవ్వండి. మైక్రోఫోన్ వీడియోలకు మాత్రమే ఉపయోగించబడుతుంది.</string>
     <string name="permission_allow">అనుమతించు</string>

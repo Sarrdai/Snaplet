@@ -8,6 +8,10 @@
     <string name="cd_zoom">זום</string>
     <string name="cd_parent_area">אזור ההורים</string>
     <string name="cd_back">חזרה</string>
+    <string name="cd_shutter">כפתור צילום</string>
+    <string name="cd_photo">תמונה</string>
+    <string name="cd_video">סרטון</string>
+    <string name="cd_delete_digit">מחיקת ספרה</string>
     <string name="permission_title">%1$s צריכה גישה למצלמה</string>
     <string name="permission_text">הורים יקרים: נא לאשר פעם אחת גישה למצלמה ולמיקרופון. המיקרופון משמש לסרטונים בלבד.</string>
     <string name="permission_allow">אישור</string>

@@ -8,6 +8,10 @@
     <string name="cd_zoom">Zoom</string>
     <string name="cd_parent_area">Àrea per a pares</string>
     <string name="cd_back">Enrere</string>
+    <string name="cd_shutter">Disparador</string>
+    <string name="cd_photo">Foto</string>
+    <string name="cd_video">Vídeo</string>
+    <string name="cd_delete_digit">Esborra la xifra</string>
     <string name="permission_title">%1$s necessita la càmera</string>
     <string name="permission_text">Benvolguts pares: permeteu una vegada la càmera i el micròfon. El micròfon només s\'utilitza per als vídeos.</string>
     <string name="permission_allow">Permet</string>

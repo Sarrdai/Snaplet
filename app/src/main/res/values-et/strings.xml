@@ -8,6 +8,10 @@
     <string name="cd_zoom">Suum</string>
     <string name="cd_parent_area">Vanemate ala</string>
     <string name="cd_back">Tagasi</string>
+    <string name="cd_shutter">Päästik</string>
+    <string name="cd_photo">Foto</string>
+    <string name="cd_video">Video</string>
+    <string name="cd_delete_digit">Kustuta number</string>
     <string name="permission_title">%1$s vajab kaamerat</string>
     <string name="permission_text">Head vanemad! Lubage palun üks kord kaamera ja mikrofon. Mikrofoni kasutatakse ainult videote jaoks.</string>
     <string name="permission_allow">Luba</string>

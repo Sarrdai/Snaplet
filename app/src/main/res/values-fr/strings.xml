@@ -8,6 +8,10 @@
     <string name="cd_zoom">Zoom</string>
     <string name="cd_parent_area">Espace parents</string>
     <string name="cd_back">Retour</string>
+    <string name="cd_shutter">Déclencheur</string>
+    <string name="cd_photo">Photo</string>
+    <string name="cd_video">Vidéo</string>
+    <string name="cd_delete_digit">Effacer le chiffre</string>
     <string name="permission_title">%1$s a besoin de l\'appareil photo</string>
     <string name="permission_text">Chers parents : autorisez une fois l\'appareil photo et le micro. Le micro sert uniquement aux vidéos.</string>
     <string name="permission_allow">Autoriser</string>

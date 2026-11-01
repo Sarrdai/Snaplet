@@ -8,6 +8,10 @@
     <string name="cd_zoom">Yaxınlaşdırma</string>
     <string name="cd_parent_area">Valideyn bölməsi</string>
     <string name="cd_back">Geri</string>
+    <string name="cd_shutter">Çəkiliş düyməsi</string>
+    <string name="cd_photo">Şəkil</string>
+    <string name="cd_video">Video</string>
+    <string name="cd_delete_digit">Rəqəmi sil</string>
     <string name="permission_title">%1$s üçün kamera lazımdır</string>
     <string name="permission_text">Hörmətli valideynlər: kameraya və mikrofona bir dəfə icazə verin. Mikrofon yalnız videolar üçün istifadə olunur.</string>
     <string name="permission_allow">İcazə ver</string>

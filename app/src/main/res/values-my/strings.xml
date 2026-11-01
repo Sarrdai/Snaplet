@@ -8,6 +8,10 @@
     <string name="cd_zoom">ချဲ့/ချုံ့</string>
     <string name="cd_parent_area">မိဘကဏ္ဍ</string>
     <string name="cd_back">နောက်သို့</string>
+    <string name="cd_shutter">ရိုက်ခလုတ်</string>
+    <string name="cd_photo">ဓာတ်ပုံ</string>
+    <string name="cd_video">ဗီဒီယို</string>
+    <string name="cd_delete_digit">ဂဏန်း ဖျက်ရန်</string>
     <string name="permission_title">%1$s သည် ကင်မရာ လိုအပ်ပါသည်</string>
     <string name="permission_text">မိဘများခင်ဗျာ- ကင်မရာနှင့် မိုက်ခရိုဖုန်းကို တစ်ကြိမ် ခွင့်ပြုပေးပါ။ မိုက်ခရိုဖုန်းကို ဗီဒီယိုအတွက်သာ အသုံးပြုပါသည်။</string>
     <string name="permission_allow">ခွင့်ပြုရန်</string>

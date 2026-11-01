@@ -8,6 +8,10 @@
     <string name="cd_zoom">Povečava</string>
     <string name="cd_parent_area">Starševski del</string>
     <string name="cd_back">Nazaj</string>
+    <string name="cd_shutter">Sprožilec</string>
+    <string name="cd_photo">Fotografija</string>
+    <string name="cd_video">Videoposnetek</string>
+    <string name="cd_delete_digit">Izbriši števko</string>
     <string name="permission_title">%1$s potrebuje fotoaparat</string>
     <string name="permission_text">Dragi starši: enkrat dovolite fotoaparat in mikrofon. Mikrofon se uporablja samo za videoposnetke.</string>
     <string name="permission_allow">Dovoli</string>

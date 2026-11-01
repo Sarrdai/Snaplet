@@ -8,6 +8,10 @@
     <string name="cd_zoom">Thu phóng</string>
     <string name="cd_parent_area">Khu vực phụ huynh</string>
     <string name="cd_back">Quay lại</string>
+    <string name="cd_shutter">Nút chụp</string>
+    <string name="cd_photo">Ảnh</string>
+    <string name="cd_video">Video</string>
+    <string name="cd_delete_digit">Xóa chữ số</string>
     <string name="permission_title">%1$s cần dùng máy ảnh</string>
     <string name="permission_text">Kính gửi phụ huynh: vui lòng cho phép máy ảnh và micrô một lần. Micrô chỉ được dùng để quay video.</string>
     <string name="permission_allow">Cho phép</string>

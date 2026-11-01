@@ -8,6 +8,10 @@
     <string name="cd_zoom">Zoom</string>
     <string name="cd_parent_area">Área dos pais</string>
     <string name="cd_back">Voltar</string>
+    <string name="cd_shutter">Disparador</string>
+    <string name="cd_photo">Foto</string>
+    <string name="cd_video">Vídeo</string>
+    <string name="cd_delete_digit">Apagar dígito</string>
     <string name="permission_title">%1$s precisa da câmera</string>
     <string name="permission_text">Queridos pais: permitam o acesso à câmera e ao microfone uma vez. O microfone só é usado para vídeos.</string>
     <string name="permission_allow">Permitir</string>

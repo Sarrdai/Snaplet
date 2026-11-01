@@ -8,6 +8,10 @@
     <string name="cd_zoom">Zoom</string>
     <string name="cd_parent_area">Area orang tua</string>
     <string name="cd_back">Kembali</string>
+    <string name="cd_shutter">Tombol rana</string>
+    <string name="cd_photo">Foto</string>
+    <string name="cd_video">Video</string>
+    <string name="cd_delete_digit">Hapus digit</string>
     <string name="permission_title">%1$s memerlukan kamera</string>
     <string name="permission_text">Orang tua yang terhormat: izinkan kamera dan mikrofon satu kali. Mikrofon hanya dipakai untuk video.</string>
     <string name="permission_allow">Izinkan</string>

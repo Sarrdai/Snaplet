@@ -8,6 +8,10 @@
     <string name="cd_zoom">Ζουμ</string>
     <string name="cd_parent_area">Περιοχή γονέων</string>
     <string name="cd_back">Πίσω</string>
+    <string name="cd_shutter">Κλείστρο</string>
+    <string name="cd_photo">Φωτογραφία</string>
+    <string name="cd_video">Βίντεο</string>
+    <string name="cd_delete_digit">Διαγραφή ψηφίου</string>
     <string name="permission_title">Το %1$s χρειάζεται την κάμερα</string>
     <string name="permission_text">Αγαπητοί γονείς: επιτρέψτε μία φορά την κάμερα και το μικρόφωνο. Το μικρόφωνο χρησιμοποιείται μόνο για βίντεο.</string>
     <string name="permission_allow">Να επιτρέπεται</string>

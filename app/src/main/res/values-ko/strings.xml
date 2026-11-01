@@ -8,6 +8,10 @@
     <string name="cd_zoom">확대/축소</string>
     <string name="cd_parent_area">부모 영역</string>
     <string name="cd_back">뒤로</string>
+    <string name="cd_shutter">셔터</string>
+    <string name="cd_photo">사진</string>
+    <string name="cd_video">동영상</string>
+    <string name="cd_delete_digit">숫자 삭제</string>
     <string name="permission_title">%1$s에 카메라가 필요합니다</string>
     <string name="permission_text">부모님께: 카메라와 마이크를 한 번만 허용해 주세요. 마이크는 동영상에만 사용됩니다.</string>
     <string name="permission_allow">허용</string>

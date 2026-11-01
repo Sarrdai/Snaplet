@@ -8,6 +8,10 @@
     <string name="cd_zoom">بزرگ‌نمایی</string>
     <string name="cd_parent_area">بخش والدین</string>
     <string name="cd_back">بازگشت</string>
+    <string name="cd_shutter">دکمهٔ عکاسی</string>
+    <string name="cd_photo">عکس</string>
+    <string name="cd_video">ویدیو</string>
+    <string name="cd_delete_digit">حذف رقم</string>
     <string name="permission_title">%1$s به دوربین نیاز دارد</string>
     <string name="permission_text">والدین عزیز: لطفاً یک بار اجازهٔ دسترسی به دوربین و میکروفون را بدهید. میکروفون فقط برای ویدیو استفاده می‌شود.</string>
     <string name="permission_allow">اجازه دادن</string>

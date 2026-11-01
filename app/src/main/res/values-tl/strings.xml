@@ -8,6 +8,10 @@
     <string name="cd_zoom">Zoom</string>
     <string name="cd_parent_area">Lugar ng magulang</string>
     <string name="cd_back">Bumalik</string>
+    <string name="cd_shutter">Shutter</string>
+    <string name="cd_photo">Litrato</string>
+    <string name="cd_video">Video</string>
+    <string name="cd_delete_digit">Burahin ang digit</string>
     <string name="permission_title">Kailangan ng %1$s ang camera</string>
     <string name="permission_text">Mahal na mga magulang: pakipayagan nang isang beses ang camera at mikropono. Sa mga video lang ginagamit ang mikropono.</string>
     <string name="permission_allow">Payagan</string>

@@ -8,6 +8,10 @@
     <string name="cd_zoom">ズーム</string>
     <string name="cd_parent_area">保護者エリア</string>
     <string name="cd_back">戻る</string>
+    <string name="cd_shutter">シャッター</string>
+    <string name="cd_photo">写真</string>
+    <string name="cd_video">動画</string>
+    <string name="cd_delete_digit">数字を削除</string>
     <string name="permission_title">%1$s にはカメラが必要です</string>
     <string name="permission_text">保護者の方へ：カメラとマイクを一度だけ許可してください。マイクは動画にのみ使用します。</string>
     <string name="permission_allow">許可する</string>

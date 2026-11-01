@@ -8,6 +8,10 @@
     <string name="cd_zoom">Zoom</string>
     <string name="cd_parent_area">Föräldraläge</string>
     <string name="cd_back">Tillbaka</string>
+    <string name="cd_shutter">Avtryckare</string>
+    <string name="cd_photo">Foto</string>
+    <string name="cd_video">Video</string>
+    <string name="cd_delete_digit">Radera siffra</string>
     <string name="permission_title">%1$s behöver kameran</string>
     <string name="permission_text">Kära föräldrar: tillåt kameran och mikrofonen en gång. Mikrofonen används bara för videor.</string>
     <string name="permission_allow">Tillåt</string>

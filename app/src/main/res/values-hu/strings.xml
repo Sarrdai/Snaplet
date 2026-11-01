@@ -8,6 +8,10 @@
     <string name="cd_zoom">Nagyítás</string>
     <string name="cd_parent_area">Szülői rész</string>
     <string name="cd_back">Vissza</string>
+    <string name="cd_shutter">Exponálógomb</string>
+    <string name="cd_photo">Fotó</string>
+    <string name="cd_video">Videó</string>
+    <string name="cd_delete_digit">Számjegy törlése</string>
     <string name="permission_title">A(z) %1$s alkalmazásnak kamera kell</string>
     <string name="permission_text">Kedves szülők! Kérjük, egyszer engedélyezzék a kamerát és a mikrofont. A mikrofont csak videókhoz használjuk.</string>
     <string name="permission_allow">Engedélyezés</string>

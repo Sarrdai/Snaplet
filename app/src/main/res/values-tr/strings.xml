@@ -8,6 +8,10 @@
     <string name="cd_zoom">Yakınlaştırma</string>
     <string name="cd_parent_area">Ebeveyn alanı</string>
     <string name="cd_back">Geri</string>
+    <string name="cd_shutter">Deklanşör</string>
+    <string name="cd_photo">Fotoğraf</string>
+    <string name="cd_video">Video</string>
+    <string name="cd_delete_digit">Rakamı sil</string>
     <string name="permission_title">%1$s kameraya ihtiyaç duyuyor</string>
     <string name="permission_text">Sevgili ebeveynler: lütfen kamera ve mikrofona bir kez izin verin. Mikrofon yalnızca videolar için kullanılır.</string>
     <string name="permission_allow">İzin ver</string>

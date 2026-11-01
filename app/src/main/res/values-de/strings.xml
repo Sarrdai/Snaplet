@@ -9,6 +9,10 @@
     <string name="cd_zoom">Zoom</string>
     <string name="cd_parent_area">Eltern-Bereich</string>
     <string name="cd_back">Zurück</string>
+    <string name="cd_shutter">Auslöser</string>
+    <string name="cd_photo">Foto</string>
+    <string name="cd_video">Video</string>
+    <string name="cd_delete_digit">Ziffer löschen</string>
 
     <!-- Permission screen -->
     <string name="permission_title">%1$s braucht die Kamera</string>

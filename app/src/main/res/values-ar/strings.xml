@@ -8,6 +8,10 @@
     <string name="cd_zoom">تكبير/تصغير</string>
     <string name="cd_parent_area">منطقة الوالدين</string>
     <string name="cd_back">رجوع</string>
+    <string name="cd_shutter">زر التصوير</string>
+    <string name="cd_photo">صورة</string>
+    <string name="cd_video">فيديو</string>
+    <string name="cd_delete_digit">حذف رقم</string>
     <string name="permission_title">يحتاج %1$s إلى الكاميرا</string>
     <string name="permission_text">أعزاءنا الآباء والأمهات: يُرجى السماح بالكاميرا والميكروفون مرة واحدة. يُستخدم الميكروفون للفيديو فقط.</string>
     <string name="permission_allow">سماح</string>

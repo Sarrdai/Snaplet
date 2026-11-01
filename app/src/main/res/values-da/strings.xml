@@ -8,6 +8,10 @@
     <string name="cd_zoom">Zoom</string>
     <string name="cd_parent_area">Forældreområde</string>
     <string name="cd_back">Tilbage</string>
+    <string name="cd_shutter">Udløser</string>
+    <string name="cd_photo">Foto</string>
+    <string name="cd_video">Video</string>
+    <string name="cd_delete_digit">Slet ciffer</string>
     <string name="permission_title">%1$s skal bruge kameraet</string>
     <string name="permission_text">Kære forældre: Tillad kameraet og mikrofonen én gang. Mikrofonen bruges kun til videoer.</string>
     <string name="permission_allow">Tillad</string>

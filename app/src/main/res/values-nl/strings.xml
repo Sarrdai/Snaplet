@@ -8,6 +8,10 @@
     <string name="cd_zoom">Zoom</string>
     <string name="cd_parent_area">Oudergedeelte</string>
     <string name="cd_back">Terug</string>
+    <string name="cd_shutter">Ontspanknop</string>
+    <string name="cd_photo">Foto</string>
+    <string name="cd_video">Video</string>
+    <string name="cd_delete_digit">Cijfer wissen</string>
     <string name="permission_title">%1$s heeft de camera nodig</string>
     <string name="permission_text">Beste ouders: sta de camera en microfoon één keer toe. De microfoon wordt alleen voor video\'s gebruikt.</string>
     <string name="permission_allow">Toestaan</string>

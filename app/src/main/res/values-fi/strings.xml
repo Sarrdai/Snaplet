@@ -8,6 +8,10 @@
     <string name="cd_zoom">Zoomaus</string>
     <string name="cd_parent_area">Vanhempien alue</string>
     <string name="cd_back">Takaisin</string>
+    <string name="cd_shutter">Laukaisin</string>
+    <string name="cd_photo">Kuva</string>
+    <string name="cd_video">Video</string>
+    <string name="cd_delete_digit">Poista numero</string>
     <string name="permission_title">%1$s tarvitsee kameran</string>
     <string name="permission_text">Hyvät vanhemmat: salli kamera ja mikrofoni kerran. Mikrofonia käytetään vain videoihin.</string>
     <string name="permission_allow">Salli</string>

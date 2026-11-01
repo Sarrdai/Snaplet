@@ -8,6 +8,10 @@
     <string name="cd_zoom">Tālummaiņa</string>
     <string name="cd_parent_area">Vecāku sadaļa</string>
     <string name="cd_back">Atpakaļ</string>
+    <string name="cd_shutter">Slēdzis</string>
+    <string name="cd_photo">Fotoattēls</string>
+    <string name="cd_video">Video</string>
+    <string name="cd_delete_digit">Dzēst ciparu</string>
     <string name="permission_title">%1$s ir nepieciešama kamera</string>
     <string name="permission_text">Dārgie vecāki! Lūdzu, vienreiz atļaujiet kameru un mikrofonu. Mikrofons tiek izmantots tikai video.</string>
     <string name="permission_allow">Atļaut</string>

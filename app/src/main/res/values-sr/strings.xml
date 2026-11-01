@@ -8,6 +8,10 @@
     <string name="cd_zoom">Зумирање</string>
     <string name="cd_parent_area">Родитељски део</string>
     <string name="cd_back">Назад</string>
+    <string name="cd_shutter">Окидач</string>
+    <string name="cd_photo">Фотографија</string>
+    <string name="cd_video">Видео снимак</string>
+    <string name="cd_delete_digit">Избриши цифру</string>
     <string name="permission_title">%1$s треба камеру</string>
     <string name="permission_text">Драги родитељи: дозволите једном камеру и микрофон. Микрофон се користи само за видео снимке.</string>
     <string name="permission_allow">Дозволи</string>

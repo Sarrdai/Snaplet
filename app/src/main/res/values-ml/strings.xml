@@ -8,6 +8,10 @@
     <string name="cd_zoom">സൂം</string>
     <string name="cd_parent_area">രക്ഷിതാക്കളുടെ വിഭാഗം</string>
     <string name="cd_back">മടങ്ങുക</string>
+    <string name="cd_shutter">ഷട്ടർ</string>
+    <string name="cd_photo">ഫോട്ടോ</string>
+    <string name="cd_video">വീഡിയോ</string>
+    <string name="cd_delete_digit">അക്കം ഇല്ലാതാക്കുക</string>
     <string name="permission_title">%1$s-ന് ക്യാമറ ആവശ്യമാണ്</string>
     <string name="permission_text">പ്രിയ രക്ഷിതാക്കളേ: ദയവായി ഒരിക്കൽ ക്യാമറയ്ക്കും മൈക്രോഫോണിനും അനുമതി നൽകുക. മൈക്രോഫോൺ വീഡിയോകൾക്ക് മാത്രമേ ഉപയോഗിക്കൂ.</string>
     <string name="permission_allow">അനുവദിക്കുക</string>

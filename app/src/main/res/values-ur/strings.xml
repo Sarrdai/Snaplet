@@ -8,6 +8,10 @@
     <string name="cd_zoom">زوم</string>
     <string name="cd_parent_area">والدین کا حصہ</string>
     <string name="cd_back">واپس</string>
+    <string name="cd_shutter">شٹر</string>
+    <string name="cd_photo">تصویر</string>
+    <string name="cd_video">ویڈیو</string>
+    <string name="cd_delete_digit">ہندسہ مٹائیں</string>
     <string name="permission_title">%1$s کو کیمرا چاہیے</string>
     <string name="permission_text">محترم والدین: براہ کرم ایک بار کیمرا اور مائیکروفون کی اجازت دیں۔ مائیکروفون صرف ویڈیو کے لیے استعمال ہوتا ہے۔</string>
     <string name="permission_allow">اجازت دیں</string>
