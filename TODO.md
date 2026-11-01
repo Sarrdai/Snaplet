@@ -14,7 +14,7 @@ Der angezeigte Name („Snaplet“) lässt sich dagegen jederzeit ändern.
 - [x] Falls geändert: `applicationId` in `app/build.gradle.kts` und `packageName` in
       `.github/workflows/release.yml` anpassen. `namespace` (Kotlin-Paket `app.tinycam`) kann bleiben.
       Achtung: Per APK installierte Testgeräte bekommen dann eine zweite, neue App; vorher Fotos sichern.
-- [ ] Namen „Snaplet“ prüfen: Suche im Play Store, Markenregister
+- [x] Namen „Snaplet“ prüfen: Suche im Play Store, Markenregister
       ([DPMAregister](https://register.dpma.de), [TMview](https://www.tmdn.org/tmview)) in Klasse 9.
 
 ## 2. Upload-Schlüssel anlegen und als GitHub-Secrets hinterlegen
@@ -23,18 +23,18 @@ Google Play signiert die App mit einem eigenen Schlüssel („Play App Signing�
 **Upload-Schlüssel**, mit dem Google prüft, dass ein Upload von uns kommt. Geht er verloren, kann der
 Play-Support ihn zurücksetzen – trotzdem sicher aufbewahren.
 
-1. [ ] Schlüssel lokal erzeugen (Java/JDK nötig; `keytool` fragt Passwort und Namen ab):
+1. [x] Schlüssel lokal erzeugen (Java/JDK nötig; `keytool` fragt Passwort und Namen ab):
    ```bash
    keytool -genkeypair -v -keystore snaplet-upload.jks -alias upload -keyalg RSA -keysize 4096 -validity 10000
    ```
    Für Keystore- und Schlüssel-Passwort darf dasselbe starke Passwort genutzt werden.
-2. [ ] `snaplet-upload.jks` und das Passwort im Passwort-Manager sichern. **Nie ins Repo einchecken.**
-3. [ ] Keystore als Base64 kodieren:
+2. [x] `snaplet-upload.jks` und das Passwort im Passwort-Manager sichern. **Nie ins Repo einchecken.**
+3. [x] Keystore als Base64 kodieren:
    ```bash
    base64 -w0 snaplet-upload.jks > snaplet-upload.b64
    ```
    (macOS: `base64 -i snaplet-upload.jks -o snaplet-upload.b64`)
-4. [ ] Auf GitHub: Repository → **Settings → Secrets and variables → Actions → New repository secret**,
+4. [x] Auf GitHub: Repository → **Settings → Secrets and variables → Actions → New repository secret**,
    vier Secrets anlegen:
 
    | Name | Wert |
@@ -43,8 +43,8 @@ Play-Support ihn zurücksetzen – trotzdem sicher aufbewahren.
    | `UPLOAD_KEYSTORE_PASSWORD` | Keystore-Passwort |
    | `UPLOAD_KEY_ALIAS` | `upload` (bzw. der gewählte Alias) |
    | `UPLOAD_KEY_PASSWORD` | Schlüssel-Passwort |
-5. [ ] `snaplet-upload.b64` löschen.
-6. [ ] Testlauf: unter **Actions → Play release → Run workflow** Version `v1.0.0` eingeben. Ergebnis: Artefakt
+5. [x] `snaplet-upload.b64` löschen.
+6. [x] Testlauf: unter **Actions → Play release → Run workflow** Version `v1.0.0` eingeben. Ergebnis: Artefakt
    `Snaplet-v1.0.0-aab` mit `app-release.aab`. Fehlt ein Secret, bricht der Lauf mit einer klaren Meldung ab.
    Später reicht ein Tag: `git tag v1.0.1 && git push origin v1.0.1`.
    Versionsschema: `vX.Y.Z` → versionCode `X*10000 + Y*100 + Z` (Y und Z unter 100). Jede Play-Version braucht
@@ -56,26 +56,26 @@ Play-Support ihn zurücksetzen – trotzdem sicher aufbewahren.
 
 ## 3. Datenschutzerklärung veröffentlichen (GitHub Pages)
 
-- [ ] Repository → **Settings → Pages → Build and deployment**: Source „Deploy from a branch“, Branch `main`,
+- [x] Repository → **Settings → Pages → Build and deployment**: Source „Deploy from a branch“, Branch `main`,
       Ordner `/docs`. Pages braucht ein öffentliches Repository (oder einen kostenpflichtigen GitHub-Plan).
-- [ ] Repository umbenennen: **Settings → General → Repository name** → `Snaplet`. GitHub leitet alte Git- und
+- [x] Repository umbenennen: **Settings → General → Repository name** → `Snaplet`. GitHub leitet alte Git- und
       Web-URLs weiter, GitHub Pages aber nicht. Lokale Klone danach umstellen:
       `git remote set-url origin https://github.com/Sarrdai/Snaplet.git`
-- [ ] Prüfen: `https://sarrdai.github.io/Snaplet/privacy.html` (Pfad = Repository-Name).
+- [x] Prüfen: `https://sarrdai.github.io/Snaplet/privacy.html` (Pfad = Repository-Name).
 - [ ] Impressum in `docs/privacy.html` prüfen: Anschrift ist jetzt 20359 Hamburg (auf
       rainbow.kleinphilipp.de steht noch die falsche PLZ 55758 ohne Ort). Kontakt-Adresse `mail+snaplet@…` muss zustellbar sein. Verweis jetzt auf
       § 5 DDG (ersetzt seit Mai 2024 § 5 TMG).
 
 ## 4. Play Console
 
-- [ ] Entwicklerkonto anlegen (25 $ einmalig, Identitätsprüfung).
-- [ ] App anlegen: Name „Snaplet“, Standardsprache Deutsch oder Englisch, App, kostenlos.
+- [x] Entwicklerkonto anlegen (25 $ einmalig, Identitätsprüfung).
+- [x] App anlegen: Name „Snaplet“, Standardsprache Deutsch oder Englisch, App, kostenlos.
 - [ ] **Play App Signing**: beim ersten Release den von Google erzeugten App-Signaturschlüssel akzeptieren.
-- [ ] **Zielgruppe und Inhalte**: Altersgruppen wählen (z. B. „5 und jünger“, „6–8“, Eltern); damit gilt die
+- [x] **Zielgruppe und Inhalte**: Altersgruppen wählen (z. B. „5 und jünger“, „6–8“, Eltern); damit gilt die
       Families-Richtlinie. Werbung: nein.
-- [ ] **Datensicherheit**: „Keine Daten erhoben“, „Keine Daten geteilt“. Datenschutz-URL aus Punkt 3.
-- [ ] **Inhaltseinstufung** (IARC-Fragebogen).
-- [ ] **App-Zugriff**: Hinweis für Prüfer: „Parent area: hold the lock icon in the bottom corner for 3 s“ (in der Sprache der Prüfer, also Englisch).
+- [x] **Datensicherheit**: „Keine Daten erhoben“, „Keine Daten geteilt“. Datenschutz-URL aus Punkt 3.
+- [x] **Inhaltseinstufung** (IARC-Fragebogen).
+- [x] **App-Zugriff**: Hinweis für Prüfer: „Parent area: hold the lock icon in the bottom corner for 3 s“ (in der Sprache der Prüfer, also Englisch).
 - [ ] **Store-Eintrag**: Texte aus `store/listing/<sprache>/`, Bilder aus dem Workflow
       **Actions → Store assets** (Artefakt: Screenshots je Sprache, `feature_graphic.png`, `icon_512.png`).
       Optional eigenes Kamerabild: URL oder Pfad im Repo (z. B. `store/camera.jpg`) als Eingabe.
