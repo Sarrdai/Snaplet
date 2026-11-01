@@ -23,7 +23,7 @@ android {
     compileSdk = 37
 
     defaultConfig {
-        applicationId = "app.tinycam"
+        applicationId = "de.kleinphilipp.snaplet"
         minSdk = 26
         targetSdk = 36
         versionCode = releaseVersion?.let(::versionCodeOf) ?: maxOf(runNumber, 1)

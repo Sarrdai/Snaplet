@@ -4,14 +4,14 @@ Reihenfolge = empfohlene Abarbeitung. Abhaken mit `[x]`.
 
 ## 1. Package-ID festlegen (vor dem ersten Upload!)
 
-Die Package-ID (`applicationId` in `app/build.gradle.kts`, heute `app.tinycam`) ist die technische, weltweit
+Die Package-ID (`applicationId` in `app/build.gradle.kts`: `de.kleinphilipp.snaplet`) ist die technische, weltweit
 eindeutige Kennung der App. Android erkennt daran Updates, Google Play die App
 (`play.google.com/store/apps/details?id=<Package-ID>`). **Nach dem ersten Upload ist sie für immer fest.**
 Der angezeigte Name („Snaplet“) lässt sich dagegen jederzeit ändern.
 
-- [ ] Entscheiden: `app.tinycam` behalten oder passend zum neuen Namen ändern.
+- [x] Entscheiden: `app.tinycam` behalten oder passend zum neuen Namen ändern.
       Empfehlung: `de.kleinphilipp.snaplet` (umgekehrte eigene Domain, kollidiert garantiert mit niemandem).
-- [ ] Falls geändert: `applicationId` in `app/build.gradle.kts` und `packageName` in
+- [x] Falls geändert: `applicationId` in `app/build.gradle.kts` und `packageName` in
       `.github/workflows/release.yml` anpassen. `namespace` (Kotlin-Paket `app.tinycam`) kann bleiben.
       Achtung: Per APK installierte Testgeräte bekommen dann eine zweite, neue App; vorher Fotos sichern.
 - [ ] Namen „Snaplet“ prüfen: Suche im Play Store, Markenregister
@@ -58,7 +58,10 @@ Play-Support ihn zurücksetzen – trotzdem sicher aufbewahren.
 
 - [ ] Repository → **Settings → Pages → Build and deployment**: Source „Deploy from a branch“, Branch `main`,
       Ordner `/docs`. Pages braucht ein öffentliches Repository (oder einen kostenpflichtigen GitHub-Plan).
-- [ ] Prüfen: `https://sarrdai.github.io/TinyCam/privacy.html` (Pfad = Repository-Name).
+- [ ] Repository umbenennen: **Settings → General → Repository name** → `Snaplet`. GitHub leitet alte Git- und
+      Web-URLs weiter, GitHub Pages aber nicht. Lokale Klone danach umstellen:
+      `git remote set-url origin https://github.com/Sarrdai/Snaplet.git`
+- [ ] Prüfen: `https://sarrdai.github.io/Snaplet/privacy.html` (Pfad = Repository-Name).
 - [ ] Impressum in `docs/privacy.html` prüfen: Anschrift ist jetzt 20359 Hamburg (auf
       rainbow.kleinphilipp.de steht noch die falsche PLZ 55758 ohne Ort). Kontakt-Adresse `mail+snaplet@…` muss zustellbar sein. Verweis jetzt auf
       § 5 DDG (ersetzt seit Mai 2024 § 5 TMG).
