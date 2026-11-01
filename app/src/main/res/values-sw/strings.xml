@@ -95,6 +95,12 @@
     <string name="media_view">Tazama na uchague …</string>
     <string name="media_share_all">Shiriki zote …</string>
     <string name="media_delete_all">Futa zote (shikilia sek 3)</string>
+    <string name="section_export">Hamisha kwenye kifaa</string>
+    <string name="section_export_info">Hunakili kila picha na video mpya kwenye folda ya kifaa hiki. Programu ya kusawazisha inaweza kuzichukua kutoka hapo; Snaplet yenyewe haipakii chochote. Kufuta ndani ya Snaplet hakufuti nakala.</string>
+    <string name="export_auto">Nakili rekodi mpya kiotomatiki</string>
+    <string name="export_choose_folder">Chagua folda</string>
+    <string name="export_folder">Folda: %1$s</string>
+    <string name="export_failed">Imeshindwa kuhamisha. Tafadhali chagua folda tena.</string>
     <string name="section_access">Kuingia sehemu ya wazazi</string>
     <string name="lock_info_hold">Yeyote anayeshikilia kufuli kwa sek 3 anaingia.</string>
     <string name="lock_info_device">Baada ya kushikilia, Android huomba kufuli ya skrini ya simu (PIN, mchoro au alama ya kidole). Inafaa kwa simu inayoshirikiwa.</string>

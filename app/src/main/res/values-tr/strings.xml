@@ -95,6 +95,12 @@
     <string name="media_view">Görüntüle ve seç …</string>
     <string name="media_share_all">Tümünü paylaş …</string>
     <string name="media_delete_all">Tümünü sil (3 sn basılı tut)</string>
+    <string name="section_export">Cihaza dışa aktar</string>
+    <string name="section_export_info">Her yeni fotoğraf ve videoyu bu cihazdaki bir klasöre kopyalar. Bir senkronizasyon uygulaması onları oradan alabilir; Snaplet kendisi hiçbir şey yüklemez. Snaplet\'te silmek kopyaları silmez.</string>
+    <string name="export_auto">Yeni kayıtları otomatik kopyala</string>
+    <string name="export_choose_folder">Klasör seç</string>
+    <string name="export_folder">Klasör: %1$s</string>
+    <string name="export_failed">Dışa aktarma başarısız. Lütfen klasörü yeniden seçin.</string>
     <string name="section_access">Ebeveyn alanına erişim</string>
     <string name="lock_info_hold">Kilidi 3 sn basılı tutan herkes girer.</string>
     <string name="lock_info_device">Basılı tuttuktan sonra Android telefonun ekran kilidini (PIN, desen veya parmak izi) ister. Ortak kullanılan bir telefon için ideal.</string>

@@ -97,6 +97,12 @@
     <string name="media_view">Pokaż i zaznacz …</string>
     <string name="media_share_all">Udostępnij wszystkie …</string>
     <string name="media_delete_all">Usuń wszystkie (przytrzymaj 3 s)</string>
+    <string name="section_export">Eksport na urządzenie</string>
+    <string name="section_export_info">Kopiuje każde nowe zdjęcie i wideo do folderu na tym urządzeniu. Aplikacja do synchronizacji może je stamtąd pobrać; sam Snaplet niczego nie wysyła. Usunięcie w Snaplet nie usuwa kopii.</string>
+    <string name="export_auto">Automatycznie kopiuj nowe nagrania</string>
+    <string name="export_choose_folder">Wybierz folder</string>
+    <string name="export_folder">Folder: %1$s</string>
+    <string name="export_failed">Eksport nie powiódł się. Wybierz folder ponownie.</string>
     <string name="section_access">Dostęp do strefy rodzica</string>
     <string name="lock_info_hold">Wejdzie każdy, kto przytrzyma kłódkę przez 3 s.</string>
     <string name="lock_info_device">Po przytrzymaniu Android poprosi o blokadę ekranu telefonu (PIN, wzór lub odcisk palca). Idealne dla wspólnego telefonu.</string>

@@ -95,6 +95,12 @@
     <string name="media_view">Megtekintés és kijelölés …</string>
     <string name="media_share_all">Összes megosztása …</string>
     <string name="media_delete_all">Összes törlése (3 mp nyomva tartás)</string>
+    <string name="section_export">Exportálás az eszközre</string>
+    <string name="section_export_info">Minden új fotót és videót egy mappába másol ezen az eszközön. Egy szinkronizáló alkalmazás onnan átveheti őket; a Snaplet maga semmit nem tölt fel. A Snapletben való törlés nem törli a másolatokat.</string>
+    <string name="export_auto">Új felvételek automatikus másolása</string>
+    <string name="export_choose_folder">Mappa kiválasztása</string>
+    <string name="export_folder">Mappa: %1$s</string>
+    <string name="export_failed">Az exportálás sikertelen. Válassza ki újra a mappát.</string>
     <string name="section_access">Hozzáférés a szülői részhez</string>
     <string name="lock_info_hold">Bárki bejut, aki 3 mp-ig nyomva tartja a lakatot.</string>
     <string name="lock_info_device">A nyomva tartás után az Android kéri a telefon képernyőzárát (PIN, minta vagy ujjlenyomat). Ideális közös telefonhoz.</string>

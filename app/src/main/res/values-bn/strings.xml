@@ -95,6 +95,12 @@
     <string name="media_view">দেখুন ও বেছে নিন …</string>
     <string name="media_share_all">সব শেয়ার করুন …</string>
     <string name="media_delete_all">সব মুছুন (৩ সেকেন্ড চেপে ধরুন)</string>
+    <string name="section_export">ডিভাইসে এক্সপোর্ট</string>
+    <string name="section_export_info">প্রতিটি নতুন ছবি ও ভিডিও এই ডিভাইসের একটি ফোল্ডারে কপি করে। কোনো সিঙ্ক অ্যাপ সেখান থেকে নিতে পারে; Snaplet নিজে কিছুই আপলোড করে না। Snaplet-এ মুছলে কপিগুলো মোছে না।</string>
+    <string name="export_auto">নতুন রেকর্ডিং স্বয়ংক্রিয়ভাবে কপি করুন</string>
+    <string name="export_choose_folder">ফোল্ডার বেছে নিন</string>
+    <string name="export_folder">ফোল্ডার: %1$s</string>
+    <string name="export_failed">এক্সপোর্ট ব্যর্থ হয়েছে। আবার ফোল্ডার বেছে নিন।</string>
     <string name="section_access">অভিভাবক অংশে প্রবেশ</string>
     <string name="lock_info_hold">যে কেউ তালাটি ৩ সেকেন্ড চেপে ধরলেই ঢুকতে পারে।</string>
     <string name="lock_info_device">চেপে ধরার পর Android ফোনের স্ক্রিন লক (PIN, প্যাটার্ন বা আঙুলের ছাপ) চায়। শেয়ার করা ফোনের জন্য আদর্শ।</string>

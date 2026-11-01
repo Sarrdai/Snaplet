@@ -94,6 +94,12 @@
     <string name="media_view">ดูและเลือก …</string>
     <string name="media_share_all">แชร์ทั้งหมด …</string>
     <string name="media_delete_all">ลบทั้งหมด (กดค้าง 3 วินาที)</string>
+    <string name="section_export">ส่งออกไปยังอุปกรณ์</string>
+    <string name="section_export_info">คัดลอกรูปและวิดีโอใหม่ทุกรายการไปยังโฟลเดอร์ในอุปกรณ์นี้ แอปซิงค์สามารถนำไปจากที่นั่นได้ Snaplet เองไม่อัปโหลดสิ่งใด การลบใน Snaplet จะไม่ลบสำเนา</string>
+    <string name="export_auto">คัดลอกการบันทึกใหม่โดยอัตโนมัติ</string>
+    <string name="export_choose_folder">เลือกโฟลเดอร์</string>
+    <string name="export_folder">โฟลเดอร์: %1$s</string>
+    <string name="export_failed">ส่งออกไม่สำเร็จ โปรดเลือกโฟลเดอร์อีกครั้ง</string>
     <string name="section_access">การเข้าสู่ส่วนของผู้ปกครอง</string>
     <string name="lock_info_hold">ใครก็ตามที่กดแม่กุญแจค้าง 3 วินาทีจะเข้าได้</string>
     <string name="lock_info_device">หลังจากกดค้าง Android จะขอการล็อกหน้าจอของโทรศัพท์ (PIN, รูปแบบ หรือลายนิ้วมือ) เหมาะสำหรับโทรศัพท์ที่ใช้ร่วมกัน</string>

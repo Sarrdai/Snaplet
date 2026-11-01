@@ -94,6 +94,12 @@
     <string name="media_view">Lihat &amp; pilih …</string>
     <string name="media_share_all">Kongsi semua …</string>
     <string name="media_delete_all">Padam semua (tahan 3 saat)</string>
+    <string name="section_export">Eksport ke peranti</string>
+    <string name="section_export_info">Menyalin setiap foto dan video baharu ke folder pada peranti ini. Apl penyegerakan boleh mengambilnya dari situ; Snaplet sendiri tidak memuat naik apa-apa. Memadam dalam Snaplet tidak memadam salinan.</string>
+    <string name="export_auto">Salin rakaman baharu secara automatik</string>
+    <string name="export_choose_folder">Pilih folder</string>
+    <string name="export_folder">Folder: %1$s</string>
+    <string name="export_failed">Eksport gagal. Sila pilih folder sekali lagi.</string>
     <string name="section_access">Akses ke ruang ibu bapa</string>
     <string name="lock_info_hold">Sesiapa yang menahan mangga selama 3 saat boleh masuk.</string>
     <string name="lock_info_device">Selepas ditahan, Android meminta kunci skrin telefon (PIN, corak atau cap jari). Sesuai untuk telefon yang dikongsi.</string>

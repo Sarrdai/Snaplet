@@ -95,6 +95,12 @@
     <string name="media_view">જુઓ અને પસંદ કરો …</string>
     <string name="media_share_all">બધું શેર કરો …</string>
     <string name="media_delete_all">બધું ડિલીટ કરો (3 સે. દબાવી રાખો)</string>
+    <string name="section_export">ઉપકરણ પર નિકાસ</string>
+    <string name="section_export_info">દરેક નવો ફોટો અને વિડિયો આ ઉપકરણના એક ફોલ્ડરમાં કૉપિ કરે છે. સિંક એપ ત્યાંથી લઈ શકે છે; Snaplet પોતે કંઈ અપલોડ કરતું નથી. Snaplet માં કાઢી નાખવાથી કૉપિ કાઢી નખાતી નથી.</string>
+    <string name="export_auto">નવા રેકોર્ડિંગ આપમેળે કૉપિ કરો</string>
+    <string name="export_choose_folder">ફોલ્ડર પસંદ કરો</string>
+    <string name="export_folder">ફોલ્ડર: %1$s</string>
+    <string name="export_failed">નિકાસ નિષ્ફળ. કૃપા કરીને ફરીથી ફોલ્ડર પસંદ કરો.</string>
     <string name="section_access">વાલી વિભાગમાં પ્રવેશ</string>
     <string name="lock_info_hold">તાળું 3 સે. દબાવી રાખનાર કોઈ પણ અંદર જઈ શકે છે.</string>
     <string name="lock_info_device">દબાવી રાખ્યા પછી Android ફોનનું સ્ક્રીન લૉક (PIN, પૅટર્ન અથવા ફિંગરપ્રિન્ટ) માગે છે. શેર કરેલા ફોન માટે આદર્શ.</string>

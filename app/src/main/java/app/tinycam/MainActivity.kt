@@ -37,6 +37,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import app.tinycam.data.AppState
+import app.tinycam.data.MediaExporter
 import app.tinycam.data.MediaItem
 import app.tinycam.data.ParentLock
 import app.tinycam.ui.ParentPinGate
@@ -81,6 +82,12 @@ class MainActivity : ComponentActivity() {
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
             permissionPending = false
             refreshPermissions()
+        }
+
+    // System folder picker for the automatic export; access is kept via a persisted URI permission
+    private val exportFolderRequest =
+        registerForActivityResult(ActivityResultContracts.OpenDocumentTree()) { tree ->
+            if (tree != null) runCatching { app.setExportFolder(tree) }
         }
 
     // Android 8 and 9: the system's "confirm device credential" screen
@@ -186,6 +193,10 @@ class MainActivity : ComponentActivity() {
                     onShare = ::share,
                     onDelete = app::delete,
                     onTogglePin = ::togglePin,
+                    exportFolder = settings.exportFolder?.takeIf { app.exportFolderUsable() }
+                        ?.let { MediaExporter.label(Uri.parse(it)) },
+                    exportFailed = app.exportFailed || (settings.autoExport && !app.exportFolderUsable()),
+                    onChooseExportFolder = ::chooseExportFolder,
                     onClose = {
                         parentOpen = false
                         pinIfWanted()
@@ -351,6 +362,12 @@ class MainActivity : ComponentActivity() {
     private fun togglePin() {
         if (isPinned()) stopLockTask() else startLockTask()
         pinned = isPinned()
+    }
+
+    private fun chooseExportFolder() {
+        // The picker cannot open while the screen is pinned
+        if (isPinned()) stopLockTask()
+        runCatching { exportFolderRequest.launch(app.settings.exportFolder?.let(Uri::parse)) }
     }
 
     private fun share(selection: List<MediaItem>) {

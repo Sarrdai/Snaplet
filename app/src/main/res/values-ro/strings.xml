@@ -96,6 +96,12 @@
     <string name="media_view">Vezi și selectează …</string>
     <string name="media_share_all">Distribuie tot …</string>
     <string name="media_delete_all">Șterge tot (ține apăsat 3 s)</string>
+    <string name="section_export">Export pe dispozitiv</string>
+    <string name="section_export_info">Copiază fiecare fotografie și videoclip nou într-un dosar de pe acest dispozitiv. O aplicație de sincronizare le poate prelua de acolo; Snaplet nu încarcă nimic. Ștergerea în Snaplet nu șterge copiile.</string>
+    <string name="export_auto">Copiază automat înregistrările noi</string>
+    <string name="export_choose_folder">Alege dosarul</string>
+    <string name="export_folder">Dosar: %1$s</string>
+    <string name="export_failed">Exportul a eșuat. Alegeți din nou dosarul.</string>
     <string name="section_access">Acces la zona părinților</string>
     <string name="lock_info_hold">Oricine ține apăsat lacătul 3 s intră.</string>
     <string name="lock_info_device">După apăsare, Android cere blocarea ecranului telefonului (PIN, model sau amprentă). Ideal pentru un telefon folosit în comun.</string>

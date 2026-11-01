@@ -95,6 +95,12 @@
     <string name="media_view">കാണുക &amp; തിരഞ്ഞെടുക്കുക …</string>
     <string name="media_share_all">എല്ലാം പങ്കിടുക …</string>
     <string name="media_delete_all">എല്ലാം ഇല്ലാതാക്കുക (3 സെ. അമർത്തിപ്പിടിക്കുക)</string>
+    <string name="section_export">ഉപകരണത്തിലേക്ക് എക്സ്പോർട്ട്</string>
+    <string name="section_export_info">ഓരോ പുതിയ ഫോട്ടോയും വീഡിയോയും ഈ ഉപകരണത്തിലെ ഒരു ഫോൾഡറിലേക്ക് പകർത്തുന്നു. ഒരു സിങ്ക് ആപ്പിന് അവിടെ നിന്ന് എടുക്കാം; Snaplet സ്വയം ഒന്നും അപ്‌ലോഡ് ചെയ്യുന്നില്ല. Snaplet-ൽ ഇല്ലാതാക്കിയാൽ പകർപ്പുകൾ ഇല്ലാതാകില്ല.</string>
+    <string name="export_auto">പുതിയ റെക്കോർഡിംഗുകൾ സ്വയം പകർത്തുക</string>
+    <string name="export_choose_folder">ഫോൾഡർ തിരഞ്ഞെടുക്കുക</string>
+    <string name="export_folder">ഫോൾഡർ: %1$s</string>
+    <string name="export_failed">എക്സ്പോർട്ട് പരാജയപ്പെട്ടു. ഫോൾഡർ വീണ്ടും തിരഞ്ഞെടുക്കുക.</string>
     <string name="section_access">രക്ഷിതാക്കളുടെ വിഭാഗത്തിലേക്കുള്ള പ്രവേശനം</string>
     <string name="lock_info_hold">പൂട്ട് 3 സെ. അമർത്തിപ്പിടിക്കുന്ന ആർക്കും അകത്ത് കടക്കാം.</string>
     <string name="lock_info_device">അമർത്തിപ്പിടിച്ച ശേഷം Android ഫോണിന്റെ സ്ക്രീൻ ലോക്ക് (PIN, പാറ്റേൺ അല്ലെങ്കിൽ വിരലടയാളം) ആവശ്യപ്പെടും. പങ്കിട്ട് ഉപയോഗിക്കുന്ന ഫോണിന് അനുയോജ്യം.</string>

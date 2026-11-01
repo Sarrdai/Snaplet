@@ -95,6 +95,12 @@
     <string name="media_view">ನೋಡಿ ಮತ್ತು ಆಯ್ಕೆಮಾಡಿ …</string>
     <string name="media_share_all">ಎಲ್ಲವನ್ನೂ ಹಂಚಿಕೊಳ್ಳಿ …</string>
     <string name="media_delete_all">ಎಲ್ಲವನ್ನೂ ಅಳಿಸಿ (3 ಸೆ. ಒತ್ತಿ ಹಿಡಿಯಿರಿ)</string>
+    <string name="section_export">ಸಾಧನಕ್ಕೆ ರಫ್ತು</string>
+    <string name="section_export_info">ಪ್ರತಿ ಹೊಸ ಫೋಟೋ ಮತ್ತು ವೀಡಿಯೊವನ್ನು ಈ ಸಾಧನದ ಒಂದು ಫೋಲ್ಡರ್‌ಗೆ ನಕಲಿಸುತ್ತದೆ. ಸಿಂಕ್ ಆ್ಯಪ್ ಅವುಗಳನ್ನು ಅಲ್ಲಿಂದ ತೆಗೆದುಕೊಳ್ಳಬಹುದು; Snaplet ಸ್ವತಃ ಏನನ್ನೂ ಅಪ್‌ಲೋಡ್ ಮಾಡುವುದಿಲ್ಲ. Snaplet ನಲ್ಲಿ ಅಳಿಸಿದರೆ ನಕಲುಗಳು ಅಳಿಸುವುದಿಲ್ಲ.</string>
+    <string name="export_auto">ಹೊಸ ರೆಕಾರ್ಡಿಂಗ್‌ಗಳನ್ನು ಸ್ವಯಂ ನಕಲಿಸಿ</string>
+    <string name="export_choose_folder">ಫೋಲ್ಡರ್ ಆಯ್ಕೆಮಾಡಿ</string>
+    <string name="export_folder">ಫೋಲ್ಡರ್: %1$s</string>
+    <string name="export_failed">ರಫ್ತು ವಿಫಲವಾಗಿದೆ. ಫೋಲ್ಡರ್ ಅನ್ನು ಮತ್ತೆ ಆಯ್ಕೆಮಾಡಿ.</string>
     <string name="section_access">ಪೋಷಕರ ವಿಭಾಗಕ್ಕೆ ಪ್ರವೇಶ</string>
     <string name="lock_info_hold">ಬೀಗವನ್ನು 3 ಸೆ. ಒತ್ತಿ ಹಿಡಿಯುವ ಯಾರಾದರೂ ಒಳಗೆ ಹೋಗಬಹುದು.</string>
     <string name="lock_info_device">ಒತ್ತಿ ಹಿಡಿದ ನಂತರ Android ಫೋನ್‌ನ ಸ್ಕ್ರೀನ್ ಲಾಕ್ (PIN, ಪ್ಯಾಟರ್ನ್ ಅಥವಾ ಬೆರಳಚ್ಚು) ಕೇಳುತ್ತದೆ. ಹಂಚಿಕೊಂಡ ಫೋನ್‌ಗೆ ಸೂಕ್ತ.</string>

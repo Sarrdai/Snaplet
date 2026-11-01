@@ -96,6 +96,12 @@
     <string name="media_view">Прегледај и изабери …</string>
     <string name="media_share_all">Дели све …</string>
     <string name="media_delete_all">Избриши све (држи 3 с)</string>
+    <string name="section_export">Извоз на уређај</string>
+    <string name="section_export_info">Копира сваку нову фотографију и видео у фасциклу на овом уређају. Апликација за синхронизацију може да их преузме одатле; сам Snaplet ништа не отпрема. Брисање у Snaplet-у не брише копије.</string>
+    <string name="export_auto">Аутоматски копирај нове снимке</string>
+    <string name="export_choose_folder">Изабери фасциклу</string>
+    <string name="export_folder">Фасцикла: %1$s</string>
+    <string name="export_failed">Извоз није успео. Поново изаберите фасциклу.</string>
     <string name="section_access">Приступ родитељском делу</string>
     <string name="lock_info_hold">Ко држи катанац 3 с, улази.</string>
     <string name="lock_info_device">Након држања Android тражи закључавање екрана телефона (PIN, шаблон или отисак прста). Идеално за заједнички телефон.</string>

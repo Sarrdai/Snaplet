@@ -95,6 +95,12 @@
     <string name="media_view">Mostra i selecciona …</string>
     <string name="media_share_all">Comparteix-ho tot …</string>
     <string name="media_delete_all">Suprimeix-ho tot (mantén 3 s)</string>
+    <string name="section_export">Exporta al dispositiu</string>
+    <string name="section_export_info">Copia cada foto i vídeo nous a una carpeta d\'aquest dispositiu. Una app de sincronització els pot agafar d\'allà; Snaplet mateix no puja res. Esborrar a Snaplet no esborra les còpies.</string>
+    <string name="export_auto">Copia automàticament les gravacions noves</string>
+    <string name="export_choose_folder">Tria una carpeta</string>
+    <string name="export_folder">Carpeta: %1$s</string>
+    <string name="export_failed">L\'exportació ha fallat. Torna a triar la carpeta.</string>
     <string name="section_access">Accés a l\'àrea per a pares</string>
     <string name="lock_info_hold">Qui mantingui premut el cadenat 3 s hi entra.</string>
     <string name="lock_info_device">Després de mantenir premut, Android demana el bloqueig de pantalla del telèfon (PIN, patró o empremta). Ideal per a un telèfon compartit.</string>

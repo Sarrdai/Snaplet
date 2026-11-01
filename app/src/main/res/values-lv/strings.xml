@@ -96,6 +96,12 @@
     <string name="media_view">Skatīt un atlasīt …</string>
     <string name="media_share_all">Kopīgot visus …</string>
     <string name="media_delete_all">Dzēst visus (turēt 3 s)</string>
+    <string name="section_export">Eksports uz ierīci</string>
+    <string name="section_export_info">Kopē katru jauno fotoattēlu un video mapē šajā ierīcē. Sinhronizācijas lietotne var tos paņemt no turienes; pati Snaplet neko neaugšupielādē. Dzēšana Snaplet neizdzēš kopijas.</string>
+    <string name="export_auto">Automātiski kopēt jaunos ierakstus</string>
+    <string name="export_choose_folder">Izvēlēties mapi</string>
+    <string name="export_folder">Mape: %1$s</string>
+    <string name="export_failed">Eksports neizdevās. Lūdzu, izvēlieties mapi vēlreiz.</string>
     <string name="section_access">Piekļuve vecāku sadaļai</string>
     <string name="lock_info_hold">Ikviens, kurš 3 s tur slēdzeni, tiek iekšā.</string>
     <string name="lock_info_device">Pēc turēšanas Android pieprasa tālruņa ekrāna bloķēšanu (PIN, kombināciju vai pirkstu nospiedumu). Ideāli koplietotam tālrunim.</string>

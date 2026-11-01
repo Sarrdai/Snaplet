@@ -94,6 +94,12 @@
     <string name="media_view">ကြည့်ပြီး ရွေးရန် …</string>
     <string name="media_share_all">အားလုံး မျှဝေရန် …</string>
     <string name="media_delete_all">အားလုံး ဖျက်ရန် (၃ စက္ကန့် ဖိထားပါ)</string>
+    <string name="section_export">စက်ထဲသို့ ထုတ်ယူရန်</string>
+    <string name="section_export_info">ဓာတ်ပုံနှင့် ဗီဒီယိုအသစ်တိုင်းကို ဤစက်ရှိ ဖိုင်တွဲတစ်ခုသို့ ကူးယူသည်။ ချိန်ကိုက်အက်ပ်က ထိုနေရာမှ ယူနိုင်သည်။ Snaplet ကိုယ်တိုင် ဘာမှ အပ်လုဒ်မလုပ်ပါ။ Snaplet တွင် ဖျက်ခြင်းက မိတ္တူများကို မဖျက်ပါ။</string>
+    <string name="export_auto">ရိုက်ကူးမှုအသစ်များကို အလိုအလျောက် ကူးယူရန်</string>
+    <string name="export_choose_folder">ဖိုင်တွဲ ရွေးရန်</string>
+    <string name="export_folder">ဖိုင်တွဲ- %1$s</string>
+    <string name="export_failed">ထုတ်ယူမှု မအောင်မြင်ပါ။ ဖိုင်တွဲကို ထပ်ရွေးပါ။</string>
     <string name="section_access">မိဘကဏ္ဍသို့ ဝင်ရောက်ခြင်း</string>
     <string name="lock_info_hold">သော့ခလောက်ကို ၃ စက္ကန့် ဖိထားသူ မည်သူမဆို ဝင်နိုင်ပါသည်။</string>
     <string name="lock_info_device">ဖိထားပြီးနောက် Android သည် ဖုန်း၏ မျက်နှာပြင် လော့ခ် (PIN၊ ပုံစံ သို့မဟုတ် လက်ဗွေ) ကို တောင်းပါသည်။ မျှဝေသုံးသော ဖုန်းအတွက် အကောင်းဆုံး။</string>

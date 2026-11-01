@@ -114,6 +114,12 @@
     <string name="media_view">View &amp; select …</string>
     <string name="media_share_all">Share all …</string>
     <string name="media_delete_all">Delete all (hold 3 s)</string>
+    <string name="section_export">Export to device</string>
+    <string name="section_export_info">Copies every new photo and video into a folder on this device. A sync app may pick them up from there; Snaplet itself never uploads anything. Deleting in Snaplet does not delete the copies.</string>
+    <string name="export_auto">Copy new recordings automatically</string>
+    <string name="export_choose_folder">Choose folder</string>
+    <string name="export_folder">Folder: %1$s</string>
+    <string name="export_failed">Export failed. Please choose the folder again.</string>
     <string name="section_access">Access to the parent area</string>
     <string name="lock_info_hold">Anyone who holds the lock for 3 s gets in.</string>
     <string name="lock_info_device">After holding, Android asks for the phone\'s screen lock (PIN, pattern or fingerprint). Ideal for a shared phone.</string>

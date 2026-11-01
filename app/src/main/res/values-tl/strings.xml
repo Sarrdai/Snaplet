@@ -95,6 +95,12 @@
     <string name="media_view">Tingnan at piliin …</string>
     <string name="media_share_all">I-share lahat …</string>
     <string name="media_delete_all">Burahin lahat (pindutin nang 3 s)</string>
+    <string name="section_export">I-export sa device</string>
+    <string name="section_export_info">Kinokopya ang bawat bagong larawan at video sa isang folder sa device na ito. Maaaring kunin ito ng sync app mula roon; walang ina-upload ang Snaplet mismo. Ang pagbura sa Snaplet ay hindi bumubura sa mga kopya.</string>
+    <string name="export_auto">Awtomatikong kopyahin ang mga bagong recording</string>
+    <string name="export_choose_folder">Pumili ng folder</string>
+    <string name="export_folder">Folder: %1$s</string>
+    <string name="export_failed">Nabigo ang pag-export. Pakipili muli ang folder.</string>
     <string name="section_access">Pagpasok sa lugar ng magulang</string>
     <string name="lock_info_hold">Makakapasok ang sinumang pumindot sa kandado nang 3 s.</string>
     <string name="lock_info_device">Pagkatapos pindutin, hihingin ng Android ang screen lock ng telepono (PIN, pattern o fingerprint). Mainam para sa telepono na pinagsasaluhan.</string>

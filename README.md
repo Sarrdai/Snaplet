@@ -41,6 +41,11 @@ an sind. Außerdem: Design, Auslöser-Position (links, rechts oder rund in der M
 (4:3, 16:9, 1:1), Foto-Größe, Video-Qualität und eine Galerie mit Großansicht zum gezielten Teilen
 oder Löschen.
 
+**Export aufs Gerät** (optional, aus): Eltern wählen über die Android-Ordnerauswahl einen Ordner, z. B.
+`DCIM/Snaplet` oder einen Ordner, den eine Sync-App (Nextcloud, Syncthing, Google Fotos …) überwacht. Jede neue
+Aufnahme wird dann dorthin kopiert (Fotos mit eingerechnetem Filter). Snaplet selbst hat weiterhin keinen
+Internetzugriff; Löschen in Snaplet entfernt die Kopien nicht.
+
 **Zugang zum Eltern-Bereich** (nach 3 s Halten des Schlosses): nur Halten, die Bildschirmsperre des
 Handys (PIN, Muster, Fingerabdruck; ideal bei geteiltem Handy) oder eine eigene 4-stellige PIN mit
 der Geräte-Sperre als Rückweg.

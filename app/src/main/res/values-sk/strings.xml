@@ -97,6 +97,12 @@
     <string name="media_view">Zobraziť a vybrať …</string>
     <string name="media_share_all">Zdieľať všetko …</string>
     <string name="media_delete_all">Odstrániť všetko (podržať 3 s)</string>
+    <string name="section_export">Export do zariadenia</string>
+    <string name="section_export_info">Skopíruje každú novú fotku a video do priečinka v tomto zariadení. Synchronizačná aplikácia ich odtiaľ môže prevziať; Snaplet sám nič nenahráva. Vymazanie v Snaplete kópie nevymaže.</string>
+    <string name="export_auto">Automaticky kopírovať nové záznamy</string>
+    <string name="export_choose_folder">Vybrať priečinok</string>
+    <string name="export_folder">Priečinok: %1$s</string>
+    <string name="export_failed">Export zlyhal. Vyberte priečinok znova.</string>
     <string name="section_access">Prístup do rodičovskej sekcie</string>
     <string name="lock_info_hold">Kto podrží zámok 3 s, dostane sa dnu.</string>
     <string name="lock_info_device">Po podržaní si Android vyžiada zámku obrazovky telefónu (PIN, vzor alebo odtlačok prsta). Ideálne pre zdieľaný telefón.</string>

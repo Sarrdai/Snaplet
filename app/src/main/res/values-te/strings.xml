@@ -95,6 +95,12 @@
     <string name="media_view">చూడు &amp; ఎంచుకో …</string>
     <string name="media_share_all">అన్నీ షేర్ చేయి …</string>
     <string name="media_delete_all">అన్నీ తొలగించు (3 సె. నొక్కి పట్టుకో)</string>
+    <string name="section_export">పరికరానికి ఎగుమతి</string>
+    <string name="section_export_info">ప్రతి కొత్త ఫోటో మరియు వీడియోను ఈ పరికరంలోని ఒక ఫోల్డర్‌కు కాపీ చేస్తుంది. సింక్ యాప్ వాటిని అక్కడి నుండి తీసుకోవచ్చు; Snaplet స్వయంగా ఏదీ అప్‌లోడ్ చేయదు. Snaplet లో తొలగిస్తే కాపీలు తొలగవు.</string>
+    <string name="export_auto">కొత్త రికార్డింగ్‌లను ఆటోమేటిక్‌గా కాపీ చేయి</string>
+    <string name="export_choose_folder">ఫోల్డర్ ఎంచుకోండి</string>
+    <string name="export_folder">ఫోల్డర్: %1$s</string>
+    <string name="export_failed">ఎగుమతి విఫలమైంది. దయచేసి ఫోల్డర్‌ను మళ్లీ ఎంచుకోండి.</string>
     <string name="section_access">తల్లిదండ్రుల విభాగానికి యాక్సెస్</string>
     <string name="lock_info_hold">తాళాన్ని 3 సె. నొక్కి పట్టుకున్న ఎవరైనా లోపలికి వెళ్లవచ్చు.</string>
     <string name="lock_info_device">నొక్కి పట్టుకున్న తర్వాత Android ఫోన్ స్క్రీన్ లాక్ (PIN, ప్యాటర్న్ లేదా వేలిముద్ర) అడుగుతుంది. షేర్ చేసే ఫోన్‌కు అనువైనది.</string>

@@ -97,6 +97,12 @@
     <string name="media_view">Посмотреть и выбрать …</string>
     <string name="media_share_all">Поделиться всеми …</string>
     <string name="media_delete_all">Удалить все (удерживать 3 с)</string>
+    <string name="section_export">Экспорт на устройство</string>
+    <string name="section_export_info">Копирует каждое новое фото и видео в папку на этом устройстве. Приложение синхронизации может забрать их оттуда; сам Snaplet ничего не загружает. Удаление в Snaplet не удаляет копии.</string>
+    <string name="export_auto">Автоматически копировать новые записи</string>
+    <string name="export_choose_folder">Выбрать папку</string>
+    <string name="export_folder">Папка: %1$s</string>
+    <string name="export_failed">Не удалось экспортировать. Выберите папку заново.</string>
     <string name="section_access">Доступ к разделу для родителей</string>
     <string name="lock_info_hold">Войти может любой, кто удерживает замок 3 с.</string>
     <string name="lock_info_device">После удержания Android запросит блокировку экрана телефона (PIN-код, графический ключ или отпечаток). Идеально для общего телефона.</string>

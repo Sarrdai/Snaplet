@@ -192,7 +192,11 @@ private class CameraXActions(
             ImageCapture.OutputFileOptions.Builder(item.file).setMetadata(metadata).build(), executor,
             object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
-                    if (effect != Effect.NONE || crop) scope.launch { postProcess(item, effect, crop) }
+                    if (effect != Effect.NONE || crop) {
+                        scope.launch { postProcess(item, effect, crop); app.exportIfWanted(item) }
+                    } else {
+                        app.exportIfWanted(item)
+                    }
                 }
 
                 override fun onError(exception: ImageCaptureException) = drop(item)
@@ -209,9 +213,13 @@ private class CameraXActions(
             recording = controller.startRecording(
                 FileOutputOptions.Builder(item.file).build(), AudioConfig.create(hasAudio()), executor,
             ) { event ->
-                if (event is VideoRecordEvent.Finalize && event.hasError() && item.file.length() == 0L) {
-                    pendingVideo = null
-                    drop(item)
+                if (event is VideoRecordEvent.Finalize) {
+                    if (item.file.length() > 0L) {
+                        app.exportIfWanted(item) // also after errors like a reached size limit, the file is complete
+                    } else if (event.hasError()) {
+                        pendingVideo = null
+                        drop(item)
+                    }
                 }
             }
             pendingVideo = Pending(item, snapshot)

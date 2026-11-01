@@ -94,6 +94,12 @@
     <string name="media_view">Lihat &amp; pilih …</string>
     <string name="media_share_all">Bagikan semua …</string>
     <string name="media_delete_all">Hapus semua (tahan 3 dtk)</string>
+    <string name="section_export">Ekspor ke perangkat</string>
+    <string name="section_export_info">Menyalin setiap foto dan video baru ke folder di perangkat ini. Aplikasi sinkronisasi dapat mengambilnya dari sana; Snaplet sendiri tidak mengunggah apa pun. Menghapus di Snaplet tidak menghapus salinannya.</string>
+    <string name="export_auto">Salin rekaman baru secara otomatis</string>
+    <string name="export_choose_folder">Pilih folder</string>
+    <string name="export_folder">Folder: %1$s</string>
+    <string name="export_failed">Ekspor gagal. Pilih folder lagi.</string>
     <string name="section_access">Akses ke area orang tua</string>
     <string name="lock_info_hold">Siapa pun yang menahan gembok selama 3 dtk bisa masuk.</string>
     <string name="lock_info_device">Setelah ditahan, Android meminta kunci layar ponsel (PIN, pola, atau sidik jari). Ideal untuk ponsel yang dipakai bersama.</string>

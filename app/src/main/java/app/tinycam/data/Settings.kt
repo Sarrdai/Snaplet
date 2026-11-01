@@ -65,6 +65,9 @@ data class Settings(
     val photoAspect: PhotoAspect = PhotoAspect.STANDARD,
     val photoSize: PhotoSize = PhotoSize.MEDIUM,
     val videoQuality: VideoQuality = VideoQuality.HD,
+    /** Copy every new recording into [exportFolder], a folder tree URI picked by the parents. */
+    val autoExport: Boolean = false,
+    val exportFolder: String? = null,
 )
 
 class SettingsStore(context: Context) {
@@ -107,6 +110,8 @@ class SettingsStore(context: Context) {
             photoAspect = enumOr(prefs.getString("photoAspect", null), d.photoAspect),
             photoSize = enumOr(prefs.getString("photoSize", null), d.photoSize),
             videoQuality = enumOr(prefs.getString("videoQuality", null), d.videoQuality),
+            autoExport = prefs.getBoolean("autoExport", d.autoExport),
+            exportFolder = prefs.getString("exportFolder", d.exportFolder),
         )
     }
 
@@ -137,6 +142,8 @@ class SettingsStore(context: Context) {
         putString("photoAspect", s.photoAspect.name)
         putString("photoSize", s.photoSize.name)
         putString("videoQuality", s.videoQuality.name)
+        putBoolean("autoExport", s.autoExport)
+        if (s.exportFolder != null) putString("exportFolder", s.exportFolder) else remove("exportFolder")
     }
 
     fun loadUsage() = DailyUsage(

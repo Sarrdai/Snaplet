@@ -94,6 +94,12 @@
     <string name="media_view">Xem &amp; chọn …</string>
     <string name="media_share_all">Chia sẻ tất cả …</string>
     <string name="media_delete_all">Xóa tất cả (giữ 3 giây)</string>
+    <string name="section_export">Xuất ra thiết bị</string>
+    <string name="section_export_info">Sao chép mỗi ảnh và video mới vào một thư mục trên thiết bị này. Ứng dụng đồng bộ có thể lấy chúng từ đó; bản thân Snaplet không tải lên gì cả. Xóa trong Snaplet không xóa các bản sao.</string>
+    <string name="export_auto">Tự động sao chép bản ghi mới</string>
+    <string name="export_choose_folder">Chọn thư mục</string>
+    <string name="export_folder">Thư mục: %1$s</string>
+    <string name="export_failed">Xuất thất bại. Vui lòng chọn lại thư mục.</string>
     <string name="section_access">Quyền vào khu vực phụ huynh</string>
     <string name="lock_info_hold">Ai giữ biểu tượng ổ khóa 3 giây đều vào được.</string>
     <string name="lock_info_device">Sau khi giữ, Android sẽ yêu cầu khóa màn hình của điện thoại (mã PIN, hình mở khóa hoặc vân tay). Lý tưởng cho điện thoại dùng chung.</string>

@@ -95,6 +95,12 @@
     <string name="media_view">Bekijken en selecteren …</string>
     <string name="media_share_all">Alles delen …</string>
     <string name="media_delete_all">Alles verwijderen (3 s vasthouden)</string>
+    <string name="section_export">Exporteren naar apparaat</string>
+    <string name="section_export_info">Kopieert elke nieuwe foto en video naar een map op dit apparaat. Een synchronisatie-app kan ze daar ophalen; Snaplet zelf uploadt niets. Verwijderen in Snaplet verwijdert de kopieën niet.</string>
+    <string name="export_auto">Nieuwe opnames automatisch kopiëren</string>
+    <string name="export_choose_folder">Map kiezen</string>
+    <string name="export_folder">Map: %1$s</string>
+    <string name="export_failed">Exporteren mislukt. Kies de map opnieuw.</string>
     <string name="section_access">Toegang tot het oudergedeelte</string>
     <string name="lock_info_hold">Wie het slotje 3 s vasthoudt, komt erin.</string>
     <string name="lock_info_device">Na het vasthouden vraagt Android om de schermvergrendeling van de telefoon (pincode, patroon of vingerafdruk). Ideaal voor een gedeelde telefoon.</string>

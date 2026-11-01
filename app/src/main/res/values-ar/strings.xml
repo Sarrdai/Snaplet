@@ -99,6 +99,12 @@
     <string name="media_view">عرض وتحديد …</string>
     <string name="media_share_all">مشاركة الكل …</string>
     <string name="media_delete_all">حذف الكل (اضغط 3 ث)</string>
+    <string name="section_export">التصدير إلى الجهاز</string>
+    <string name="section_export_info">ينسخ كل صورة وفيديو جديد إلى مجلد على هذا الجهاز. يمكن لتطبيق مزامنة أخذها من هناك؛ Snaplet نفسه لا يرفع أي شيء. الحذف في Snaplet لا يحذف النسخ.</string>
+    <string name="export_auto">نسخ التسجيلات الجديدة تلقائيًا</string>
+    <string name="export_choose_folder">اختيار المجلد</string>
+    <string name="export_folder">المجلد: %1$s</string>
+    <string name="export_failed">فشل التصدير. يُرجى اختيار المجلد مرة أخرى.</string>
     <string name="section_access">الدخول إلى منطقة الوالدين</string>
     <string name="lock_info_hold">يدخل كل من يضغط على القفل لمدة 3 ث.</string>
     <string name="lock_info_device">بعد الضغط المطوّل، يطلب Android قفل شاشة الهاتف (رقم PIN أو نمط أو بصمة). مثالي للهاتف المشترك.</string>

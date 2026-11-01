@@ -153,6 +153,10 @@ fun ParentScreen(
     onTogglePin: () -> Unit,
     onClose: () -> Unit,
     initialGalleryOpen: Boolean = false,
+    /** Readable name of the export folder, null if none is set or access was lost. */
+    exportFolder: String? = null,
+    exportFailed: Boolean = false,
+    onChooseExportFolder: () -> Unit = {},
 ) {
     val touches = remember { TouchCounter() }
     var galleryOpen by remember { mutableStateOf(initialGalleryOpen) }
@@ -272,6 +276,17 @@ fun ParentScreen(
                     Button(stringResource(R.string.media_share_all), touches = touches) { onShare(items.toList()) }
                     HoldButton(stringResource(R.string.media_delete_all), touches) { onDelete(items.toList()) }
                 }
+            }
+            Section(stringResource(R.string.section_export), stringResource(R.string.section_export_info)) {
+                SwitchRow(
+                    stringResource(R.string.export_auto),
+                    exportFolder?.let { stringResource(R.string.export_folder, it) },
+                    settings.autoExport, touches,
+                ) { on -> if (on && exportFolder == null) onChooseExportFolder() else onChange(settings.copy(autoExport = on)) }
+                if (exportFailed && settings.autoExport) {
+                    BasicText(stringResource(R.string.export_failed), style = Body.copy(color = Accent))
+                }
+                Button(stringResource(R.string.export_choose_folder), touches = touches, onClick = onChooseExportFolder)
             }
             Section(stringResource(R.string.section_access), stringResource(settings.parentLock.info)) {
                 Options(ParentLock.entries, settings.parentLock, { it.label }, touches) { lock ->

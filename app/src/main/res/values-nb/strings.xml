@@ -95,6 +95,12 @@
     <string name="media_view">Vis og velg …</string>
     <string name="media_share_all">Del alle …</string>
     <string name="media_delete_all">Slett alle (hold 3 s)</string>
+    <string name="section_export">Eksport til enheten</string>
+    <string name="section_export_info">Kopierer hvert nytt bilde og video til en mappe på denne enheten. En synkroniseringsapp kan hente dem derfra; Snaplet laster aldri opp noe selv. Sletting i Snaplet sletter ikke kopiene.</string>
+    <string name="export_auto">Kopier nye opptak automatisk</string>
+    <string name="export_choose_folder">Velg mappe</string>
+    <string name="export_folder">Mappe: %1$s</string>
+    <string name="export_failed">Eksporten mislyktes. Velg mappen på nytt.</string>
     <string name="section_access">Tilgang til foreldreområdet</string>
     <string name="lock_info_hold">Alle som holder låsen i 3 s, kommer inn.</string>
     <string name="lock_info_device">Etter at du har holdt, ber Android om telefonens skjermlås (PIN-kode, mønster eller fingeravtrykk). Ideelt for en delt telefon.</string>
