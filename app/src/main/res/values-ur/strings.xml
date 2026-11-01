@@ -95,6 +95,15 @@
     <string name="media_view">دیکھیں اور منتخب کریں …</string>
     <string name="media_share_all">سب شیئر کریں …</string>
     <string name="media_delete_all">سب حذف کریں (3 سیکنڈ دبائیں)</string>
+    <string name="section_export">ڈیوائس پر ایکسپورٹ</string>
+    <string name="section_export_info">ہر نئی تصویر اور ویڈیو کو اس ڈیوائس کے ایک فولڈر میں کاپی کرتا ہے۔ کوئی سنک ایپ انہیں وہاں سے لے سکتی ہے؛ Snaplet خود کچھ اپ لوڈ نہیں کرتا۔ Snaplet میں حذف کرنے سے کاپیاں حذف نہیں ہوتیں۔</string>
+    <string name="export_auto">نئی ریکارڈنگز خودکار طور پر کاپی کریں</string>
+    <string name="export_choose_folder">فولڈر منتخب کریں</string>
+    <string name="export_folder">فولڈر: %1$s</string>
+    <string name="export_failed">ایکسپورٹ ناکام ہو گیا۔ براہ کرم فولڈر دوبارہ منتخب کریں۔</string>
+    <string name="export_all">ابھی سب کاپی کریں</string>
+    <string name="export_all_progress">کاپی ہو رہا ہے… %2$d میں سے %1$d</string>
+    <string name="export_all_done">%1$d کاپی ہوئے، %2$d پہلے سے فولڈر میں تھے۔</string>
     <string name="section_access">والدین کے حصے تک رسائی</string>
     <string name="lock_info_hold">جو بھی تالے کو 3 سیکنڈ دبائے رکھے، وہ اندر جا سکتا ہے۔</string>
     <string name="lock_info_device">دبانے کے بعد Android فون کا اسکرین لاک (PIN، پیٹرن یا فنگر پرنٹ) مانگتا ہے۔ مشترکہ فون کے لیے بہترین۔</string>

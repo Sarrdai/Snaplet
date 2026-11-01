@@ -153,6 +153,15 @@ fun ParentScreen(
     onTogglePin: () -> Unit,
     onClose: () -> Unit,
     initialGalleryOpen: Boolean = false,
+    /** Readable name of the export folder, null if none is set or access was lost. */
+    exportFolder: String? = null,
+    exportFailed: Boolean = false,
+    onChooseExportFolder: () -> Unit = {},
+    /** Copying all recordings: done to total while running, null otherwise. */
+    exportAllProgress: Pair<Int, Int>? = null,
+    /** Last "copy all": copied to already present. */
+    exportAllResult: Pair<Int, Int>? = null,
+    onExportAll: () -> Unit = {},
 ) {
     val touches = remember { TouchCounter() }
     var galleryOpen by remember { mutableStateOf(initialGalleryOpen) }
@@ -271,6 +280,31 @@ fun ParentScreen(
                     Button(stringResource(R.string.media_view), primary = true, touches = touches) { galleryOpen = true }
                     Button(stringResource(R.string.media_share_all), touches = touches) { onShare(items.toList()) }
                     HoldButton(stringResource(R.string.media_delete_all), touches) { onDelete(items.toList()) }
+                }
+            }
+            Section(stringResource(R.string.section_export), stringResource(R.string.section_export_info)) {
+                SwitchRow(
+                    stringResource(R.string.export_auto),
+                    exportFolder?.let { stringResource(R.string.export_folder, it) },
+                    settings.autoExport, touches,
+                ) { on -> if (on && exportFolder == null) onChooseExportFolder() else onChange(settings.copy(autoExport = on)) }
+                if (exportFailed) {
+                    BasicText(stringResource(R.string.export_failed), style = Body.copy(color = Accent))
+                }
+                when {
+                    exportAllProgress != null -> BasicText(
+                        stringResource(R.string.export_all_progress, exportAllProgress.first, exportAllProgress.second),
+                        style = Chip.copy(color = Text),
+                    )
+                    exportAllResult != null -> BasicText(
+                        stringResource(R.string.export_all_done, exportAllResult.first, exportAllResult.second), style = Body,
+                    )
+                }
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(10.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Button(stringResource(R.string.export_choose_folder), touches = touches, onClick = onChooseExportFolder)
+                    if (exportFolder != null && exportAllProgress == null) {
+                        Button(stringResource(R.string.export_all), touches = touches, onClick = onExportAll)
+                    }
                 }
             }
             Section(stringResource(R.string.section_access), stringResource(settings.parentLock.info)) {

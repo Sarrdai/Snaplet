@@ -94,6 +94,15 @@
     <string name="media_view">表示して選択 …</string>
     <string name="media_share_all">すべて共有 …</string>
     <string name="media_delete_all">すべて削除（3 秒長押し）</string>
+    <string name="section_export">端末へのエクスポート</string>
+    <string name="section_export_info">新しい写真と動画をこの端末のフォルダにコピーします。同期アプリがそこから取り込めます。Snaplet自体は何もアップロードしません。Snapletで削除してもコピーは削除されません。</string>
+    <string name="export_auto">新しい撮影を自動でコピー</string>
+    <string name="export_choose_folder">フォルダを選択</string>
+    <string name="export_folder">フォルダ: %1$s</string>
+    <string name="export_failed">エクスポートに失敗しました。フォルダを選び直してください。</string>
+    <string name="export_all">今すぐすべてコピー</string>
+    <string name="export_all_progress">コピー中… %1$d / %2$d</string>
+    <string name="export_all_done">%1$d件をコピー、%2$d件は既にフォルダにありました。</string>
     <string name="section_access">保護者エリアへのアクセス</string>
     <string name="lock_info_hold">鍵を 3 秒長押しすれば誰でも入れます。</string>
     <string name="lock_info_device">長押しの後、Android がスマートフォンの画面ロック（PIN、パターン、指紋）を求めます。家族で共有するスマートフォンに最適です。</string>

@@ -95,6 +95,15 @@
     <string name="media_view">Näytä ja valitse …</string>
     <string name="media_share_all">Jaa kaikki …</string>
     <string name="media_delete_all">Poista kaikki (pidä 3 s)</string>
+    <string name="section_export">Vienti laitteelle</string>
+    <string name="section_export_info">Kopioi jokaisen uuden kuvan ja videon tämän laitteen kansioon. Synkronointisovellus voi noutaa ne sieltä; Snaplet itse ei lähetä mitään. Poistaminen Snapletissa ei poista kopioita.</string>
+    <string name="export_auto">Kopioi uudet tallenteet automaattisesti</string>
+    <string name="export_choose_folder">Valitse kansio</string>
+    <string name="export_folder">Kansio: %1$s</string>
+    <string name="export_failed">Vienti epäonnistui. Valitse kansio uudelleen.</string>
+    <string name="export_all">Kopioi kaikki nyt</string>
+    <string name="export_all_progress">Kopioidaan… %1$d / %2$d</string>
+    <string name="export_all_done">%1$d kopioitu, %2$d oli jo kansiossa.</string>
     <string name="section_access">Pääsy vanhempien alueelle</string>
     <string name="lock_info_hold">Kuka tahansa, joka pitää lukkoa 3 s, pääsee sisään.</string>
     <string name="lock_info_device">Painalluksen jälkeen Android pyytää puhelimen näytön lukitusta (PIN, kuvio tai sormenjälki). Sopii hyvin jaettuun puhelimeen.</string>

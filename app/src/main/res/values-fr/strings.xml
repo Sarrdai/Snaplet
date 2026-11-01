@@ -96,6 +96,15 @@
     <string name="media_view">Voir et sélectionner …</string>
     <string name="media_share_all">Tout partager …</string>
     <string name="media_delete_all">Tout supprimer (maintenir 3 s)</string>
+    <string name="section_export">Export vers l\'appareil</string>
+    <string name="section_export_info">Copie chaque nouvelle photo et vidéo dans un dossier de cet appareil. Une app de synchronisation peut les récupérer ; Snaplet n\'envoie jamais rien lui-même. Supprimer dans Snaplet ne supprime pas les copies.</string>
+    <string name="export_auto">Copier automatiquement les nouveaux enregistrements</string>
+    <string name="export_choose_folder">Choisir un dossier</string>
+    <string name="export_folder">Dossier : %1$s</string>
+    <string name="export_failed">L\'export a échoué. Veuillez choisir à nouveau le dossier.</string>
+    <string name="export_all">Tout copier maintenant</string>
+    <string name="export_all_progress">Copie… %1$d sur %2$d</string>
+    <string name="export_all_done">%1$d copiés, %2$d étaient déjà dans le dossier.</string>
     <string name="section_access">Accès à l\'espace parents</string>
     <string name="lock_info_hold">Quiconque maintient le cadenas 3 s entre.</string>
     <string name="lock_info_device">Après l\'appui long, Android demande le verrouillage d\'écran du téléphone (code, schéma ou empreinte). Idéal pour un téléphone partagé.</string>

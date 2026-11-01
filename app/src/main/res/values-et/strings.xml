@@ -95,6 +95,15 @@
     <string name="media_view">Vaata ja vali …</string>
     <string name="media_share_all">Jaga kõiki …</string>
     <string name="media_delete_all">Kustuta kõik (hoia 3 s)</string>
+    <string name="section_export">Eksport seadmesse</string>
+    <string name="section_export_info">Kopeerib iga uue foto ja video selle seadme kausta. Sünkroonimisrakendus võib need sealt võtta; Snaplet ise ei laadi midagi üles. Snapletis kustutamine koopiaid ei kustuta.</string>
+    <string name="export_auto">Kopeeri uued salvestused automaatselt</string>
+    <string name="export_choose_folder">Vali kaust</string>
+    <string name="export_folder">Kaust: %1$s</string>
+    <string name="export_failed">Eksport ebaõnnestus. Vali kaust uuesti.</string>
+    <string name="export_all">Kopeeri kõik kohe</string>
+    <string name="export_all_progress">Kopeerimine… %1$d / %2$d</string>
+    <string name="export_all_done">%1$d kopeeritud, %2$d olid juba kaustas.</string>
     <string name="section_access">Juurdepääs vanemate alale</string>
     <string name="lock_info_hold">Igaüks, kes hoiab lukku 3 s, pääseb sisse.</string>
     <string name="lock_info_device">Pärast hoidmist küsib Android telefoni ekraanilukku (PIN-kood, muster või sõrmejälg). Ideaalne jagatud telefonile.</string>

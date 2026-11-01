@@ -94,6 +94,15 @@
     <string name="media_view">查看和选择 …</string>
     <string name="media_share_all">全部分享 …</string>
     <string name="media_delete_all">全部删除（按住 3 秒）</string>
+    <string name="section_export">导出到设备</string>
+    <string name="section_export_info">将每张新照片和每段新视频复制到此设备上的一个文件夹。同步应用可以从那里获取；Snaplet 本身不会上传任何内容。在 Snaplet 中删除不会删除副本。</string>
+    <string name="export_auto">自动复制新拍摄内容</string>
+    <string name="export_choose_folder">选择文件夹</string>
+    <string name="export_folder">文件夹：%1$s</string>
+    <string name="export_failed">导出失败。请重新选择文件夹。</string>
+    <string name="export_all">立即全部复制</string>
+    <string name="export_all_progress">正在复制… %1$d / %2$d</string>
+    <string name="export_all_done">已复制 %1$d 个，%2$d 个已在文件夹中。</string>
     <string name="section_access">进入家长区的方式</string>
     <string name="lock_info_hold">任何人按住锁图标 3 秒即可进入。</string>
     <string name="lock_info_device">长按后，Android 会要求输入手机的屏幕锁（PIN 码、图案或指纹）。非常适合共用的手机。</string>

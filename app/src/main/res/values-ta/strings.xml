@@ -95,6 +95,15 @@
     <string name="media_view">பார் &amp; தேர்ந்தெடு …</string>
     <string name="media_share_all">அனைத்தையும் பகிர் …</string>
     <string name="media_delete_all">அனைத்தையும் நீக்கு (3 வி. அழுத்திப் பிடி)</string>
+    <string name="section_export">சாதனத்திற்கு ஏற்றுமதி</string>
+    <string name="section_export_info">ஒவ்வொரு புதிய படத்தையும் வீடியோவையும் இந்தச் சாதனத்தில் உள்ள ஒரு கோப்புறைக்கு நகலெடுக்கிறது. ஒத்திசைவு ஆப்ஸ் அங்கிருந்து எடுக்கலாம்; Snaplet தானாக எதையும் பதிவேற்றாது. Snaplet-இல் நீக்கினால் நகல்கள் நீங்காது.</string>
+    <string name="export_auto">புதிய பதிவுகளைத் தானாக நகலெடு</string>
+    <string name="export_choose_folder">கோப்புறையைத் தேர்ந்தெடு</string>
+    <string name="export_folder">கோப்புறை: %1$s</string>
+    <string name="export_failed">ஏற்றுமதி தோல்வியடைந்தது. கோப்புறையை மீண்டும் தேர்ந்தெடுக்கவும்.</string>
+    <string name="export_all">இப்போது அனைத்தையும் நகலெடு</string>
+    <string name="export_all_progress">நகலெடுக்கிறது… %2$d இல் %1$d</string>
+    <string name="export_all_done">%1$d நகலெடுக்கப்பட்டன, %2$d ஏற்கனவே கோப்புறையில் இருந்தன.</string>
     <string name="section_access">பெற்றோர் பகுதிக்கான அணுகல்</string>
     <string name="lock_info_hold">பூட்டை 3 வி. அழுத்திப் பிடிக்கும் எவரும் உள்ளே செல்லலாம்.</string>
     <string name="lock_info_device">அழுத்திப் பிடித்த பிறகு Android ஃபோனின் திரைப் பூட்டைக் (PIN, பேட்டர்ன் அல்லது கைரேகை) கேட்கும். பகிரப்படும் ஃபோனுக்கு ஏற்றது.</string>

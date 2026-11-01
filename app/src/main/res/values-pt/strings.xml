@@ -96,6 +96,15 @@
     <string name="media_view">Ver e selecionar …</string>
     <string name="media_share_all">Compartilhar tudo …</string>
     <string name="media_delete_all">Excluir tudo (segure 3 s)</string>
+    <string name="section_export">Exportar para o dispositivo</string>
+    <string name="section_export_info">Copia cada nova foto e vídeo para uma pasta neste dispositivo. Um app de sincronização pode pegá-los de lá; o Snaplet não envia nada sozinho. Apagar no Snaplet não apaga as cópias.</string>
+    <string name="export_auto">Copiar novas gravações automaticamente</string>
+    <string name="export_choose_folder">Escolher pasta</string>
+    <string name="export_folder">Pasta: %1$s</string>
+    <string name="export_failed">Falha na exportação. Escolha a pasta novamente.</string>
+    <string name="export_all">Copiar tudo agora</string>
+    <string name="export_all_progress">Copiando… %1$d de %2$d</string>
+    <string name="export_all_done">%1$d copiados, %2$d já estavam na pasta.</string>
     <string name="section_access">Acesso à área dos pais</string>
     <string name="lock_info_hold">Quem segurar o cadeado por 3 s entra.</string>
     <string name="lock_info_device">Depois de segurar, o Android pede o bloqueio de tela do celular (PIN, padrão ou digital). Ideal para um celular compartilhado.</string>

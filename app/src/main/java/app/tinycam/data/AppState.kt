@@ -1,10 +1,15 @@
 package app.tinycam.data
 
 import android.content.Context
+import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 /** Single source of truth for settings, daily usage and the media list. */
@@ -12,6 +17,14 @@ class AppState(context: Context) {
     private val store = SettingsStore(context)
     val media = MediaRepository(context)
     val thumbs = Thumbnails()
+    private val exporter = MediaExporter(context)
+
+    /** Exports outlive the camera screen, so a copy is not cut off when the child's time is up. */
+    private val exportScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+
+    /** The chosen folder was removed or access was revoked; shown in the parent area. */
+    var exportFailed by mutableStateOf(false)
+        private set
 
     var settings by mutableStateOf(store.loadSettings())
         private set
@@ -40,6 +53,59 @@ class AppState(context: Context) {
     fun addUsageTime(ms: Long) {
         if (ms > 0) setUsage(usage.copy(usageMs = usage.usageMs + ms))
     }
+
+    /** Progress of [exportAll] as done to total; null while it is not running. */
+    var exportAllProgress by mutableStateOf<Pair<Int, Int>?>(null)
+        private set
+
+    /** Result of the last [exportAll] as copied to already present. */
+    var exportAllResult by mutableStateOf<Pair<Int, Int>?>(null)
+        private set
+
+    /** Copies every saved recording that is not yet in the export folder, oldest first. */
+    fun exportAll() {
+        val tree = settings.exportFolder?.let(Uri::parse) ?: return
+        if (exportAllProgress != null) return
+        val all = items.toList().asReversed()
+        exportAllResult = null
+        exportScope.launch {
+            val existing = exporter.existingNames(tree)
+            val todo = all.filter { it.file.name !in existing && it.file.exists() }
+            var copied = 0
+            exportAllProgress = 0 to todo.size
+            for (item in todo) {
+                // Stop at the first failure: the folder is usually gone, not just one file
+                if (!exporter.export(item, tree)) {
+                    exportFailed = true
+                    break
+                }
+                exportAllProgress = ++copied to todo.size
+            }
+            exportAllProgress = null
+            exportAllResult = copied to all.size - todo.size
+        }
+    }
+
+    /** Called once a recording is final (after filters were baked in). */
+    fun exportIfWanted(item: MediaItem) {
+        val folder = settings.exportFolder?.takeIf { settings.autoExport } ?: return
+        exportScope.launch {
+            if (!item.file.exists()) return@launch
+            val ok = exporter.export(item, Uri.parse(folder))
+            if (!ok) exportFailed = true
+        }
+    }
+
+    /** Parents picked a folder in the system picker; turns automatic export on. */
+    fun setExportFolder(tree: Uri) {
+        exporter.adopt(tree)
+        exportFailed = false
+        exportAllResult = null
+        updateSettings(settings.copy(autoExport = true, exportFolder = tree.toString()))
+    }
+
+    /** True if the export folder is set and still writable. */
+    fun exportFolderUsable() = settings.exportFolder?.let { exporter.hasAccess(Uri.parse(it)) } == true
 
     fun resetToday() = setUsage(DailyUsage(today()))
 

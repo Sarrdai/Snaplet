@@ -95,6 +95,15 @@
     <string name="media_view">دیدن و انتخاب …</string>
     <string name="media_share_all">هم‌رسانی همه …</string>
     <string name="media_delete_all">حذف همه (۳ ثانیه نگه دارید)</string>
+    <string name="section_export">خروجی به دستگاه</string>
+    <string name="section_export_info">هر عکس و ویدیوی جدید را در پوشه‌ای روی این دستگاه کپی می‌کند. یک برنامه همگام‌سازی می‌تواند آن‌ها را از آنجا بردارد؛ خود Snaplet چیزی بارگذاری نمی‌کند. حذف در Snaplet کپی‌ها را حذف نمی‌کند.</string>
+    <string name="export_auto">کپی خودکار ضبط‌های جدید</string>
+    <string name="export_choose_folder">انتخاب پوشه</string>
+    <string name="export_folder">پوشه: %1$s</string>
+    <string name="export_failed">خروجی ناموفق بود. لطفاً دوباره پوشه را انتخاب کنید.</string>
+    <string name="export_all">کپی همه اکنون</string>
+    <string name="export_all_progress">در حال کپی… %1$d از %2$d</string>
+    <string name="export_all_done">%1$d کپی شد، %2$d از قبل در پوشه بود.</string>
     <string name="section_access">دسترسی به بخش والدین</string>
     <string name="lock_info_hold">هر کسی قفل را ۳ ثانیه نگه دارد وارد می‌شود.</string>
     <string name="lock_info_device">پس از نگه داشتن، Android قفل صفحهٔ گوشی (پین، الگو یا اثر انگشت) را می‌خواهد. برای گوشی مشترک ایده‌آل است.</string>

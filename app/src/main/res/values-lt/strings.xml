@@ -97,6 +97,15 @@
     <string name="media_view">Peržiūrėti ir pasirinkti …</string>
     <string name="media_share_all">Bendrinti visas …</string>
     <string name="media_delete_all">Ištrinti visas (laikyti 3 s)</string>
+    <string name="section_export">Eksportas į įrenginį</string>
+    <string name="section_export_info">Kopijuoja kiekvieną naują nuotrauką ir vaizdo įrašą į šio įrenginio aplanką. Sinchronizavimo programa gali juos iš ten paimti; pati Snaplet nieko neįkelia. Ištrynus Snaplet, kopijos neištrinamos.</string>
+    <string name="export_auto">Automatiškai kopijuoti naujus įrašus</string>
+    <string name="export_choose_folder">Pasirinkti aplanką</string>
+    <string name="export_folder">Aplankas: %1$s</string>
+    <string name="export_failed">Eksportuoti nepavyko. Pasirinkite aplanką iš naujo.</string>
+    <string name="export_all">Kopijuoti viską dabar</string>
+    <string name="export_all_progress">Kopijuojama… %1$d iš %2$d</string>
+    <string name="export_all_done">Nukopijuota: %1$d, jau buvo aplanke: %2$d.</string>
     <string name="section_access">Prieiga prie tėvų skilties</string>
     <string name="lock_info_hold">Įeina kiekvienas, kuris 3 s palaiko spyną.</string>
     <string name="lock_info_device">Palaikius „Android“ paprašo telefono ekrano užrakto (PIN kodo, atrakinimo piešinio ar piršto atspaudo). Puikiai tinka bendram telefonui.</string>

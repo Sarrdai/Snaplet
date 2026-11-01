@@ -96,6 +96,15 @@
     <string name="media_view">צפייה ובחירה …</string>
     <string name="media_share_all">שיתוף הכול …</string>
     <string name="media_delete_all">מחיקת הכול (לחיצה של 3 שנ׳)</string>
+    <string name="section_export">ייצוא למכשיר</string>
+    <string name="section_export_info">מעתיק כל תמונה וסרטון חדשים לתיקייה במכשיר זה. אפליקציית סנכרון יכולה לקחת אותם משם; Snaplet עצמה לא מעלה דבר. מחיקה ב-Snaplet לא מוחקת את העותקים.</string>
+    <string name="export_auto">העתקה אוטומטית של הקלטות חדשות</string>
+    <string name="export_choose_folder">בחירת תיקייה</string>
+    <string name="export_folder">תיקייה: %1$s</string>
+    <string name="export_failed">הייצוא נכשל. נא לבחור את התיקייה מחדש.</string>
+    <string name="export_all">העתקת הכול עכשיו</string>
+    <string name="export_all_progress">מעתיק… %1$d מתוך %2$d</string>
+    <string name="export_all_done">הועתקו %1$d, %2$d כבר היו בתיקייה.</string>
     <string name="section_access">גישה לאזור ההורים</string>
     <string name="lock_info_hold">כל מי שלוחץ על המנעול 3 שנ׳ נכנס.</string>
     <string name="lock_info_device">אחרי הלחיצה, Android מבקשת את נעילת המסך של הטלפון (קוד, קו ביטול נעילה או טביעת אצבע). אידיאלי לטלפון משותף.</string>

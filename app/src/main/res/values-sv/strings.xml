@@ -95,6 +95,15 @@
     <string name="media_view">Visa och markera …</string>
     <string name="media_share_all">Dela alla …</string>
     <string name="media_delete_all">Radera alla (håll 3 s)</string>
+    <string name="section_export">Export till enheten</string>
+    <string name="section_export_info">Kopierar varje nytt foto och video till en mapp på den här enheten. En synkapp kan hämta dem därifrån; Snaplet laddar aldrig upp något själv. Att radera i Snaplet raderar inte kopiorna.</string>
+    <string name="export_auto">Kopiera nya inspelningar automatiskt</string>
+    <string name="export_choose_folder">Välj mapp</string>
+    <string name="export_folder">Mapp: %1$s</string>
+    <string name="export_failed">Exporten misslyckades. Välj mappen igen.</string>
+    <string name="export_all">Kopiera alla nu</string>
+    <string name="export_all_progress">Kopierar … %1$d av %2$d</string>
+    <string name="export_all_done">%1$d kopierade, %2$d fanns redan i mappen.</string>
     <string name="section_access">Åtkomst till föräldraläget</string>
     <string name="lock_info_hold">Den som håller låset i 3 s kommer in.</string>
     <string name="lock_info_device">Efter att ha hållit ber Android om telefonens skärmlås (pinkod, mönster eller fingeravtryck). Perfekt för en delad telefon.</string>

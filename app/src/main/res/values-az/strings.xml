@@ -95,6 +95,15 @@
     <string name="media_view">Bax və seç …</string>
     <string name="media_share_all">Hamısını paylaş …</string>
     <string name="media_delete_all">Hamısını sil (3 san basılı saxla)</string>
+    <string name="section_export">Cihaza ixrac</string>
+    <string name="section_export_info">Hər yeni foto və videonu bu cihazdakı qovluğa kopyalayır. Sinxronizasiya tətbiqi onları oradan götürə bilər; Snaplet özü heç nə yükləmir. Snaplet-də silmək kopyaları silmir.</string>
+    <string name="export_auto">Yeni çəkilişləri avtomatik kopyala</string>
+    <string name="export_choose_folder">Qovluq seç</string>
+    <string name="export_folder">Qovluq: %1$s</string>
+    <string name="export_failed">İxrac alınmadı. Qovluğu yenidən seçin.</string>
+    <string name="export_all">Hamısını indi kopyala</string>
+    <string name="export_all_progress">Kopyalanır… %1$d / %2$d</string>
+    <string name="export_all_done">%1$d kopyalandı, %2$d artıq qovluqda idi.</string>
     <string name="section_access">Valideyn bölməsinə giriş</string>
     <string name="lock_info_hold">Kilidi 3 san basılı saxlayan hər kəs daxil olur.</string>
     <string name="lock_info_device">Basılı saxladıqdan sonra Android telefonun ekran kilidini (PIN, naxış və ya barmaq izi) istəyir. Ortaq telefon üçün ideal.</string>

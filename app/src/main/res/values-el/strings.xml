@@ -95,6 +95,15 @@
     <string name="media_view">Προβολή και επιλογή …</string>
     <string name="media_share_all">Κοινοποίηση όλων …</string>
     <string name="media_delete_all">Διαγραφή όλων (κράτημα 3 δ.)</string>
+    <string name="section_export">Εξαγωγή στη συσκευή</string>
+    <string name="section_export_info">Αντιγράφει κάθε νέα φωτογραφία και βίντεο σε φάκελο αυτής της συσκευής. Μια εφαρμογή συγχρονισμού μπορεί να τα πάρει από εκεί· το ίδιο το Snaplet δεν ανεβάζει τίποτα. Η διαγραφή στο Snaplet δεν διαγράφει τα αντίγραφα.</string>
+    <string name="export_auto">Αυτόματη αντιγραφή νέων λήψεων</string>
+    <string name="export_choose_folder">Επιλογή φακέλου</string>
+    <string name="export_folder">Φάκελος: %1$s</string>
+    <string name="export_failed">Η εξαγωγή απέτυχε. Επιλέξτε ξανά τον φάκελο.</string>
+    <string name="export_all">Αντιγραφή όλων τώρα</string>
+    <string name="export_all_progress">Αντιγραφή… %1$d από %2$d</string>
+    <string name="export_all_done">Αντιγράφηκαν %1$d, %2$d υπήρχαν ήδη στον φάκελο.</string>
     <string name="section_access">Πρόσβαση στην περιοχή γονέων</string>
     <string name="lock_info_hold">Όποιος κρατήσει το λουκέτο 3 δ. μπαίνει.</string>
     <string name="lock_info_device">Μετά το κράτημα, το Android ζητά το κλείδωμα οθόνης του τηλεφώνου (PIN, μοτίβο ή δακτυλικό αποτύπωμα). Ιδανικό για κοινόχρηστο τηλέφωνο.</string>
