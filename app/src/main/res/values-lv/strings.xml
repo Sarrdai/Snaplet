@@ -102,6 +102,9 @@
     <string name="export_choose_folder">Izvēlēties mapi</string>
     <string name="export_folder">Mape: %1$s</string>
     <string name="export_failed">Eksports neizdevās. Lūdzu, izvēlieties mapi vēlreiz.</string>
+    <string name="export_all">Kopēt visu tagad</string>
+    <string name="export_all_progress">Kopē… %1$d no %2$d</string>
+    <string name="export_all_done">Nokopēti: %1$d, jau bija mapē: %2$d.</string>
     <string name="section_access">Piekļuve vecāku sadaļai</string>
     <string name="lock_info_hold">Ikviens, kurš 3 s tur slēdzeni, tiek iekšā.</string>
     <string name="lock_info_device">Pēc turēšanas Android pieprasa tālruņa ekrāna bloķēšanu (PIN, kombināciju vai pirkstu nospiedumu). Ideāli koplietotam tālrunim.</string>

@@ -100,6 +100,9 @@
     <string name="export_choose_folder">選擇資料夾</string>
     <string name="export_folder">資料夾：%1$s</string>
     <string name="export_failed">匯出失敗。請重新選擇資料夾。</string>
+    <string name="export_all">立即全部複製</string>
+    <string name="export_all_progress">正在複製… %1$d / %2$d</string>
+    <string name="export_all_done">已複製 %1$d 個，%2$d 個已在資料夾中。</string>
     <string name="section_access">進入家長專區的方式</string>
     <string name="lock_info_hold">任何人按住鎖頭 3 秒即可進入。</string>
     <string name="lock_info_device">長按後，Android 會要求輸入手機的螢幕鎖定（PIN 碼、圖案或指紋）。非常適合共用的手機。</string>

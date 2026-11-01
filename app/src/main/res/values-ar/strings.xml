@@ -105,6 +105,9 @@
     <string name="export_choose_folder">اختيار المجلد</string>
     <string name="export_folder">المجلد: %1$s</string>
     <string name="export_failed">فشل التصدير. يُرجى اختيار المجلد مرة أخرى.</string>
+    <string name="export_all">نسخ الكل الآن</string>
+    <string name="export_all_progress">جارٍ النسخ… %1$d من %2$d</string>
+    <string name="export_all_done">تم نسخ %1$d، وكان %2$d موجودًا في المجلد بالفعل.</string>
     <string name="section_access">الدخول إلى منطقة الوالدين</string>
     <string name="lock_info_hold">يدخل كل من يضغط على القفل لمدة 3 ث.</string>
     <string name="lock_info_device">بعد الضغط المطوّل، يطلب Android قفل شاشة الهاتف (رقم PIN أو نمط أو بصمة). مثالي للهاتف المشترك.</string>

@@ -101,6 +101,9 @@
     <string name="export_choose_folder">Valitse kansio</string>
     <string name="export_folder">Kansio: %1$s</string>
     <string name="export_failed">Vienti epäonnistui. Valitse kansio uudelleen.</string>
+    <string name="export_all">Kopioi kaikki nyt</string>
+    <string name="export_all_progress">Kopioidaan… %1$d / %2$d</string>
+    <string name="export_all_done">%1$d kopioitu, %2$d oli jo kansiossa.</string>
     <string name="section_access">Pääsy vanhempien alueelle</string>
     <string name="lock_info_hold">Kuka tahansa, joka pitää lukkoa 3 s, pääsee sisään.</string>
     <string name="lock_info_device">Painalluksen jälkeen Android pyytää puhelimen näytön lukitusta (PIN, kuvio tai sormenjälki). Sopii hyvin jaettuun puhelimeen.</string>

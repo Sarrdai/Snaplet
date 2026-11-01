@@ -101,6 +101,9 @@
     <string name="export_choose_folder">ఫోల్డర్ ఎంచుకోండి</string>
     <string name="export_folder">ఫోల్డర్: %1$s</string>
     <string name="export_failed">ఎగుమతి విఫలమైంది. దయచేసి ఫోల్డర్‌ను మళ్లీ ఎంచుకోండి.</string>
+    <string name="export_all">ఇప్పుడే అన్నీ కాపీ చేయి</string>
+    <string name="export_all_progress">కాపీ చేస్తోంది… %2$d లో %1$d</string>
+    <string name="export_all_done">%1$d కాపీ అయ్యాయి, %2$d ఇప్పటికే ఫోల్డర్‌లో ఉన్నాయి.</string>
     <string name="section_access">తల్లిదండ్రుల విభాగానికి యాక్సెస్</string>
     <string name="lock_info_hold">తాళాన్ని 3 సె. నొక్కి పట్టుకున్న ఎవరైనా లోపలికి వెళ్లవచ్చు.</string>
     <string name="lock_info_device">నొక్కి పట్టుకున్న తర్వాత Android ఫోన్ స్క్రీన్ లాక్ (PIN, ప్యాటర్న్ లేదా వేలిముద్ర) అడుగుతుంది. షేర్ చేసే ఫోన్‌కు అనువైనది.</string>

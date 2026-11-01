@@ -100,6 +100,9 @@
     <string name="export_choose_folder">フォルダを選択</string>
     <string name="export_folder">フォルダ: %1$s</string>
     <string name="export_failed">エクスポートに失敗しました。フォルダを選び直してください。</string>
+    <string name="export_all">今すぐすべてコピー</string>
+    <string name="export_all_progress">コピー中… %1$d / %2$d</string>
+    <string name="export_all_done">%1$d件をコピー、%2$d件は既にフォルダにありました。</string>
     <string name="section_access">保護者エリアへのアクセス</string>
     <string name="lock_info_hold">鍵を 3 秒長押しすれば誰でも入れます。</string>
     <string name="lock_info_device">長押しの後、Android がスマートフォンの画面ロック（PIN、パターン、指紋）を求めます。家族で共有するスマートフォンに最適です。</string>

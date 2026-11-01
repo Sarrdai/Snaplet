@@ -103,6 +103,9 @@
     <string name="export_choose_folder">Выбрать папку</string>
     <string name="export_folder">Папка: %1$s</string>
     <string name="export_failed">Не удалось экспортировать. Выберите папку заново.</string>
+    <string name="export_all">Скопировать всё сейчас</string>
+    <string name="export_all_progress">Копирование… %1$d из %2$d</string>
+    <string name="export_all_done">Скопировано: %1$d, уже было в папке: %2$d.</string>
     <string name="section_access">Доступ к разделу для родителей</string>
     <string name="lock_info_hold">Войти может любой, кто удерживает замок 3 с.</string>
     <string name="lock_info_device">После удержания Android запросит блокировку экрана телефона (PIN-код, графический ключ или отпечаток). Идеально для общего телефона.</string>

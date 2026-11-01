@@ -101,6 +101,9 @@
     <string name="export_choose_folder">Tria una carpeta</string>
     <string name="export_folder">Carpeta: %1$s</string>
     <string name="export_failed">L\'exportació ha fallat. Torna a triar la carpeta.</string>
+    <string name="export_all">Copia-ho tot ara</string>
+    <string name="export_all_progress">S\'està copiant… %1$d de %2$d</string>
+    <string name="export_all_done">%1$d copiats, %2$d ja eren a la carpeta.</string>
     <string name="section_access">Accés a l\'àrea per a pares</string>
     <string name="lock_info_hold">Qui mantingui premut el cadenat 3 s hi entra.</string>
     <string name="lock_info_device">Després de mantenir premut, Android demana el bloqueig de pantalla del telèfon (PIN, patró o empremta). Ideal per a un telèfon compartit.</string>

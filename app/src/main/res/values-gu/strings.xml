@@ -101,6 +101,9 @@
     <string name="export_choose_folder">ફોલ્ડર પસંદ કરો</string>
     <string name="export_folder">ફોલ્ડર: %1$s</string>
     <string name="export_failed">નિકાસ નિષ્ફળ. કૃપા કરીને ફરીથી ફોલ્ડર પસંદ કરો.</string>
+    <string name="export_all">હમણાં બધું કૉપિ કરો</string>
+    <string name="export_all_progress">કૉપિ થઈ રહ્યું છે… %2$d માંથી %1$d</string>
+    <string name="export_all_done">%1$d કૉપિ થયા, %2$d પહેલેથી ફોલ્ડરમાં હતા.</string>
     <string name="section_access">વાલી વિભાગમાં પ્રવેશ</string>
     <string name="lock_info_hold">તાળું 3 સે. દબાવી રાખનાર કોઈ પણ અંદર જઈ શકે છે.</string>
     <string name="lock_info_device">દબાવી રાખ્યા પછી Android ફોનનું સ્ક્રીન લૉક (PIN, પૅટર્ન અથવા ફિંગરપ્રિન્ટ) માગે છે. શેર કરેલા ફોન માટે આદર્શ.</string>

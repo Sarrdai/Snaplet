@@ -101,6 +101,9 @@
     <string name="export_choose_folder">Избор на папка</string>
     <string name="export_folder">Папка: %1$s</string>
     <string name="export_failed">Износът не бе успешен. Изберете папката отново.</string>
+    <string name="export_all">Копиране на всички сега</string>
+    <string name="export_all_progress">Копиране… %1$d от %2$d</string>
+    <string name="export_all_done">Копирани: %1$d, вече в папката: %2$d.</string>
     <string name="section_access">Достъп до зоната за родители</string>
     <string name="lock_info_hold">Всеки, който задържи катинара 3 сек, влиза.</string>
     <string name="lock_info_device">След задържането Android иска заключването на екрана на телефона (ПИН, фигура или пръстов отпечатък). Идеално за споделен телефон.</string>

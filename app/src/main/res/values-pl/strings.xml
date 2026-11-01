@@ -103,6 +103,9 @@
     <string name="export_choose_folder">Wybierz folder</string>
     <string name="export_folder">Folder: %1$s</string>
     <string name="export_failed">Eksport nie powiódł się. Wybierz folder ponownie.</string>
+    <string name="export_all">Kopiuj wszystko teraz</string>
+    <string name="export_all_progress">Kopiowanie… %1$d z %2$d</string>
+    <string name="export_all_done">Skopiowano: %1$d, już w folderze: %2$d.</string>
     <string name="section_access">Dostęp do strefy rodzica</string>
     <string name="lock_info_hold">Wejdzie każdy, kto przytrzyma kłódkę przez 3 s.</string>
     <string name="lock_info_device">Po przytrzymaniu Android poprosi o blokadę ekranu telefonu (PIN, wzór lub odcisk palca). Idealne dla wspólnego telefonu.</string>

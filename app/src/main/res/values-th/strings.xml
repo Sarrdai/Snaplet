@@ -100,6 +100,9 @@
     <string name="export_choose_folder">เลือกโฟลเดอร์</string>
     <string name="export_folder">โฟลเดอร์: %1$s</string>
     <string name="export_failed">ส่งออกไม่สำเร็จ โปรดเลือกโฟลเดอร์อีกครั้ง</string>
+    <string name="export_all">คัดลอกทั้งหมดตอนนี้</string>
+    <string name="export_all_progress">กำลังคัดลอก… %1$d จาก %2$d</string>
+    <string name="export_all_done">คัดลอกแล้ว %1$d รายการ มีอยู่ในโฟลเดอร์แล้ว %2$d รายการ</string>
     <string name="section_access">การเข้าสู่ส่วนของผู้ปกครอง</string>
     <string name="lock_info_hold">ใครก็ตามที่กดแม่กุญแจค้าง 3 วินาทีจะเข้าได้</string>
     <string name="lock_info_device">หลังจากกดค้าง Android จะขอการล็อกหน้าจอของโทรศัพท์ (PIN, รูปแบบ หรือลายนิ้วมือ) เหมาะสำหรับโทรศัพท์ที่ใช้ร่วมกัน</string>

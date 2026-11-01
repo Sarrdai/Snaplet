@@ -101,6 +101,9 @@
     <string name="export_choose_folder">Klasör seç</string>
     <string name="export_folder">Klasör: %1$s</string>
     <string name="export_failed">Dışa aktarma başarısız. Lütfen klasörü yeniden seçin.</string>
+    <string name="export_all">Hepsini şimdi kopyala</string>
+    <string name="export_all_progress">Kopyalanıyor… %1$d / %2$d</string>
+    <string name="export_all_done">%1$d kopyalandı, %2$d zaten klasördeydi.</string>
     <string name="section_access">Ebeveyn alanına erişim</string>
     <string name="lock_info_hold">Kilidi 3 sn basılı tutan herkes girer.</string>
     <string name="lock_info_device">Basılı tuttuktan sonra Android telefonun ekran kilidini (PIN, desen veya parmak izi) ister. Ortak kullanılan bir telefon için ideal.</string>

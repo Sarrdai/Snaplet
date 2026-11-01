@@ -42,6 +42,16 @@ class MediaExporter(private val context: Context) {
         }.getOrDefault(false)
     }
 
+    /** File names already in [tree], so copying everything again skips earlier copies. */
+    suspend fun existingNames(tree: Uri): Set<String> = withContext(Dispatchers.IO) {
+        runCatching {
+            val children = DocumentsContract.buildChildDocumentsUriUsingTree(tree, DocumentsContract.getTreeDocumentId(tree))
+            resolver.query(children, arrayOf(DocumentsContract.Document.COLUMN_DISPLAY_NAME), null, null, null)?.use { c ->
+                buildSet { while (c.moveToNext()) c.getString(0)?.let(::add) }
+            }.orEmpty()
+        }.getOrDefault(emptySet())
+    }
+
     companion object {
         /** Readable folder name, e.g. "DCIM/Snaplet" for "primary:DCIM/Snaplet". */
         fun label(tree: Uri): String =

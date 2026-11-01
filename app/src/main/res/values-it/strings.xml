@@ -102,6 +102,9 @@
     <string name="export_choose_folder">Scegli cartella</string>
     <string name="export_folder">Cartella: %1$s</string>
     <string name="export_failed">Esportazione non riuscita. Scegli di nuovo la cartella.</string>
+    <string name="export_all">Copia tutto ora</string>
+    <string name="export_all_progress">Copia in corso… %1$d di %2$d</string>
+    <string name="export_all_done">%1$d copiati, %2$d erano già nella cartella.</string>
     <string name="section_access">Accesso all\'area genitori</string>
     <string name="lock_info_hold">Chi tiene premuto il lucchetto per 3 s entra.</string>
     <string name="lock_info_device">Dopo la pressione, Android chiede il blocco schermo del telefono (PIN, sequenza o impronta). Ideale per un telefono condiviso.</string>

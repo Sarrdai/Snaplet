@@ -103,6 +103,9 @@
     <string name="export_choose_folder">Vybrať priečinok</string>
     <string name="export_folder">Priečinok: %1$s</string>
     <string name="export_failed">Export zlyhal. Vyberte priečinok znova.</string>
+    <string name="export_all">Skopírovať všetko teraz</string>
+    <string name="export_all_progress">Kopírovanie… %1$d z %2$d</string>
+    <string name="export_all_done">Skopírované: %1$d, už v priečinku: %2$d.</string>
     <string name="section_access">Prístup do rodičovskej sekcie</string>
     <string name="lock_info_hold">Kto podrží zámok 3 s, dostane sa dnu.</string>
     <string name="lock_info_device">Po podržaní si Android vyžiada zámku obrazovky telefónu (PIN, vzor alebo odtlačok prsta). Ideálne pre zdieľaný telefón.</string>

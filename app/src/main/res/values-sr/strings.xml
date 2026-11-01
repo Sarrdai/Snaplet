@@ -102,6 +102,9 @@
     <string name="export_choose_folder">Изабери фасциклу</string>
     <string name="export_folder">Фасцикла: %1$s</string>
     <string name="export_failed">Извоз није успео. Поново изаберите фасциклу.</string>
+    <string name="export_all">Копирај све сада</string>
+    <string name="export_all_progress">Копирање… %1$d од %2$d</string>
+    <string name="export_all_done">Копирано: %1$d, већ у фасцикли: %2$d.</string>
     <string name="section_access">Приступ родитељском делу</string>
     <string name="lock_info_hold">Ко држи катанац 3 с, улази.</string>
     <string name="lock_info_device">Након држања Android тражи закључавање екрана телефона (PIN, шаблон или отисак прста). Идеално за заједнички телефон.</string>

@@ -101,6 +101,9 @@
     <string name="export_choose_folder">Pumili ng folder</string>
     <string name="export_folder">Folder: %1$s</string>
     <string name="export_failed">Nabigo ang pag-export. Pakipili muli ang folder.</string>
+    <string name="export_all">Kopyahin lahat ngayon</string>
+    <string name="export_all_progress">Kinokopya… %1$d sa %2$d</string>
+    <string name="export_all_done">%1$d ang nakopya, %2$d ang nasa folder na.</string>
     <string name="section_access">Pagpasok sa lugar ng magulang</string>
     <string name="lock_info_hold">Makakapasok ang sinumang pumindot sa kandado nang 3 s.</string>
     <string name="lock_info_device">Pagkatapos pindutin, hihingin ng Android ang screen lock ng telepono (PIN, pattern o fingerprint). Mainam para sa telepono na pinagsasaluhan.</string>

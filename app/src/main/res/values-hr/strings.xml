@@ -102,6 +102,9 @@
     <string name="export_choose_folder">Odaberi mapu</string>
     <string name="export_folder">Mapa: %1$s</string>
     <string name="export_failed">Izvoz nije uspio. Ponovno odaberite mapu.</string>
+    <string name="export_all">Kopiraj sve sada</string>
+    <string name="export_all_progress">Kopiranje… %1$d od %2$d</string>
+    <string name="export_all_done">Kopirano: %1$d, već u mapi: %2$d.</string>
     <string name="section_access">Pristup roditeljskom dijelu</string>
     <string name="lock_info_hold">Tko drži lokot 3 s, ulazi.</string>
     <string name="lock_info_device">Nakon držanja Android traži zaključavanje zaslona telefona (PIN, uzorak ili otisak prsta). Idealno za zajednički telefon.</string>

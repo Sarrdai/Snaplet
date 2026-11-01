@@ -101,6 +101,9 @@
     <string name="export_choose_folder">Mappa kiválasztása</string>
     <string name="export_folder">Mappa: %1$s</string>
     <string name="export_failed">Az exportálás sikertelen. Válassza ki újra a mappát.</string>
+    <string name="export_all">Összes másolása most</string>
+    <string name="export_all_progress">Másolás… %1$d / %2$d</string>
+    <string name="export_all_done">%1$d másolva, %2$d már a mappában volt.</string>
     <string name="section_access">Hozzáférés a szülői részhez</string>
     <string name="lock_info_hold">Bárki bejut, aki 3 mp-ig nyomva tartja a lakatot.</string>
     <string name="lock_info_device">A nyomva tartás után az Android kéri a telefon képernyőzárát (PIN, minta vagy ujjlenyomat). Ideális közös telefonhoz.</string>

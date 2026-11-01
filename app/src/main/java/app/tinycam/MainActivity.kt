@@ -197,6 +197,9 @@ class MainActivity : ComponentActivity() {
                         ?.let { MediaExporter.label(Uri.parse(it)) },
                     exportFailed = app.exportFailed || (settings.autoExport && !app.exportFolderUsable()),
                     onChooseExportFolder = ::chooseExportFolder,
+                    exportAllProgress = app.exportAllProgress,
+                    exportAllResult = app.exportAllResult,
+                    onExportAll = app::exportAll,
                     onClose = {
                         parentOpen = false
                         pinIfWanted()

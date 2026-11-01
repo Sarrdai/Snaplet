@@ -100,6 +100,9 @@
     <string name="export_choose_folder">Pilih folder</string>
     <string name="export_folder">Folder: %1$s</string>
     <string name="export_failed">Ekspor gagal. Pilih folder lagi.</string>
+    <string name="export_all">Salin semua sekarang</string>
+    <string name="export_all_progress">Menyalin… %1$d dari %2$d</string>
+    <string name="export_all_done">%1$d disalin, %2$d sudah ada di folder.</string>
     <string name="section_access">Akses ke area orang tua</string>
     <string name="lock_info_hold">Siapa pun yang menahan gembok selama 3 dtk bisa masuk.</string>
     <string name="lock_info_device">Setelah ditahan, Android meminta kunci layar ponsel (PIN, pola, atau sidik jari). Ideal untuk ponsel yang dipakai bersama.</string>

@@ -100,6 +100,9 @@
     <string name="export_choose_folder">Pilih folder</string>
     <string name="export_folder">Folder: %1$s</string>
     <string name="export_failed">Eksport gagal. Sila pilih folder sekali lagi.</string>
+    <string name="export_all">Salin semua sekarang</string>
+    <string name="export_all_progress">Menyalin… %1$d daripada %2$d</string>
+    <string name="export_all_done">%1$d disalin, %2$d sudah ada dalam folder.</string>
     <string name="section_access">Akses ke ruang ibu bapa</string>
     <string name="lock_info_hold">Sesiapa yang menahan mangga selama 3 saat boleh masuk.</string>
     <string name="lock_info_device">Selepas ditahan, Android meminta kunci skrin telefon (PIN, corak atau cap jari). Sesuai untuk telefon yang dikongsi.</string>

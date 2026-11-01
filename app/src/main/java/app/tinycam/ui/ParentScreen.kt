@@ -157,6 +157,11 @@ fun ParentScreen(
     exportFolder: String? = null,
     exportFailed: Boolean = false,
     onChooseExportFolder: () -> Unit = {},
+    /** Copying all recordings: done to total while running, null otherwise. */
+    exportAllProgress: Pair<Int, Int>? = null,
+    /** Last "copy all": copied to already present. */
+    exportAllResult: Pair<Int, Int>? = null,
+    onExportAll: () -> Unit = {},
 ) {
     val touches = remember { TouchCounter() }
     var galleryOpen by remember { mutableStateOf(initialGalleryOpen) }
@@ -283,10 +288,24 @@ fun ParentScreen(
                     exportFolder?.let { stringResource(R.string.export_folder, it) },
                     settings.autoExport, touches,
                 ) { on -> if (on && exportFolder == null) onChooseExportFolder() else onChange(settings.copy(autoExport = on)) }
-                if (exportFailed && settings.autoExport) {
+                if (exportFailed) {
                     BasicText(stringResource(R.string.export_failed), style = Body.copy(color = Accent))
                 }
-                Button(stringResource(R.string.export_choose_folder), touches = touches, onClick = onChooseExportFolder)
+                when {
+                    exportAllProgress != null -> BasicText(
+                        stringResource(R.string.export_all_progress, exportAllProgress.first, exportAllProgress.second),
+                        style = Chip.copy(color = Text),
+                    )
+                    exportAllResult != null -> BasicText(
+                        stringResource(R.string.export_all_done, exportAllResult.first, exportAllResult.second), style = Body,
+                    )
+                }
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(10.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Button(stringResource(R.string.export_choose_folder), touches = touches, onClick = onChooseExportFolder)
+                    if (exportFolder != null && exportAllProgress == null) {
+                        Button(stringResource(R.string.export_all), touches = touches, onClick = onExportAll)
+                    }
+                }
             }
             Section(stringResource(R.string.section_access), stringResource(settings.parentLock.info)) {
                 Options(ParentLock.entries, settings.parentLock, { it.label }, touches) { lock ->

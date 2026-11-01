@@ -110,6 +110,9 @@
     <string name="export_choose_folder">Ordner wählen</string>
     <string name="export_folder">Ordner: %1$s</string>
     <string name="export_failed">Export fehlgeschlagen. Bitte den Ordner neu wählen.</string>
+    <string name="export_all">Alle jetzt kopieren</string>
+    <string name="export_all_progress">Kopiere … %1$d von %2$d</string>
+    <string name="export_all_done">%1$d kopiert, %2$d waren schon im Ordner.</string>
     <string name="section_access">Zugang zum Eltern-Bereich</string>
     <string name="lock_info_hold">Wer das Schloss 3 s hält, kommt hinein.</string>
     <string name="lock_info_device">Nach dem Halten fragt Android die Bildschirmsperre des Handys ab (PIN, Muster oder Fingerabdruck). Ideal für ein geteiltes Handy.</string>

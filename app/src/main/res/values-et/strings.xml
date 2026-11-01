@@ -101,6 +101,9 @@
     <string name="export_choose_folder">Vali kaust</string>
     <string name="export_folder">Kaust: %1$s</string>
     <string name="export_failed">Eksport ebaõnnestus. Vali kaust uuesti.</string>
+    <string name="export_all">Kopeeri kõik kohe</string>
+    <string name="export_all_progress">Kopeerimine… %1$d / %2$d</string>
+    <string name="export_all_done">%1$d kopeeritud, %2$d olid juba kaustas.</string>
     <string name="section_access">Juurdepääs vanemate alale</string>
     <string name="lock_info_hold">Igaüks, kes hoiab lukku 3 s, pääseb sisse.</string>
     <string name="lock_info_device">Pärast hoidmist küsib Android telefoni ekraanilukku (PIN-kood, muster või sõrmejälg). Ideaalne jagatud telefonile.</string>

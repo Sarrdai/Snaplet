@@ -101,6 +101,9 @@
     <string name="export_choose_folder">Vælg mappe</string>
     <string name="export_folder">Mappe: %1$s</string>
     <string name="export_failed">Eksporten mislykkedes. Vælg mappen igen.</string>
+    <string name="export_all">Kopiér alle nu</string>
+    <string name="export_all_progress">Kopierer … %1$d af %2$d</string>
+    <string name="export_all_done">%1$d kopieret, %2$d var allerede i mappen.</string>
     <string name="section_access">Adgang til forældreområdet</string>
     <string name="lock_info_hold">Alle, der holder låsen i 3 s, kommer ind.</string>
     <string name="lock_info_device">Efter at have holdt beder Android om telefonens skærmlås (pinkode, mønster eller fingeraftryk). Ideelt til en delt telefon.</string>

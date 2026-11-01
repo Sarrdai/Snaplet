@@ -120,6 +120,9 @@
     <string name="export_choose_folder">Choose folder</string>
     <string name="export_folder">Folder: %1$s</string>
     <string name="export_failed">Export failed. Please choose the folder again.</string>
+    <string name="export_all">Copy all now</string>
+    <string name="export_all_progress">Copying… %1$d of %2$d</string>
+    <string name="export_all_done">%1$d copied, %2$d were already in the folder.</string>
     <string name="section_access">Access to the parent area</string>
     <string name="lock_info_hold">Anyone who holds the lock for 3 s gets in.</string>
     <string name="lock_info_device">After holding, Android asks for the phone\'s screen lock (PIN, pattern or fingerprint). Ideal for a shared phone.</string>

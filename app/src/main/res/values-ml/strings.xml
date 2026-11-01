@@ -101,6 +101,9 @@
     <string name="export_choose_folder">ഫോൾഡർ തിരഞ്ഞെടുക്കുക</string>
     <string name="export_folder">ഫോൾഡർ: %1$s</string>
     <string name="export_failed">എക്സ്പോർട്ട് പരാജയപ്പെട്ടു. ഫോൾഡർ വീണ്ടും തിരഞ്ഞെടുക്കുക.</string>
+    <string name="export_all">എല്ലാം ഇപ്പോൾ പകർത്തുക</string>
+    <string name="export_all_progress">പകർത്തുന്നു… %2$d-ൽ %1$d</string>
+    <string name="export_all_done">%1$d പകർത്തി, %2$d ഇതിനകം ഫോൾഡറിൽ ഉണ്ടായിരുന്നു.</string>
     <string name="section_access">രക്ഷിതാക്കളുടെ വിഭാഗത്തിലേക്കുള്ള പ്രവേശനം</string>
     <string name="lock_info_hold">പൂട്ട് 3 സെ. അമർത്തിപ്പിടിക്കുന്ന ആർക്കും അകത്ത് കടക്കാം.</string>
     <string name="lock_info_device">അമർത്തിപ്പിടിച്ച ശേഷം Android ഫോണിന്റെ സ്ക്രീൻ ലോക്ക് (PIN, പാറ്റേൺ അല്ലെങ്കിൽ വിരലടയാളം) ആവശ്യപ്പെടും. പങ്കിട്ട് ഉപയോഗിക്കുന്ന ഫോണിന് അനുയോജ്യം.</string>

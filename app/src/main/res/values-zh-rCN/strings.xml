@@ -100,6 +100,9 @@
     <string name="export_choose_folder">选择文件夹</string>
     <string name="export_folder">文件夹：%1$s</string>
     <string name="export_failed">导出失败。请重新选择文件夹。</string>
+    <string name="export_all">立即全部复制</string>
+    <string name="export_all_progress">正在复制… %1$d / %2$d</string>
+    <string name="export_all_done">已复制 %1$d 个，%2$d 个已在文件夹中。</string>
     <string name="section_access">进入家长区的方式</string>
     <string name="lock_info_hold">任何人按住锁图标 3 秒即可进入。</string>
     <string name="lock_info_device">长按后，Android 会要求输入手机的屏幕锁（PIN 码、图案或指纹）。非常适合共用的手机。</string>

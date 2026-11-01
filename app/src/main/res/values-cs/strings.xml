@@ -103,6 +103,9 @@
     <string name="export_choose_folder">Vybrat složku</string>
     <string name="export_folder">Složka: %1$s</string>
     <string name="export_failed">Export se nezdařil. Vyberte složku znovu.</string>
+    <string name="export_all">Zkopírovat vše nyní</string>
+    <string name="export_all_progress">Kopírování… %1$d z %2$d</string>
+    <string name="export_all_done">Zkopírováno: %1$d, již ve složce: %2$d.</string>
     <string name="section_access">Přístup do rodičovské sekce</string>
     <string name="lock_info_hold">Kdo podrží zámek 3 s, ten se dostane dovnitř.</string>
     <string name="lock_info_device">Po podržení si Android vyžádá zámek obrazovky telefonu (PIN, gesto nebo otisk prstu). Ideální pro sdílený telefon.</string>
