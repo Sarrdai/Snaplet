@@ -4,6 +4,19 @@ import androidx.activity.compose.BackHandler
 import androidx.annotation.StringRes
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.semantics.ProgressBarRangeInfo
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.progressBarRangeInfo
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.setProgress
+import androidx.compose.ui.semantics.stateDescription
+import androidx.compose.ui.semantics.toggleableState
+import androidx.compose.ui.state.ToggleableState
+import androidx.compose.ui.unit.LayoutDirection
 import app.tinycam.R
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Canvas
@@ -310,19 +323,34 @@ private fun Indented(content: @Composable () -> Unit) {
 private fun ValueSlider(value: Int, range: IntRange, step: Int, label: @Composable (Int) -> String, onChange: (Int) -> Unit) {
     val change by rememberUpdatedState(onChange)
     val current by rememberUpdatedState(value)
+    val text = label(value)
+    // Right-to-left languages fill the track from the right
+    val rtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+    fun snap(raw: Float) = (range.first + ((raw - range.first) / step).roundToInt() * step).coerceIn(range)
     fun valueAt(x: Float, width: Int): Int {
-        val raw = range.first + (x / width).coerceIn(0f, 1f) * (range.last - range.first)
-        return (range.first + ((raw - range.first) / step).roundToInt() * step).coerceIn(range)
+        val f = (x / width).coerceIn(0f, 1f)
+        return snap(range.first + (if (rtl) 1f - f else f) * (range.last - range.first))
     }
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
         Canvas(
             Modifier
                 .weight(1f)
                 .height(40.dp)
-                .pointerInput(range, step) {
+                .semantics {
+                    stateDescription = text
+                    progressBarRangeInfo = ProgressBarRangeInfo(
+                        value.toFloat(), range.first.toFloat()..range.last.toFloat(), (range.last - range.first) / step - 1,
+                    )
+                    setProgress { v ->
+                        val next = snap(v)
+                        if (next != current) change(next)
+                        true
+                    }
+                }
+                .pointerInput(range, step, rtl) {
                     detectTapGestures { change(valueAt(it.x, size.width)) }
                 }
-                .pointerInput(range, step) {
+                .pointerInput(range, step, rtl) {
                     detectHorizontalDragGestures { c, _ ->
                         c.consume()
                         val v = valueAt(c.position.x, size.width)
@@ -334,13 +362,14 @@ private fun ValueSlider(value: Int, range: IntRange, step: Int, label: @Composab
             val y = size.height / 2
             val track = 6.dp.toPx()
             val knob = 12.dp.toPx()
-            val x = knob + f * (size.width - knob * 2)
+            val x = knob + (if (rtl) 1f - f else f) * (size.width - knob * 2)
+            val start = if (rtl) size.width - knob else knob
             drawLine(Line, Offset(knob, y), Offset(size.width - knob, y), track, StrokeCap.Round)
-            drawLine(Accent, Offset(knob, y), Offset(x, y), track, StrokeCap.Round)
+            drawLine(Accent, Offset(start, y), Offset(x, y), track, StrokeCap.Round)
             drawCircle(Accent, knob, Offset(x, y))
             drawCircle(Ink, knob * 0.35f, Offset(x, y))
         }
-        BasicText(label(value), Modifier.widthIn(min = 76.dp), style = Chip.copy(color = Text, textAlign = TextAlign.End))
+        BasicText(text, Modifier.widthIn(min = 76.dp), style = Chip.copy(color = Text, textAlign = TextAlign.End))
     }
 }
 
@@ -363,11 +392,18 @@ private fun Section(title: String, info: String? = null, content: @Composable ()
 
 @Composable
 private fun <T> Options(values: List<T>, selected: T, label: (T) -> Int, touches: TouchCounter, onSelect: (T) -> Unit) =
-    MultiOptions(values, setOf(selected), label, touches, onSelect)
+    MultiOptions(values, setOf(selected), label, touches, single = true, onToggle = onSelect)
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun <T> MultiOptions(values: List<T>, selected: Set<T>, label: (T) -> Int, touches: TouchCounter, onToggle: (T) -> Unit) {
+private fun <T> MultiOptions(
+    values: List<T>,
+    selected: Set<T>,
+    label: (T) -> Int,
+    touches: TouchCounter,
+    single: Boolean = false,
+    onToggle: (T) -> Unit,
+) {
     FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         values.forEach { v ->
             val on = v in selected
@@ -377,7 +413,8 @@ private fun <T> MultiOptions(values: List<T>, selected: Set<T>, label: (T) -> In
                     .clip(RoundedCornerShape(50))
                     .background(if (on) Accent else Bg)
                     .border(1.dp, if (on) Accent else Line, RoundedCornerShape(50))
-                    .singleTap(touches) { onToggle(v) }
+                    .singleTap(touches, if (single) Role.RadioButton else Role.Checkbox) { onToggle(v) }
+                    .semantics { if (single) { this.selected = on } else { toggleableState = ToggleableState(on) } }
                     .padding(horizontal = 16.dp, vertical = 10.dp),
                 style = Chip.copy(color = if (on) Ink else Text),
             )
@@ -398,7 +435,8 @@ private fun SwitchRow(
         Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(14.dp))
-            .singleTap(touches) { onToggle(!on) }
+            .singleTap(touches, Role.Switch) { onToggle(!on) }
+            .semantics { toggleableState = ToggleableState(on) }
             .padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(14.dp),
@@ -439,7 +477,7 @@ private fun Button(text: String, primary: Boolean = false, touches: TouchCounter
         Modifier
             .clip(RoundedCornerShape(50))
             .background(if (primary) Accent else Line)
-            .singleTap(touches, onClick)
+            .singleTap(touches, onTap = onClick)
             .padding(horizontal = 20.dp, vertical = 12.dp),
         style = Chip.copy(color = if (primary) Ink else Text),
     )
@@ -474,7 +512,8 @@ private fun SkinPicker(selected: Skin, round: Boolean, touches: TouchCounter, on
                     .clip(RoundedCornerShape(16.dp))
                     .background(Bg)
                     .border(if (on) 2.5.dp else 1.dp, if (on) Accent else Line, RoundedCornerShape(16.dp))
-                    .singleTap(touches) { onSelect(skin) }
+                    .singleTap(touches, Role.RadioButton) { onSelect(skin) }
+                    .semantics { this.selected = on }
                     .width(112.dp)
                     .padding(vertical = 12.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -574,7 +613,17 @@ private fun ParentGallery(
 /** Generous touch target around the visible circle so selecting is easy. */
 @Composable
 private fun SelectCircle(on: Boolean, touches: TouchCounter, modifier: Modifier, onToggle: () -> Unit) {
-    Box(modifier.size(48.dp).singleTap(touches, onToggle), contentAlignment = Alignment.Center) {
+    val label = stringResource(R.string.select)
+    Box(
+        modifier
+            .size(48.dp)
+            .singleTap(touches, Role.Checkbox, onTap = onToggle)
+            .semantics {
+                contentDescription = label
+                toggleableState = ToggleableState(on)
+            },
+        contentAlignment = Alignment.Center,
+    ) {
         Box(
             Modifier
                 .size(28.dp)
@@ -687,34 +736,39 @@ private fun PinPad(title: String, message: String?, enabled: Boolean = true, onC
     ) {
         BasicText(title, style = Title.copy(fontSize = 26.sp, textAlign = TextAlign.Center))
         BasicText(message ?: " ", style = Body.copy(textAlign = TextAlign.Center))
-        Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+        Row(Modifier.semantics { contentDescription = "${entered.length} / 4" }, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
             repeat(4) { i ->
                 Box(Modifier.size(18.dp).background(if (i < entered.length) Accent else Line, CircleShape))
             }
         }
         val keys = listOf("1", "2", "3", "4", "5", "6", "7", "8", "9", "", "0", "⌫")
-        keys.chunked(3).forEach { row ->
-            Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                row.forEach { key ->
-                    Box(
-                        Modifier
-                            .size(76.dp)
-                            .then(if (key.isEmpty()) Modifier else Modifier.background(Card, CircleShape).border(1.dp, Line, CircleShape))
-                            .singleTap(touches) {
-                                if (!enabled || key.isEmpty()) return@singleTap
-                                if (key == "⌫") {
-                                    entered = entered.dropLast(1)
-                                } else if (entered.length < 4) {
-                                    entered += key
-                                    if (entered.length == 4) {
-                                        onComplete(entered)
-                                        entered = ""
+        val deleteLabel = stringResource(R.string.cd_delete_digit)
+        // Keypads keep their 1-2-3 order in right-to-left languages too
+        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+            keys.chunked(3).forEach { row ->
+                Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                    row.forEach { key ->
+                        Box(
+                            Modifier
+                                .size(76.dp)
+                                .then(if (key.isEmpty()) Modifier else Modifier.background(Card, CircleShape).border(1.dp, Line, CircleShape))
+                                .singleTap(touches, accessible = key.isNotEmpty()) {
+                                    if (!enabled || key.isEmpty()) return@singleTap
+                                    if (key == "⌫") {
+                                        entered = entered.dropLast(1)
+                                    } else if (entered.length < 4) {
+                                        entered += key
+                                        if (entered.length == 4) {
+                                            onComplete(entered)
+                                            entered = ""
+                                        }
                                     }
                                 }
-                            },
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        BasicText(key, style = Title.copy(fontSize = 28.sp))
+                                .then(if (key == "⌫") Modifier.semantics { contentDescription = deleteLabel } else Modifier),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            BasicText(key, style = Title.copy(fontSize = 28.sp))
+                        }
                     }
                 }
             }

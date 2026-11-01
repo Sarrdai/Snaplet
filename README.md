@@ -72,8 +72,9 @@ zwischen beiden Versionen um.
 
 ### Sprachen
 
-Alle Texte stehen in `app/src/main/res/values/strings.xml` (Englisch, Standard) und
-`values-de/strings.xml` (Deutsch). Neue Sprache: siehe [TODO.md](TODO.md#5-weitere-sprachen);
+Alle Texte stehen in `app/src/main/res/values/strings.xml` (Englisch, Standard) und je Sprache in
+`values-<sprache>/strings.xml` (52 Sprachen, Store-Texte in `store/listing/<play-locale>/`).
+Neue Sprache: siehe [TODO.md](TODO.md#5-weitere-sprachen);
 `TranslationsTest` prüft, dass jede Sprache vollständig ist.
 
 ### Signatur

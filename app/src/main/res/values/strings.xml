@@ -12,6 +12,10 @@
     <string name="cd_zoom">Zoom</string>
     <string name="cd_parent_area">Parent area</string>
     <string name="cd_back">Back</string>
+    <string name="cd_shutter">Shutter</string>
+    <string name="cd_photo">Photo</string>
+    <string name="cd_video">Video</string>
+    <string name="cd_delete_digit">Delete digit</string>
 
     <!-- Permission screen -->
     <string name="permission_title">%1$s needs the camera</string>
@@ -32,6 +36,15 @@
     <string name="skin_fire_truck">Fire truck</string>
     <string name="skin_monster">Monster</string>
     <string name="skin_ice_cream">Ice cream</string>
+
+    <!-- Filter names for screen readers -->
+    <string name="effect_black_white">Black and white</string>
+    <string name="effect_sepia">Sepia</string>
+    <string name="effect_vivid">Vivid</string>
+    <string name="effect_stars">Stars</string>
+    <string name="effect_hearts">Hearts</string>
+    <string name="effect_porthole">Porthole</string>
+    <string name="effect_leaves">Leaves</string>
 
     <!-- Option labels -->
     <string name="side_left">Left</string>

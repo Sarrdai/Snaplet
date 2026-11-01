@@ -1,5 +1,7 @@
 package app.tinycam
 
+import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.platform.LocalLayoutDirection
 import android.Manifest
 import android.app.ActivityManager
 import android.content.Intent
@@ -143,10 +145,13 @@ class MainActivity : ComponentActivity() {
         val settings = app.settings
         val usage = app.usage
         Box(Modifier.fillMaxSize()) {
-            when {
-                !hasCamera -> PermissionScreen(hasCameraBlocked, ::requestPermissions, ::openAppSettings)
-                settings.isTimeUp(usage) -> SleepScreen(settings.skin, ::requestParentArea)
-                else -> CameraScreen(app, hasAudio, ::requestParentArea)
+            // The child's screens stay left-to-right in every language: "shutter left/right" means the physical side
+            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                when {
+                    !hasCamera -> PermissionScreen(hasCameraBlocked, ::requestPermissions, ::openAppSettings)
+                    settings.isTimeUp(usage) -> SleepScreen(settings.skin, ::requestParentArea)
+                    else -> CameraScreen(app, hasAudio, ::requestParentArea)
+                }
             }
             pinGateAction?.let { action ->
                 ParentPinGate(

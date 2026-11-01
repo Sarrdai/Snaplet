@@ -1,6 +1,17 @@
 package app.tinycam.ui
 
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.ProgressBarRangeInfo
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.onClick
+import androidx.compose.ui.semantics.onLongClick
+import androidx.compose.ui.semantics.progressBarRangeInfo
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.setProgress
+import androidx.compose.ui.semantics.toggleableState
+import androidx.compose.ui.state.ToggleableState
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloat
@@ -117,7 +128,7 @@ fun Modifier.trackTouches(counter: TouchCounter) = pointerInput(counter) {
 fun Modifier.pressDown(touches: TouchCounter, onPressedChange: (Boolean) -> Unit = {}, onPress: () -> Unit): Modifier {
     val press by rememberUpdatedState(onPress)
     val change by rememberUpdatedState(onPressedChange)
-    return pointerInput(touches) {
+    return accessibleClick(Role.Button) { press() }.pointerInput(touches) {
         awaitEachGesture {
             val down = awaitFirstDown(requireUnconsumed = false)
             if (touches.count > 1) return@awaitEachGesture
@@ -130,11 +141,14 @@ fun Modifier.pressDown(touches: TouchCounter, onPressedChange: (Boolean) -> Unit
     }
 }
 
-/** A single-finger tap (down and up inside the element). */
+/**
+ * A single-finger tap (down and up inside the element). Screen readers get a click action with [role];
+ * [accessible] = false for layers that only swallow touches.
+ */
 @Composable
-fun Modifier.singleTap(touches: TouchCounter, onTap: () -> Unit): Modifier {
+fun Modifier.singleTap(touches: TouchCounter, role: Role? = Role.Button, accessible: Boolean = true, onTap: () -> Unit): Modifier {
     val tap by rememberUpdatedState(onTap)
-    return pointerInput(touches) {
+    return (if (accessible) accessibleClick(role) { tap() } else this).pointerInput(touches) {
         awaitEachGesture {
             val down = awaitFirstDown(requireUnconsumed = false)
             if (touches.count > 1) return@awaitEachGesture
@@ -146,6 +160,15 @@ fun Modifier.singleTap(touches: TouchCounter, onTap: () -> Unit): Modifier {
             }
         }
     }
+}
+
+/**
+ * Screen readers and switch access cannot do the finger gestures below, so they get a semantic action instead.
+ * The multi-finger protection stays for touch; these services are deliberately switched on by an adult.
+ */
+private fun Modifier.accessibleClick(role: Role?, action: () -> Unit) = semantics(mergeDescendants = true) {
+    if (role != null) this.role = role
+    onClick { action(); true }
 }
 
 @Stable
@@ -183,13 +206,18 @@ fun Modifier.holdToActivate(
     touches: TouchCounter,
     enabled: Boolean = true,
     onTooShort: () -> Unit = {},
+    role: Role = Role.Button,
     onComplete: () -> Unit,
 ): Modifier {
     val complete by rememberUpdatedState(onComplete)
     val tooShort by rememberUpdatedState(onTooShort)
     val indicator = LocalHoldIndicator.current
     if (!enabled) return this
-    return pointerInput(durationMs, touches) {
+    // The hold maps to the screen reader's long press ("double-tap and hold")
+    return semantics(mergeDescendants = true) {
+        this.role = role
+        onLongClick { complete(); true }
+    }.pointerInput(durationMs, touches) {
         coroutineScope {
             awaitEachGesture {
                 val down = awaitFirstDown(requireUnconsumed = false)
@@ -249,6 +277,7 @@ fun Shutter(
     round: Boolean = false,
 ) {
     var pressed by remember { mutableStateOf(false) }
+    val shutterLabel = stringResource(R.string.cd_shutter)
     val inactive = animateFloatAsState(if (ready) 0f else 1f, tween(220), label = "inactive")
     // Underdamped, so letting go overshoots below 0 and the button stretches briefly
     val press = animateFloatAsState(
@@ -290,6 +319,7 @@ fun Shutter(
             .graphicsLayer { translationX = shake() * unit.toPx() }
             .shadow(12.dp, if (round) CircleShape else PillShape, clip = false, ambientColor = style.shadow, spotColor = style.shadow)
             .pressDown(touches, onPressedChange = { pressed = it }, onPress = onPress)
+            .semantics { contentDescription = shutterLabel }
             .drawBehind {
                 val coreScale = (1f - 0.12f * inactive.value) * pop.value
                 val phase = idle?.value ?: 0f
@@ -316,6 +346,7 @@ fun ModeSwitch(
 ) {
     val hold = remember { HoldState() }
     val shape = RoundedCornerShape(50)
+    val videoLabel = stringResource(R.string.feature_video)
     Column(
         Modifier
             .shadow(6.dp, shape, ambientColor = style.shadow, spotColor = style.shadow)
@@ -323,7 +354,11 @@ fun ModeSwitch(
             .background(style.button)
             .holdFillBehind(hold, style.holdFill)
             .border(1.dp, Color.White.copy(alpha = 0.25f), shape)
-            .holdToActivate(hold, 1500, touches, enabled, onTooShort, onToggle)
+            .holdToActivate(hold, 1500, touches, enabled, onTooShort, Role.Switch, onToggle)
+            .semantics {
+                contentDescription = videoLabel
+                toggleableState = ToggleableState(videoSelected)
+            }
             .padding(unit * 1.1f),
         verticalArrangement = Arrangement.spacedBy(unit * 0.8f),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -352,6 +387,7 @@ private fun ModeSlot(icon: ImageVector, selected: Boolean, style: SkinStyle, uni
 @Composable
 fun ToolButton(
     icon: ImageVector,
+    label: String,
     active: Boolean,
     style: SkinStyle,
     unit: Dp,
@@ -373,7 +409,7 @@ fun ToolButton(
         contentAlignment = Alignment.Center,
     ) {
         Image(
-            icon, null, Modifier.size(unit * 6.8f),
+            icon, label, Modifier.size(unit * 6.8f),
             colorFilter = ColorFilter.tint(if (active) style.buttonOnInk else style.buttonInk),
         )
     }
@@ -402,6 +438,10 @@ fun ZoomSlider(
     Box(
         modifier
             .size(knob, height)
+            .semantics(mergeDescendants = true) {
+                progressBarRangeInfo = ProgressBarRangeInfo(value, 0f..1f, steps = 9)
+                setProgress { change(it.coerceIn(0f, 1f)); true }
+            }
             .pointerInput(touches) {
                 awaitEachGesture {
                     val down = awaitFirstDown(requireUnconsumed = false)
@@ -493,7 +533,7 @@ fun CloseButton(unit: Dp, touches: TouchCounter, onClose: () -> Unit, modifier: 
             .size(unit * 15f)
             .shadow(8.dp, CircleShape)
             .background(Color.White, CircleShape)
-            .singleTap(touches, onClose),
+            .singleTap(touches, onTap = onClose),
         contentAlignment = Alignment.Center,
     ) {
         Image(Icons.Close, stringResource(R.string.cd_back), Modifier.size(unit * 7f), colorFilter = ColorFilter.tint(Ink))
@@ -563,12 +603,14 @@ fun Thumbnail(
         if (value == null) value = thumbs.load(item)
     }
     val shape = RoundedCornerShape(unit * 3f)
+    val label = stringResource(if (item.isVideo) R.string.cd_video else R.string.cd_photo)
     Box(
         modifier
             .shadow(5.dp, shape, ambientColor = style.shadow, spotColor = style.shadow)
             .clip(shape)
             .background(Color(0xFF2A2F3D))
-            .singleTap(touches) { onOpen(item) },
+            .singleTap(touches) { onOpen(item) }
+            .semantics { contentDescription = label },
     ) {
         thumb?.let { Image(it.image, null, Modifier.fillMaxSize(), contentScale = ContentScale.Crop) }
         if (item.isVideo) {

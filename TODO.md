@@ -82,13 +82,28 @@ Play-Support ihn zurücksetzen – trotzdem sicher aufbewahren.
 
 ## 5. Weitere Sprachen
 
-- [ ] **App übersetzen**, je Sprache:
-  - `app/src/main/res/values-<sprache>/strings.xml` als Kopie von `values/strings.xml` (Englisch) anlegen,
-    Einträge mit `translatable="false"` weglassen. `TranslationsTest` meldet fehlende oder überzählige Einträge.
-  - In `StoreScreenshotTest.kt` eine Klasse `StoreScreenshot<Sprache>` und den Werbespruch in `Tagline` ergänzen.
-  - `store/whatsnew/whatsnew-<sprache>-<LAND>` anlegen.
-  - Kandidaten: Französisch, Spanisch, Italienisch, Niederländisch, Polnisch, Türkisch, Portugiesisch (BR).
-- [ ] **Play-Store-Texte übersetzen**: `store/listing/<sprache>-<LAND>/` mit `title.txt` (max. 30 Zeichen),
-      `short_description.txt` (max. 80) und `full_description.txt` (max. 4000) und in der Play Console unter
-      „Store-Eintrag → Übersetzungen“ eintragen.
-- [ ] Datenschutzerklärung (`docs/privacy.html`) um die neuen Sprachen ergänzen.
+52 Sprachen sind übersetzt (App, Store-Texte, „Neuigkeiten“, Werbespruch der Feature-Grafik). Auswahl nach
+Verbreitung von Android/Google Play. Übersetzt wurde maschinell (KI) – vor der Veröffentlichung möglichst
+von Muttersprachlern gegenlesen lassen, vor allem Store-Titel und Kurzbeschreibung.
+
+- [x] **App übersetzen** (`app/src/main/res/values-<sprache>/strings.xml`), `TranslationsTest` prüft Vollständigkeit.
+  Sprachcodes mit Android-Altlasten: Indonesisch `values-in`, Hebräisch `values-iw`, Filipino `values-tl`,
+  Norwegisch `values-nb`.
+- [x] **Play-Store-Texte** in `store/listing/<play-locale>/` und `store/whatsnew/whatsnew-<play-locale>`.
+  Mehrere Play-Locales teilen sich einen Text: `es-ES`/`es-419`/`es-US`, `fr-FR`/`fr-CA`, `zh-TW`/`zh-HK`,
+  `ms`/`ms-MY`.
+- [ ] In der Play Console unter **Store-Eintrag → Übersetzungen verwalten** alle Sprachen aus `store/listing/`
+  hinzufügen und Texte eintragen – **vor** dem ersten Release-Upload, sonst kann der Upload der Release-Notes
+  aus `store/whatsnew/` für fehlende Sprachen fehlschlagen. Alternativ nicht benötigte `whatsnew-*`-Dateien löschen.
+- [ ] Store-Screenshots je Sprache prüfen (Workflow **Store assets**): Schriften ohne Baloo-2-Abdeckung
+  (z. B. CJK, Arabisch, Thai, indische Schriften außer Devanagari) fallen auf Systemschriften zurück.
+- [x] RTL: Elternbereich und PIN-Eingabe spiegeln sich für Arabisch, Persisch, Urdu und Hebräisch
+  (Tastenfeld bleibt 1-2-3). Die Kinderkamera bleibt bewusst links-nach-rechts, weil „Auslöser links/rechts“
+  die echte Seite meint. Auf einem Gerät mit arabischer Systemsprache einmal durchklicken.
+- [x] Screenreader: alle Tipp- und Halte-Gesten haben Bedienungshilfe-Aktionen (Halten = „doppelt tippen und
+  halten“), Schalter/Optionen melden ihren Zustand, Regler sind per Lautstärketaste einstellbar
+  (`AccessibilityTest`). Offen: einmal mit TalkBack auf einem echten Gerät prüfen.
+- [ ] Datenschutzerklärung (`docs/privacy.html`) ggf. um weitere Sprachen ergänzen.
+- Neue Sprache später: `values-<sprache>/strings.xml` aus `values/strings.xml` kopieren (ohne
+  `translatable="false"`), Klasse `StoreScreenshot<Sprache>` + `Tagline` in `StoreScreenshotTest.kt`,
+  Store-Texte wie oben.

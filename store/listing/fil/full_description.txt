@@ -1,0 +1,34 @@
+Ang Snaplet ay camera app na kayang gamitin ng mga bata nang mag-isa – at kampanteng inaayos ng mga magulang.
+
+MADALI PARA SA MGA BATA
+• Isang malaking shutter sa gilid o bilog sa gitna, madaling abutin ng maliliit na kamay
+• Ang mga pinakabagong larawan ay nasa preview strip, isang tap lang para makita nang malaki
+• Mga pahiwatig na larawan sa halip na teksto, kaya naiintindihan kahit ng mga batang hindi pa nakakabasa
+• Hindi pinapansin ng live na larawan ang pagpindot; walang mangyayari kahit ilang daliri o palad ang nasa screen
+• Labing-isang disenyo: Klasiko, Bahaghari, Spaceship, Dino, Leopardo, Unicorn, Pating, Robot, Trak ng bumbero, Halimaw at Sorbetes
+
+LUMALAKI KASAMA NG ANAK MO
+Laging gumagana ang pagkuha ng litrato. Isa-isang binubuksan ng mga magulang ang iba kapag handa na ang bata:
+• Mga video (may opsyonal na limitasyon sa haba)
+• Gallery
+• Selfie camera
+• Zoom na may malaking slider
+• Mga filter at nakakatuwang frame
+• Self-timer na may malaking countdown
+• Pagpili ng disenyo (mula sa mga pinayagan ng magulang)
+
+MGA LIMITASYONG NAIINTINDIHAN NG BATA
+• Pahinga sa pagitan ng kuha laban sa isandaang magkakaparehong larawan
+• Kuha bawat araw – ipinapakita ng shutter ang natitira bilang mga bituin, itlog ng dino o bakas ng paa
+• Oras ng paggamit bawat araw – pagkatapos, matutulog ang camera hanggang bukas
+
+PARA SA MGA MAGULANG
+• Lugar ng magulang sa likod ng 3 segundong pagpindot, puwede ring protektahan ng screen lock ng telepono o sariling PIN
+• I-pin ang app para hindi ito maalisan ng mga bata
+• Pumili ng mga litratong ishe-share (hal. sa Google Photos) o buburahin
+• Naaayos na format ng litrato, laki ng litrato at kalidad ng video
+
+PRIVACY
+Walang internet access, ad o tracking ang Snaplet at hindi nito kailangan ng account. Nananatili sa device ang mga litrato at video hanggang i-share ito ng mga magulang.
+
+Paalala: sa loob lang ng app nakaimbak ang mga recording at nabubura ang mga ito kapag in-uninstall ang app – mag-back up muna sa lugar ng magulang.

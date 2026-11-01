@@ -1,6 +1,8 @@
 package app.tinycam.ui
 
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import app.tinycam.R
 import android.widget.VideoView
 import androidx.compose.foundation.Canvas
@@ -67,7 +69,7 @@ fun GalleryOverlay(
     onOpen: (MediaItem) -> Unit,
     onClose: () -> Unit,
 ) {
-    Box(Modifier.fillMaxSize().drawBehind { drawBackdrop(skin, style) }.singleTap(touches) {}) {
+    Box(Modifier.fillMaxSize().drawBehind { drawBackdrop(skin, style) }.singleTap(touches, accessible = false) {}) {
         LazyVerticalGrid(
             columns = GridCells.Adaptive(unit * 30f),
             contentPadding = PaddingValues(start = unit * 5f, end = unit * 5f, top = unit * 24f, bottom = unit * 8f),
@@ -129,7 +131,8 @@ fun MediaPreview(item: MediaItem, revision: Int, skin: Skin, style: SkinStyle, u
             }
         }
         // Transparent layer on top so the video view cannot swallow the closing tap
-        Box(Modifier.fillMaxSize().singleTap(touches, onClose))
+        val back = stringResource(R.string.cd_back)
+        Box(Modifier.fillMaxSize().singleTap(touches, role = null, onTap = onClose).semantics { contentDescription = back })
         if (hasOriginal) {
             FilterToggle(
                 !showOriginal, style, unit, touches, { showOriginal = !showOriginal },
@@ -147,7 +150,7 @@ private fun FilterToggle(filtered: Boolean, style: SkinStyle, unit: Dp, touches:
             .size(unit * 15f)
             .shadow(8.dp, CircleShape)
             .background(if (filtered) style.buttonOn else Color.White, CircleShape)
-            .singleTap(touches, onToggle),
+            .singleTap(touches, onTap = onToggle),
         contentAlignment = Alignment.Center,
     ) {
         Image(
@@ -214,7 +217,7 @@ fun PermissionScreen(blocked: Boolean, onRequest: () -> Unit, onOpenSettings: ()
             val action = if (blocked) {
                 Modifier.holdToActivate(hold, 3000, touches, onComplete = onOpenSettings)
             } else {
-                Modifier.singleTap(touches, onRequest)
+                Modifier.singleTap(touches, onTap = onRequest)
             }
             BasicText(
                 stringResource(if (blocked) R.string.permission_open_settings else R.string.permission_allow),

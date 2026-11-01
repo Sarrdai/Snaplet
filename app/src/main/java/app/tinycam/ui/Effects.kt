@@ -1,5 +1,7 @@
 package app.tinycam.ui
 
+import app.tinycam.R
+import androidx.annotation.StringRes
 import android.graphics.Bitmap
 import android.graphics.ColorMatrixColorFilter
 import android.graphics.Paint as AndroidPaint
@@ -50,6 +52,21 @@ enum class Effect(val matrix: FloatArray?, val frame: Frame?) {
     PORTHOLE(null, Frame.PORTHOLE),
     LEAVES(null, Frame.LEAVES),
 }
+
+/** Name for screen readers; the picker itself shows only previews. */
+@get:StringRes
+val Effect.label: Int
+    get() = when (this) {
+        Effect.NONE -> R.string.original
+        Effect.BLACK_WHITE -> R.string.effect_black_white
+        Effect.SEPIA -> R.string.effect_sepia
+        Effect.VIVID -> R.string.effect_vivid
+        Effect.STARS -> R.string.effect_stars
+        Effect.HEARTS -> R.string.effect_hearts
+        Effect.RAINBOW -> R.string.skin_rainbow
+        Effect.PORTHOLE -> R.string.effect_porthole
+        Effect.LEAVES -> R.string.effect_leaves
+    }
 
 private fun saturation(s: Float): FloatArray = ColorMatrix().apply { setToSaturation(s) }.values
 

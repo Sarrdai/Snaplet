@@ -1,0 +1,34 @@
+Snaplet este o aplicație de cameră pe care copiii o pot folosi singuri – și pe care părinții o configurează liniștiți.
+
+UȘOARĂ PENTRU COPII
+• Un declanșator mare pe margine sau rotund la mijloc, ușor de atins pentru mâini mici
+• Ultimele poze într-o bandă de previzualizare, o atingere le arată mare
+• Indicii prin imagini în loc de text, ca să le înțeleagă și copiii care încă nu citesc
+• Imaginea live ignoră atingerile; mai multe degete sau palma pe ecran nu declanșează nimic
+• Unsprezece designuri: Clasic, Curcubeu, Navă spațială, Dino, Leopard, Unicorn, Rechin, Robot, Mașină de pompieri, Monstru și Înghețată
+
+CREȘTE ODATĂ CU COPILUL
+Fotografiatul funcționează mereu. Părinții deblochează restul treptat, când copilul e pregătit:
+• Videoclipuri (cu limită opțională de durată)
+• Galerie
+• Cameră selfie
+• Zoom cu glisor mare
+• Filtre și rame amuzante
+• Temporizator cu numărătoare inversă mare
+• Alegerea designului (dintre cele permise de părinți)
+
+LIMITE PE CARE COPIII LE ÎNȚELEG
+• Pauză între fotografii împotriva a o sută de poze identice
+• Fotografii pe zi – declanșatorul le arată pe cele rămase ca stele, ouă de dinozaur sau lăbuțe
+• Timp de utilizare pe zi – apoi camera doarme până mâine
+
+PENTRU PĂRINȚI
+• Zona părinților după o apăsare de 3 secunde, protejată opțional și cu blocarea ecranului telefonului sau cu un PIN propriu
+• Fixarea aplicației, ca să nu poată fi părăsită de copii
+• Alegerea pozelor de distribuit (de ex. în Google Foto) sau de șters
+• Format foto, dimensiune foto și calitate video reglabile
+
+CONFIDENȚIALITATE
+Snaplet nu are acces la internet, reclame sau urmărire și nu necesită cont. Pozele și videoclipurile rămân pe dispozitiv până când părinții le distribuie.
+
+Notă: înregistrările sunt stocate doar în aplicație și se șterg la dezinstalare – faceți mai întâi o copie din zona părinților.
