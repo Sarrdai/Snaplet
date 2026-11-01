@@ -72,7 +72,8 @@ zwischen beiden Versionen um.
 - **Play release** (Tag `vX.Y.Z` oder manuell): baut das signierte App Bundle (AAB) für Google Play,
   optional mit Upload. Einrichtung und weitere Schritte bis zur Veröffentlichung: [TODO.md](TODO.md).
 - **Store assets** (manuell): rendert Store-Screenshots je Sprache, Feature-Grafik und 512-px-Icon nach
-  `app/build/store/`, optional mit eigenem Foto als Kamerabild. Lokal:
+  `app/build/store/`, optional mit eigenem Foto als Kamerabild und optional mit Upload von Texten und Bildern
+  in den Play-Store-Eintrag aller Sprachen (fastlane supply). Lokal:
   `./gradlew recordRoborazziDebug --tests '*StoreScreenshot*' -PstoreCamera=/pfad/foto.jpg`.
   Store-Texte liegen in `store/listing/`, die Datenschutzerklärung in `docs/` (GitHub Pages).
 
