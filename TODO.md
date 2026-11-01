@@ -102,8 +102,7 @@ von Muttersprachlern gegenlesen lassen, vor allem Store-Titel und Kurzbeschreibu
   die echte Seite meint. Auf einem Gerät mit arabischer Systemsprache einmal durchklicken.
 - [x] Screenreader: alle Tipp- und Halte-Gesten haben Bedienungshilfe-Aktionen (Halten = „doppelt tippen und
   halten“), Schalter/Optionen melden ihren Zustand, Regler sind per Lautstärketaste einstellbar
-  (`AccessibilityTest`). Offen: einmal mit TalkBack auf einem echten Gerät prüfen; die Filter-Auswahl der
-  Kinderkamera hat noch keine Namen je Filter.
+  (`AccessibilityTest`). Offen: einmal mit TalkBack auf einem echten Gerät prüfen.
 - [ ] Datenschutzerklärung (`docs/privacy.html`) ggf. um weitere Sprachen ergänzen.
 - Neue Sprache später: `values-<sprache>/strings.xml` aus `values/strings.xml` kopieren (ohne
   `translatable="false"`), Klasse `StoreScreenshot<Sprache>` + `Tagline` in `StoreScreenshotTest.kt`,
