@@ -28,6 +28,14 @@
     <string name="skin_fire_truck">Yanğın maşını</string>
     <string name="skin_monster">Canavar</string>
     <string name="skin_ice_cream">Dondurma</string>
+
+    <string name="effect_black_white">Ağ-qara</string>
+    <string name="effect_sepia">Sepiya</string>
+    <string name="effect_vivid">Parlaq rənglər</string>
+    <string name="effect_stars">Ulduzlar</string>
+    <string name="effect_hearts">Ürəklər</string>
+    <string name="effect_porthole">Gəmi pəncərəsi</string>
+    <string name="effect_leaves">Yarpaqlar</string>
     <string name="side_left">Sol</string>
     <string name="side_center">Mərkəz</string>
     <string name="side_right">Sağ</string>

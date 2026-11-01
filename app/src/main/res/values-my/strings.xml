@@ -28,6 +28,14 @@
     <string name="skin_fire_truck">မီးသတ်ကား</string>
     <string name="skin_monster">ဘီလူး</string>
     <string name="skin_ice_cream">ရေခဲမုန့်</string>
+
+    <string name="effect_black_white">အဖြူအမည်း</string>
+    <string name="effect_sepia">ဆီပီယာ</string>
+    <string name="effect_vivid">တောက်ပသော အရောင်</string>
+    <string name="effect_stars">ကြယ်များ</string>
+    <string name="effect_hearts">နှလုံးများ</string>
+    <string name="effect_porthole">သင်္ဘောပြတင်း</string>
+    <string name="effect_leaves">သစ်ရွက်များ</string>
     <string name="side_left">ဘယ်</string>
     <string name="side_center">အလယ်</string>
     <string name="side_right">ညာ</string>

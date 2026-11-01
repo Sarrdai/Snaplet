@@ -28,6 +28,14 @@
     <string name="skin_fire_truck">ماشین آتش‌نشانی</string>
     <string name="skin_monster">هیولا</string>
     <string name="skin_ice_cream">بستنی</string>
+
+    <string name="effect_black_white">سیاه‌وسفید</string>
+    <string name="effect_sepia">قهوه‌ای</string>
+    <string name="effect_vivid">رنگ‌های زنده</string>
+    <string name="effect_stars">ستاره‌ها</string>
+    <string name="effect_hearts">قلب‌ها</string>
+    <string name="effect_porthole">پنجرهٔ کشتی</string>
+    <string name="effect_leaves">برگ‌ها</string>
     <string name="side_left">چپ</string>
     <string name="side_center">وسط</string>
     <string name="side_right">راست</string>

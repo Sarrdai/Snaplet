@@ -28,6 +28,14 @@
     <string name="skin_fire_truck">Tuletõrjeauto</string>
     <string name="skin_monster">Koletis</string>
     <string name="skin_ice_cream">Jäätis</string>
+
+    <string name="effect_black_white">Mustvalge</string>
+    <string name="effect_sepia">Seepia</string>
+    <string name="effect_vivid">Erksad värvid</string>
+    <string name="effect_stars">Tähed</string>
+    <string name="effect_hearts">Südamed</string>
+    <string name="effect_porthole">Laevaaken</string>
+    <string name="effect_leaves">Lehed</string>
     <string name="side_left">Vasakul</string>
     <string name="side_center">Keskel</string>
     <string name="side_right">Paremal</string>

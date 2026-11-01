@@ -28,6 +28,14 @@
     <string name="skin_fire_truck">فائر بریگیڈ گاڑی</string>
     <string name="skin_monster">دیو</string>
     <string name="skin_ice_cream">آئس کریم</string>
+
+    <string name="effect_black_white">بلیک اینڈ وائٹ</string>
+    <string name="effect_sepia">سیپیا</string>
+    <string name="effect_vivid">شوخ رنگ</string>
+    <string name="effect_stars">ستارے</string>
+    <string name="effect_hearts">دل</string>
+    <string name="effect_porthole">جہاز کی کھڑکی</string>
+    <string name="effect_leaves">پتے</string>
     <string name="side_left">بائیں</string>
     <string name="side_center">درمیان</string>
     <string name="side_right">دائیں</string>

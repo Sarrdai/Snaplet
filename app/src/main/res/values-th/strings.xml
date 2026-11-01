@@ -28,6 +28,14 @@
     <string name="skin_fire_truck">รถดับเพลิง</string>
     <string name="skin_monster">สัตว์ประหลาด</string>
     <string name="skin_ice_cream">ไอศกรีม</string>
+
+    <string name="effect_black_white">ขาวดำ</string>
+    <string name="effect_sepia">ซีเปีย</string>
+    <string name="effect_vivid">สีสด</string>
+    <string name="effect_stars">ดาว</string>
+    <string name="effect_hearts">หัวใจ</string>
+    <string name="effect_porthole">หน้าต่างเรือ</string>
+    <string name="effect_leaves">ใบไม้</string>
     <string name="side_left">ซ้าย</string>
     <string name="side_center">กลาง</string>
     <string name="side_right">ขวา</string>

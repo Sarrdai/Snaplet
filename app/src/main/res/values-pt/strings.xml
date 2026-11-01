@@ -28,6 +28,14 @@
     <string name="skin_fire_truck">Caminhão de bombeiros</string>
     <string name="skin_monster">Monstro</string>
     <string name="skin_ice_cream">Sorvete</string>
+
+    <string name="effect_black_white">Preto e branco</string>
+    <string name="effect_sepia">Sépia</string>
+    <string name="effect_vivid">Cores vivas</string>
+    <string name="effect_stars">Estrelas</string>
+    <string name="effect_hearts">Corações</string>
+    <string name="effect_porthole">Escotilha</string>
+    <string name="effect_leaves">Folhas</string>
     <string name="side_left">Esquerda</string>
     <string name="side_center">Centro</string>
     <string name="side_right">Direita</string>

@@ -28,6 +28,14 @@
     <string name="skin_fire_truck">Gari la zimamoto</string>
     <string name="skin_monster">Zimwi</string>
     <string name="skin_ice_cream">Aiskrimu</string>
+
+    <string name="effect_black_white">Nyeusi na nyeupe</string>
+    <string name="effect_sepia">Sepia</string>
+    <string name="effect_vivid">Rangi angavu</string>
+    <string name="effect_stars">Nyota</string>
+    <string name="effect_hearts">Mioyo</string>
+    <string name="effect_porthole">Dirisha la meli</string>
+    <string name="effect_leaves">Majani</string>
     <string name="side_left">Kushoto</string>
     <string name="side_center">Katikati</string>
     <string name="side_right">Kulia</string>

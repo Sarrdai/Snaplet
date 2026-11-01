@@ -477,7 +477,7 @@ private fun Button(text: String, primary: Boolean = false, touches: TouchCounter
         Modifier
             .clip(RoundedCornerShape(50))
             .background(if (primary) Accent else Line)
-            .singleTap(touches, onClick)
+            .singleTap(touches, onTap = onClick)
             .padding(horizontal = 20.dp, vertical = 12.dp),
         style = Chip.copy(color = if (primary) Ink else Text),
     )

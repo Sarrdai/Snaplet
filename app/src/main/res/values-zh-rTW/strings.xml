@@ -28,6 +28,14 @@
     <string name="skin_fire_truck">消防車</string>
     <string name="skin_monster">小怪獸</string>
     <string name="skin_ice_cream">冰淇淋</string>
+
+    <string name="effect_black_white">黑白</string>
+    <string name="effect_sepia">復古</string>
+    <string name="effect_vivid">鮮豔</string>
+    <string name="effect_stars">星星</string>
+    <string name="effect_hearts">愛心</string>
+    <string name="effect_porthole">舷窗</string>
+    <string name="effect_leaves">樹葉</string>
     <string name="side_left">左側</string>
     <string name="side_center">置中</string>
     <string name="side_right">右側</string>

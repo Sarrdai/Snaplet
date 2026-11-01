@@ -28,6 +28,14 @@
     <string name="skin_fire_truck">अग्निशमन गाडी</string>
     <string name="skin_monster">राक्षस</string>
     <string name="skin_ice_cream">आइसक्रीम</string>
+
+    <string name="effect_black_white">कृष्णधवल</string>
+    <string name="effect_sepia">सेपिया</string>
+    <string name="effect_vivid">चमकदार रंग</string>
+    <string name="effect_stars">तारे</string>
+    <string name="effect_hearts">हृदये</string>
+    <string name="effect_porthole">जहाजाची खिडकी</string>
+    <string name="effect_leaves">पाने</string>
     <string name="side_left">डावीकडे</string>
     <string name="side_center">मध्यभागी</string>
     <string name="side_right">उजवीकडे</string>

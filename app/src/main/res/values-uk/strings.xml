@@ -28,6 +28,14 @@
     <string name="skin_fire_truck">Пожежна машина</string>
     <string name="skin_monster">Монстр</string>
     <string name="skin_ice_cream">Морозиво</string>
+
+    <string name="effect_black_white">Чорно-білий</string>
+    <string name="effect_sepia">Сепія</string>
+    <string name="effect_vivid">Яскраві кольори</string>
+    <string name="effect_stars">Зірки</string>
+    <string name="effect_hearts">Сердечка</string>
+    <string name="effect_porthole">Ілюмінатор</string>
+    <string name="effect_leaves">Листя</string>
     <string name="side_left">Ліворуч</string>
     <string name="side_center">По центру</string>
     <string name="side_right">Праворуч</string>

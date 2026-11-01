@@ -28,6 +28,14 @@
     <string name="skin_fire_truck">Gaisrinė</string>
     <string name="skin_monster">Pabaisa</string>
     <string name="skin_ice_cream">Ledai</string>
+
+    <string name="effect_black_white">Nespalvota</string>
+    <string name="effect_sepia">Sepija</string>
+    <string name="effect_vivid">Ryškios spalvos</string>
+    <string name="effect_stars">Žvaigždutės</string>
+    <string name="effect_hearts">Širdelės</string>
+    <string name="effect_porthole">Iliuminatorius</string>
+    <string name="effect_leaves">Lapai</string>
     <string name="side_left">Kairėje</string>
     <string name="side_center">Viduryje</string>
     <string name="side_right">Dešinėje</string>

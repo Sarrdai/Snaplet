@@ -594,6 +594,7 @@ internal fun EffectPicker(
                     row.forEach { e ->
                         val shape = RoundedCornerShape(unit * 5f)
                         val on = e == selected
+                        val name = stringResource(e.label)
                         Canvas(
                             Modifier
                                 .size(unit * 22f)
@@ -601,7 +602,10 @@ internal fun EffectPicker(
                                 .clip(shape)
                                 .border(if (on) unit * 1.4f else unit * 0.4f, if (on) style.buttonOn else Color.White.copy(alpha = 0.4f), shape)
                                 .singleTap(touches, Role.RadioButton) { onSelect(e) }
-                                .semantics { this.selected = on },
+                                .semantics {
+                                    contentDescription = name
+                                    this.selected = on
+                                },
                         ) {
                             withEffectColors(e) { drawMiniScene() }
                             e.frame?.let { drawFrame(it) }

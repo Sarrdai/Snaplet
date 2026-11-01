@@ -28,6 +28,14 @@
     <string name="skin_fire_truck">Ватрогасно возило</string>
     <string name="skin_monster">Чудовиште</string>
     <string name="skin_ice_cream">Сладолед</string>
+
+    <string name="effect_black_white">Црно-бело</string>
+    <string name="effect_sepia">Сепија</string>
+    <string name="effect_vivid">Живе боје</string>
+    <string name="effect_stars">Звездице</string>
+    <string name="effect_hearts">Срца</string>
+    <string name="effect_porthole">Бродски прозор</string>
+    <string name="effect_leaves">Лишће</string>
     <string name="side_left">Лево</string>
     <string name="side_center">Средина</string>
     <string name="side_right">Десно</string>

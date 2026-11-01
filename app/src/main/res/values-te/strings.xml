@@ -28,6 +28,14 @@
     <string name="skin_fire_truck">అగ్నిమాపక వాహనం</string>
     <string name="skin_monster">రాక్షసుడు</string>
     <string name="skin_ice_cream">ఐస్‌క్రీమ్</string>
+
+    <string name="effect_black_white">నలుపు-తెలుపు</string>
+    <string name="effect_sepia">సెపియా</string>
+    <string name="effect_vivid">ప్రకాశవంతమైన రంగులు</string>
+    <string name="effect_stars">నక్షత్రాలు</string>
+    <string name="effect_hearts">హృదయాలు</string>
+    <string name="effect_porthole">ఓడ కిటికీ</string>
+    <string name="effect_leaves">ఆకులు</string>
     <string name="side_left">ఎడమ</string>
     <string name="side_center">మధ్యలో</string>
     <string name="side_right">కుడి</string>

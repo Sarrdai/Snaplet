@@ -28,6 +28,14 @@
     <string name="skin_fire_truck">소방차</string>
     <string name="skin_monster">몬스터</string>
     <string name="skin_ice_cream">아이스크림</string>
+
+    <string name="effect_black_white">흑백</string>
+    <string name="effect_sepia">세피아</string>
+    <string name="effect_vivid">선명하게</string>
+    <string name="effect_stars">별</string>
+    <string name="effect_hearts">하트</string>
+    <string name="effect_porthole">둥근 창</string>
+    <string name="effect_leaves">나뭇잎</string>
     <string name="side_left">왼쪽</string>
     <string name="side_center">가운데</string>
     <string name="side_right">오른쪽</string>

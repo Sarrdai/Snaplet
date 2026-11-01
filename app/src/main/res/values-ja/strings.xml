@@ -28,6 +28,14 @@
     <string name="skin_fire_truck">しょうぼうしゃ</string>
     <string name="skin_monster">モンスター</string>
     <string name="skin_ice_cream">アイスクリーム</string>
+
+    <string name="effect_black_white">白黒</string>
+    <string name="effect_sepia">セピア</string>
+    <string name="effect_vivid">鮮やか</string>
+    <string name="effect_stars">星</string>
+    <string name="effect_hearts">ハート</string>
+    <string name="effect_porthole">丸窓</string>
+    <string name="effect_leaves">葉っぱ</string>
     <string name="side_left">左</string>
     <string name="side_center">中央</string>
     <string name="side_right">右</string>

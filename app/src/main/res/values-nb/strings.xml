@@ -28,6 +28,14 @@
     <string name="skin_fire_truck">Brannbil</string>
     <string name="skin_monster">Monster</string>
     <string name="skin_ice_cream">Iskrem</string>
+
+    <string name="effect_black_white">Svart-hvitt</string>
+    <string name="effect_sepia">Sepia</string>
+    <string name="effect_vivid">Sterke farger</string>
+    <string name="effect_stars">Stjerner</string>
+    <string name="effect_hearts">Hjerter</string>
+    <string name="effect_porthole">Koøye</string>
+    <string name="effect_leaves">Blader</string>
     <string name="side_left">Venstre</string>
     <string name="side_center">Midten</string>
     <string name="side_right">Høyre</string>

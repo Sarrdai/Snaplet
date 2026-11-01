@@ -28,6 +28,14 @@
     <string name="skin_fire_truck">ഫയർ എഞ്ചിൻ</string>
     <string name="skin_monster">ഭീകരജീവി</string>
     <string name="skin_ice_cream">ഐസ്ക്രീം</string>
+
+    <string name="effect_black_white">കറുപ്പും വെളുപ്പും</string>
+    <string name="effect_sepia">സെപിയ</string>
+    <string name="effect_vivid">തിളക്കമുള്ള നിറങ്ങൾ</string>
+    <string name="effect_stars">നക്ഷത്രങ്ങൾ</string>
+    <string name="effect_hearts">ഹൃദയങ്ങൾ</string>
+    <string name="effect_porthole">കപ്പൽ ജനാല</string>
+    <string name="effect_leaves">ഇലകൾ</string>
     <string name="side_left">ഇടത്</string>
     <string name="side_center">നടുവിൽ</string>
     <string name="side_right">വലത്</string>

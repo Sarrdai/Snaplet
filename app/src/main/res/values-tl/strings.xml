@@ -28,6 +28,14 @@
     <string name="skin_fire_truck">Trak ng bumbero</string>
     <string name="skin_monster">Halimaw</string>
     <string name="skin_ice_cream">Sorbetes</string>
+
+    <string name="effect_black_white">Black and white</string>
+    <string name="effect_sepia">Sepia</string>
+    <string name="effect_vivid">Matingkad</string>
+    <string name="effect_stars">Mga bituin</string>
+    <string name="effect_hearts">Mga puso</string>
+    <string name="effect_porthole">Bintana ng barko</string>
+    <string name="effect_leaves">Mga dahon</string>
     <string name="side_left">Kaliwa</string>
     <string name="side_center">Gitna</string>
     <string name="side_right">Kanan</string>

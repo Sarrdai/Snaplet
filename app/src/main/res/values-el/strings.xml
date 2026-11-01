@@ -28,6 +28,14 @@
     <string name="skin_fire_truck">Πυροσβεστικό</string>
     <string name="skin_monster">Τέρας</string>
     <string name="skin_ice_cream">Παγωτό</string>
+
+    <string name="effect_black_white">Ασπρόμαυρο</string>
+    <string name="effect_sepia">Σέπια</string>
+    <string name="effect_vivid">Ζωηρά χρώματα</string>
+    <string name="effect_stars">Αστέρια</string>
+    <string name="effect_hearts">Καρδιές</string>
+    <string name="effect_porthole">Φινιστρίνι</string>
+    <string name="effect_leaves">Φύλλα</string>
     <string name="side_left">Αριστερά</string>
     <string name="side_center">Κέντρο</string>
     <string name="side_right">Δεξιά</string>

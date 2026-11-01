@@ -28,6 +28,14 @@
     <string name="skin_fire_truck">दमकल गाड़ी</string>
     <string name="skin_monster">राक्षस</string>
     <string name="skin_ice_cream">आइसक्रीम</string>
+
+    <string name="effect_black_white">श्वेत-श्याम</string>
+    <string name="effect_sepia">सीपिया</string>
+    <string name="effect_vivid">चटकीले रंग</string>
+    <string name="effect_stars">तारे</string>
+    <string name="effect_hearts">दिल</string>
+    <string name="effect_porthole">जहाज़ की खिड़की</string>
+    <string name="effect_leaves">पत्तियाँ</string>
     <string name="side_left">बाएँ</string>
     <string name="side_center">बीच में</string>
     <string name="side_right">दाएँ</string>

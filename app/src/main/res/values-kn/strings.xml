@@ -28,6 +28,14 @@
     <string name="skin_fire_truck">ಅಗ್ನಿಶಾಮಕ ವಾಹನ</string>
     <string name="skin_monster">ರಾಕ್ಷಸ</string>
     <string name="skin_ice_cream">ಐಸ್‌ಕ್ರೀಮ್</string>
+
+    <string name="effect_black_white">ಕಪ್ಪು-ಬಿಳುಪು</string>
+    <string name="effect_sepia">ಸೆಪಿಯಾ</string>
+    <string name="effect_vivid">ಗಾಢ ಬಣ್ಣಗಳು</string>
+    <string name="effect_stars">ನಕ್ಷತ್ರಗಳು</string>
+    <string name="effect_hearts">ಹೃದಯಗಳು</string>
+    <string name="effect_porthole">ಹಡಗಿನ ಕಿಟಕಿ</string>
+    <string name="effect_leaves">ಎಲೆಗಳು</string>
     <string name="side_left">ಎಡ</string>
     <string name="side_center">ಮಧ್ಯ</string>
     <string name="side_right">ಬಲ</string>

@@ -28,6 +28,14 @@
     <string name="skin_fire_truck">Mașină de pompieri</string>
     <string name="skin_monster">Monstru</string>
     <string name="skin_ice_cream">Înghețată</string>
+
+    <string name="effect_black_white">Alb-negru</string>
+    <string name="effect_sepia">Sepia</string>
+    <string name="effect_vivid">Culori vii</string>
+    <string name="effect_stars">Stele</string>
+    <string name="effect_hearts">Inimioare</string>
+    <string name="effect_porthole">Hublou</string>
+    <string name="effect_leaves">Frunze</string>
     <string name="side_left">Stânga</string>
     <string name="side_center">Centru</string>
     <string name="side_right">Dreapta</string>

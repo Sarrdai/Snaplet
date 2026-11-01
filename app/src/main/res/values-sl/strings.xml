@@ -28,6 +28,14 @@
     <string name="skin_fire_truck">Gasilski avto</string>
     <string name="skin_monster">Pošast</string>
     <string name="skin_ice_cream">Sladoled</string>
+
+    <string name="effect_black_white">Črno-belo</string>
+    <string name="effect_sepia">Sepija</string>
+    <string name="effect_vivid">Žive barve</string>
+    <string name="effect_stars">Zvezdice</string>
+    <string name="effect_hearts">Srčki</string>
+    <string name="effect_porthole">Ladijsko okno</string>
+    <string name="effect_leaves">Listi</string>
     <string name="side_left">Levo</string>
     <string name="side_center">Sredina</string>
     <string name="side_right">Desno</string>

@@ -34,6 +34,14 @@
     <string name="skin_monster">Monster</string>
     <string name="skin_ice_cream">Eiscreme</string>
 
+    <string name="effect_black_white">Schwarz-Weiß</string>
+    <string name="effect_sepia">Sepia</string>
+    <string name="effect_vivid">Leuchtend</string>
+    <string name="effect_stars">Sterne</string>
+    <string name="effect_hearts">Herzen</string>
+    <string name="effect_porthole">Bullauge</string>
+    <string name="effect_leaves">Blätter</string>
+
     <!-- Option labels -->
     <string name="side_left">Links</string>
     <string name="side_center">Mitte</string>

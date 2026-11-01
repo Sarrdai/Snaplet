@@ -28,6 +28,14 @@
     <string name="skin_fire_truck">כבאית</string>
     <string name="skin_monster">מפלצת</string>
     <string name="skin_ice_cream">גלידה</string>
+
+    <string name="effect_black_white">שחור־לבן</string>
+    <string name="effect_sepia">ספיה</string>
+    <string name="effect_vivid">צבעים עזים</string>
+    <string name="effect_stars">כוכבים</string>
+    <string name="effect_hearts">לבבות</string>
+    <string name="effect_porthole">צוהר</string>
+    <string name="effect_leaves">עלים</string>
     <string name="side_left">שמאל</string>
     <string name="side_center">מרכז</string>
     <string name="side_right">ימין</string>

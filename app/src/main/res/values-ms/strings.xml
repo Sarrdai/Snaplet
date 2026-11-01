@@ -28,6 +28,14 @@
     <string name="skin_fire_truck">Kereta bomba</string>
     <string name="skin_monster">Raksasa</string>
     <string name="skin_ice_cream">Aiskrim</string>
+
+    <string name="effect_black_white">Hitam putih</string>
+    <string name="effect_sepia">Sepia</string>
+    <string name="effect_vivid">Warna terang</string>
+    <string name="effect_stars">Bintang</string>
+    <string name="effect_hearts">Hati</string>
+    <string name="effect_porthole">Tingkap kapal</string>
+    <string name="effect_leaves">Daun</string>
     <string name="side_left">Kiri</string>
     <string name="side_center">Tengah</string>
     <string name="side_right">Kanan</string>

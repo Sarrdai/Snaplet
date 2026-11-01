@@ -28,6 +28,14 @@
     <string name="skin_fire_truck">Paloauto</string>
     <string name="skin_monster">Hirviö</string>
     <string name="skin_ice_cream">Jäätelö</string>
+
+    <string name="effect_black_white">Mustavalko</string>
+    <string name="effect_sepia">Seepia</string>
+    <string name="effect_vivid">Kirkkaat värit</string>
+    <string name="effect_stars">Tähdet</string>
+    <string name="effect_hearts">Sydämet</string>
+    <string name="effect_porthole">Laivan ikkuna</string>
+    <string name="effect_leaves">Lehdet</string>
     <string name="side_left">Vasen</string>
     <string name="side_center">Keskellä</string>
     <string name="side_right">Oikea</string>

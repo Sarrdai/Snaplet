@@ -28,6 +28,14 @@
     <string name="skin_fire_truck">Tűzoltóautó</string>
     <string name="skin_monster">Szörny</string>
     <string name="skin_ice_cream">Fagyi</string>
+
+    <string name="effect_black_white">Fekete-fehér</string>
+    <string name="effect_sepia">Szépia</string>
+    <string name="effect_vivid">Élénk színek</string>
+    <string name="effect_stars">Csillagok</string>
+    <string name="effect_hearts">Szívek</string>
+    <string name="effect_porthole">Hajóablak</string>
+    <string name="effect_leaves">Levelek</string>
     <string name="side_left">Bal</string>
     <string name="side_center">Közép</string>
     <string name="side_right">Jobb</string>

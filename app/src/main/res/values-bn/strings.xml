@@ -28,6 +28,14 @@
     <string name="skin_fire_truck">দমকল গাড়ি</string>
     <string name="skin_monster">দৈত্য</string>
     <string name="skin_ice_cream">আইসক্রিম</string>
+
+    <string name="effect_black_white">সাদা-কালো</string>
+    <string name="effect_sepia">সেপিয়া</string>
+    <string name="effect_vivid">উজ্জ্বল রং</string>
+    <string name="effect_stars">তারা</string>
+    <string name="effect_hearts">হৃদয়</string>
+    <string name="effect_porthole">জাহাজের জানালা</string>
+    <string name="effect_leaves">পাতা</string>
     <string name="side_left">বাঁ দিকে</string>
     <string name="side_center">মাঝখানে</string>
     <string name="side_right">ডান দিকে</string>

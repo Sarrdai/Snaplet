@@ -28,6 +28,14 @@
     <string name="skin_fire_truck">Wóz strażacki</string>
     <string name="skin_monster">Potwór</string>
     <string name="skin_ice_cream">Lody</string>
+
+    <string name="effect_black_white">Czarno-białe</string>
+    <string name="effect_sepia">Sepia</string>
+    <string name="effect_vivid">Żywe kolory</string>
+    <string name="effect_stars">Gwiazdki</string>
+    <string name="effect_hearts">Serduszka</string>
+    <string name="effect_porthole">Bulaj</string>
+    <string name="effect_leaves">Liście</string>
     <string name="side_left">Lewo</string>
     <string name="side_center">Środek</string>
     <string name="side_right">Prawo</string>

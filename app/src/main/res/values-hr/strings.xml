@@ -28,6 +28,14 @@
     <string name="skin_fire_truck">Vatrogasno vozilo</string>
     <string name="skin_monster">Čudovište</string>
     <string name="skin_ice_cream">Sladoled</string>
+
+    <string name="effect_black_white">Crno-bijelo</string>
+    <string name="effect_sepia">Sepija</string>
+    <string name="effect_vivid">Žive boje</string>
+    <string name="effect_stars">Zvjezdice</string>
+    <string name="effect_hearts">Srca</string>
+    <string name="effect_porthole">Brodski prozor</string>
+    <string name="effect_leaves">Lišće</string>
     <string name="side_left">Lijevo</string>
     <string name="side_center">Sredina</string>
     <string name="side_right">Desno</string>

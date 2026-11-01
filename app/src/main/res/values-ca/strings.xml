@@ -28,6 +28,14 @@
     <string name="skin_fire_truck">Camió de bombers</string>
     <string name="skin_monster">Monstre</string>
     <string name="skin_ice_cream">Gelat</string>
+
+    <string name="effect_black_white">Blanc i negre</string>
+    <string name="effect_sepia">Sèpia</string>
+    <string name="effect_vivid">Colors vius</string>
+    <string name="effect_stars">Estrelles</string>
+    <string name="effect_hearts">Cors</string>
+    <string name="effect_porthole">Ull de bou</string>
+    <string name="effect_leaves">Fulles</string>
     <string name="side_left">Esquerra</string>
     <string name="side_center">Centre</string>
     <string name="side_right">Dreta</string>

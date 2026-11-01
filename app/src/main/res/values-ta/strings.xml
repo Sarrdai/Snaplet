@@ -28,6 +28,14 @@
     <string name="skin_fire_truck">தீயணைப்பு வண்டி</string>
     <string name="skin_monster">அரக்கன்</string>
     <string name="skin_ice_cream">ஐஸ்கிரீம்</string>
+
+    <string name="effect_black_white">கருப்பு-வெள்ளை</string>
+    <string name="effect_sepia">செபியா</string>
+    <string name="effect_vivid">பிரகாசமான வண்ணங்கள்</string>
+    <string name="effect_stars">நட்சத்திரங்கள்</string>
+    <string name="effect_hearts">இதயங்கள்</string>
+    <string name="effect_porthole">கப்பல் சாளரம்</string>
+    <string name="effect_leaves">இலைகள்</string>
     <string name="side_left">இடது</string>
     <string name="side_center">நடுவில்</string>
     <string name="side_right">வலது</string>

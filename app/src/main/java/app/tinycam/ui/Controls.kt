@@ -533,7 +533,7 @@ fun CloseButton(unit: Dp, touches: TouchCounter, onClose: () -> Unit, modifier: 
             .size(unit * 15f)
             .shadow(8.dp, CircleShape)
             .background(Color.White, CircleShape)
-            .singleTap(touches, onClose),
+            .singleTap(touches, onTap = onClose),
         contentAlignment = Alignment.Center,
     ) {
         Image(Icons.Close, stringResource(R.string.cd_back), Modifier.size(unit * 7f), colorFilter = ColorFilter.tint(Ink))

@@ -28,6 +28,14 @@
     <string name="skin_fire_truck">ફાયર બ્રિગેડ</string>
     <string name="skin_monster">રાક્ષસ</string>
     <string name="skin_ice_cream">આઇસક્રીમ</string>
+
+    <string name="effect_black_white">બ્લૅક ઍન્ડ વ્હાઇટ</string>
+    <string name="effect_sepia">સેપિયા</string>
+    <string name="effect_vivid">તેજસ્વી રંગો</string>
+    <string name="effect_stars">તારા</string>
+    <string name="effect_hearts">હૃદય</string>
+    <string name="effect_porthole">જહાજની બારી</string>
+    <string name="effect_leaves">પાંદડાં</string>
     <string name="side_left">ડાબે</string>
     <string name="side_center">વચ્ચે</string>
     <string name="side_right">જમણે</string>

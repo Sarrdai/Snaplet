@@ -28,6 +28,14 @@
     <string name="skin_fire_truck">İtfaiye aracı</string>
     <string name="skin_monster">Canavar</string>
     <string name="skin_ice_cream">Dondurma</string>
+
+    <string name="effect_black_white">Siyah beyaz</string>
+    <string name="effect_sepia">Sepya</string>
+    <string name="effect_vivid">Canlı renkler</string>
+    <string name="effect_stars">Yıldızlar</string>
+    <string name="effect_hearts">Kalpler</string>
+    <string name="effect_porthole">Lomboz</string>
+    <string name="effect_leaves">Yapraklar</string>
     <string name="side_left">Sol</string>
     <string name="side_center">Orta</string>
     <string name="side_right">Sağ</string>

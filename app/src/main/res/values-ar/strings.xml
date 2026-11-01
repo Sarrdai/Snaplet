@@ -28,6 +28,14 @@
     <string name="skin_fire_truck">سيارة إطفاء</string>
     <string name="skin_monster">وحش</string>
     <string name="skin_ice_cream">آيس كريم</string>
+
+    <string name="effect_black_white">أبيض وأسود</string>
+    <string name="effect_sepia">بني داكن</string>
+    <string name="effect_vivid">ألوان زاهية</string>
+    <string name="effect_stars">نجوم</string>
+    <string name="effect_hearts">قلوب</string>
+    <string name="effect_porthole">نافذة سفينة</string>
+    <string name="effect_leaves">أوراق شجر</string>
     <string name="side_left">يسار</string>
     <string name="side_center">وسط</string>
     <string name="side_right">يمين</string>

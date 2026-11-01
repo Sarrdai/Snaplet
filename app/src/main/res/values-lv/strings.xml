@@ -28,6 +28,14 @@
     <string name="skin_fire_truck">Ugunsdzēsēju mašīna</string>
     <string name="skin_monster">Briesmonis</string>
     <string name="skin_ice_cream">Saldējums</string>
+
+    <string name="effect_black_white">Melnbalts</string>
+    <string name="effect_sepia">Sēpija</string>
+    <string name="effect_vivid">Spilgtas krāsas</string>
+    <string name="effect_stars">Zvaigznes</string>
+    <string name="effect_hearts">Sirsniņas</string>
+    <string name="effect_porthole">Iluminators</string>
+    <string name="effect_leaves">Lapas</string>
     <string name="side_left">Pa kreisi</string>
     <string name="side_center">Centrā</string>
     <string name="side_right">Pa labi</string>

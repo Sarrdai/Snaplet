@@ -28,6 +28,14 @@
     <string name="skin_fire_truck">Hasičské auto</string>
     <string name="skin_monster">Příšerka</string>
     <string name="skin_ice_cream">Zmrzlina</string>
+
+    <string name="effect_black_white">Černobílá</string>
+    <string name="effect_sepia">Sépie</string>
+    <string name="effect_vivid">Živé barvy</string>
+    <string name="effect_stars">Hvězdičky</string>
+    <string name="effect_hearts">Srdíčka</string>
+    <string name="effect_porthole">Okénko lodi</string>
+    <string name="effect_leaves">Listy</string>
     <string name="side_left">Vlevo</string>
     <string name="side_center">Uprostřed</string>
     <string name="side_right">Vpravo</string>

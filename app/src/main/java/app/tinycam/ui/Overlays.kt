@@ -150,7 +150,7 @@ private fun FilterToggle(filtered: Boolean, style: SkinStyle, unit: Dp, touches:
             .size(unit * 15f)
             .shadow(8.dp, CircleShape)
             .background(if (filtered) style.buttonOn else Color.White, CircleShape)
-            .singleTap(touches, onToggle),
+            .singleTap(touches, onTap = onToggle),
         contentAlignment = Alignment.Center,
     ) {
         Image(
@@ -217,7 +217,7 @@ fun PermissionScreen(blocked: Boolean, onRequest: () -> Unit, onOpenSettings: ()
             val action = if (blocked) {
                 Modifier.holdToActivate(hold, 3000, touches, onComplete = onOpenSettings)
             } else {
-                Modifier.singleTap(touches, onRequest)
+                Modifier.singleTap(touches, onTap = onRequest)
             }
             BasicText(
                 stringResource(if (blocked) R.string.permission_open_settings else R.string.permission_allow),
