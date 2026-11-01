@@ -53,6 +53,8 @@ import app.tinycam.ui.kidText
 import app.tinycam.ui.styleFor
 import app.tinycam.ui.unitFor
 import com.github.takahirom.roborazzi.captureRoboImage
+import org.junit.Assume.assumeTrue
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -129,6 +131,12 @@ abstract class StoreScreenshotTest(private val locale: String) {
 
     @get:Rule
     val compose = createComposeRule()
+
+    /** Plain test runs only render en/de as a smoke test; recordRoborazziDebug (Store assets workflow) renders all languages. */
+    @Before
+    fun onlyAllLanguagesWhenRecording() {
+        assumeTrue(locale in setOf("en", "de") || System.getProperty("roborazzi.test.record") == "true")
+    }
 
     private val out get() = "build/store/$locale"
     private val camera: ImageBitmap? = System.getProperty("store.camera")?.takeIf { it.isNotBlank() }?.let { path ->
